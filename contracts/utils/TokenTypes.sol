@@ -71,7 +71,7 @@ library Rational {
             require(self.a / r > INVERTED_PRECISION, "Not enough precision.");
             return q;
         }
-        require(self.a / (q - r) > INVERTED_PRECISION, "Not enough precision.");
+        require(self.a / (b - r) > INVERTED_PRECISION, "Not enough precision.");
         return q + 1;
     }
 }
