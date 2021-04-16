@@ -19,27 +19,35 @@ uint constant SLOPE = (CAP - INITIAL_SUPPLY) / DURATION;
 
 
 address constant FOUNDER = address(0x14723A09ACff6D2A60DcdF7aA4AFf308FDDC160C);
-uint constant FOUNDER_SHARE = 10e15;
-uint constant FOUNDER_INITIAL_MINT_APPROVAL = 1e15;
+uint constant FOUNDERS_SHARE = 10e15;
+uint constant FOUNDERS_INITIAL_MINT_APPROVAL = 1e15;
 
 
 
 contract ArgennonToken is LockableERC20, MintableERC20, SharesToken {
-    bytes10 immutable public founder = "aybehrouz"; 
-    address immutable public founderAddress = FOUNDER;
-    
+   
     
     constructor(address payable _admin, address _owner) 
     Administered(_admin)
     MintableERC20(_owner, NAME, SYMBOL, SLOPE, INITIAL_SUPPLY, DURATION) {
         // we have to use low level functions because the msg.sender != owner and higher level functions will fail.
         // this will reduce our gas usage too.
-        ERC20._mint(FOUNDER, FOUNDER_SHARE);
-        mintingAllowances[FOUNDER] = FOUNDER_INITIAL_MINT_APPROVAL;
+        ERC20._mint(FOUNDER, FOUNDERS_SHARE);
+        mintingAllowances[FOUNDER] = FOUNDERS_INITIAL_MINT_APPROVAL;
     }
     
     
-    function decimals() public pure override returns (uint8) {
+    function founder() public pure returns(string memory) {
+        return "aybehrouz";
+    }
+    
+    
+    function founderAccount() public pure returns(address) {
+        return FOUNDER;
+    }
+    
+    
+    function decimals() public pure override returns(uint8) {
         return DECIMALS;
     }
     
