@@ -8,7 +8,7 @@ import "./Ballot.sol";
 import "./CrowdFunding.sol";
 
 
-uint64 constant MIN_LOCK_DURATION = 200 days;
+uint64 constant MIN_LOCK_DURATION = 210 days;
 uint constant MAX_STAKE_DIVISOR = 1e5;
 
 contract GovernanceSystem is Administered {
@@ -123,6 +123,9 @@ contract GovernanceSystem is Administered {
     
     function _approveMinter(bytes storage data) internal {
         (address minter, uint amount) = abi.decode(data, (address, uint));
+        // first we have to set the allowance to zero to make sure the call will not fail in case that minter has
+        // a non-zero allowance.
+        governanceToken.approveMinting(minter, 0);
         governanceToken.approveMinting(minter, amount);
     }
     

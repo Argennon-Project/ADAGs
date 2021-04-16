@@ -18,12 +18,12 @@ contract Administered is AccessControlled, PossessiveContract {
     }
     
 
-    function setAdmin(address payable newAdmin) onlyBy(admin) public {
+    function setAdmin(address payable newAdmin) onlyBy(admin) public virtual {
         admin = newAdmin;
     }
    
     
-    function withdrawToken(IERC20 token, uint256 amount) onlyBy(admin) public {
+    function withdrawToken(IERC20 token, uint256 amount) onlyBy(admin) public virtual {
         require(!canControl(token), "Withdrawal not allowed.");
         // we don't need to check transfer's return value.
         if (address(token) == address(0))

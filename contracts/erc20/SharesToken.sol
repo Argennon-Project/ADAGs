@@ -11,17 +11,19 @@ import "./../utils/Administered.sol";
 abstract contract SharesToken is ERC20, Administered {
     using ProfitTracker for ProfitSource; 
     
-    ProfitSource[] public trackers;
+    
+    ProfitSource[] private trackers;
 
 
     event ProfitSent(address recipient, uint amount, IERC20 token);
     
     
-    function registerProfitSource(IERC20 tokenContract) public onlyBy(admin) {
+    function registerProfitSource(IERC20 tokenContract) onlyBy(admin) public returns(uint sourceIndex) {
         // admin must NOT add a token that already exists in this list.
         ProfitSource storage newSource = trackers.push();
         newSource.fiatToken = tokenContract;
         newSource.sharesToken = this;
+        return trackers.length - 1;
     }
     
     
@@ -54,6 +56,7 @@ abstract contract SharesToken is ERC20, Administered {
 
 
 struct ProfitSource {
+    // profit[address] = balance * perTokenProfit + profitDeltas[address] / 2 ^ DELTAS_SHIFT 
     mapping(address => int) profitDeltas;
     IERC20 fiatToken;
     IERC20 sharesToken;

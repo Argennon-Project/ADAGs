@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 
 interface PossessiveContract {
-     function canControl(IERC20 token) view external returns(bool);
+     function canControl(IERC20 token) external view returns(bool);
 }
 
 
@@ -32,7 +32,7 @@ interface MintableToken {
 interface LockableMintable is MintableToken, LockableToken, PossessiveContract {}
 
 
-uint constant INVERTED_PRECISION = 1e6;
+uint constant INVERTED_PRECISION = 1e7;
 
 
 struct RationalNumber {
@@ -71,7 +71,7 @@ library Rational {
             require(self.a / r > INVERTED_PRECISION, "Not enough precision.");
             return q;
         }
-        require(self.a / (b - r) > INVERTED_PRECISION, "Not enough precision.");
+        require(self.a / (self.b - r) > INVERTED_PRECISION, "Not enough precision.");
         return q + 1;
     }
 }
