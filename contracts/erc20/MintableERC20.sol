@@ -39,6 +39,14 @@ contract MintableERC20 is ERC20, Owned {
             timestamp = duration + startTime;
         return slope * (timestamp - startTime) + initialSupply;
     }
+    
+    
+    function approveMinting(address minter, uint amount) onlyBy(owner) public {
+        // to prevent unintentional double usage of allowances by minters, we update allowance only if it was zero before.
+        require(mintingAllowances[minter] == 0, "minter already has a non-zero allowance.");
+        // we don't need to check anything about amount.
+        mintingAllowances[minter] = amount;
+    }
   
     
     function mint(address recipient, uint amount) public {
@@ -56,13 +64,5 @@ contract MintableERC20 is ERC20, Owned {
         // would change.
         super._mint(account, amount);
         require(totalSupply() <= allowedSupply(block.timestamp), "totalSupply exceeds limit.");
-    }
-    
-    
-    function approveMinting(address minter, uint amount) onlyBy(owner) public {
-        // to prevent unintentional double usage of allowances by minters, we update allowance only if it was zero before.
-        require(mintingAllowances[minter] == 0, "minter already has a non-zero allowance.");
-        // we don't need to check anything about amount.
-        mintingAllowances[minter] = amount;
     }
 }

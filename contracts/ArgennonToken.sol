@@ -12,20 +12,21 @@ import "./erc20/LockableERC20.sol";
 string constant NAME = "Argennon Token";
 string constant SYMBOL = "ARG";
 uint8 constant DECIMALS = 6;
-uint constant CAP = 500;
-uint constant INITIAL_SUPPLY = 20;
-uint constant DURATION = 200000;
+uint constant CAP = 50e15;
+uint constant INITIAL_SUPPLY = 15e15;
+uint constant DURATION = 2555 days;
 uint constant SLOPE = (CAP - INITIAL_SUPPLY) / DURATION;
 
 
 address constant FOUNDER = address(0x14723A09ACff6D2A60DcdF7aA4AFf308FDDC160C);
-uint constant FOUNDER_SHARE = 10;
-uint constant FOUNDER_INITIAL_MINT_APPROVAL = 1;
+uint constant FOUNDER_SHARE = 10e15;
+uint constant FOUNDER_INITIAL_MINT_APPROVAL = 1e15;
 
 
 
 contract ArgennonToken is LockableERC20, MintableERC20, SharesToken {
-    address immutable public aybehrouz = FOUNDER;
+    bytes10 immutable public founder = "aybehrouz"; 
+    address immutable public founderAddress = FOUNDER;
     
     
     constructor(address payable _admin, address _owner) 

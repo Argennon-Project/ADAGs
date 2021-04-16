@@ -99,6 +99,7 @@ contract GovernanceSystem is Administered {
             ballotEndTime < block.timestamp + lockDuration / 2,
             "Ballot end time is too far."
         );
+        // ballot contract will do other checks for times.
         uint128 lockTime = ballotEndTime + lockDuration; 
         require(
             governanceToken.locked(msg.sender).releaseTime >= lockTime,
@@ -108,7 +109,6 @@ contract GovernanceSystem is Administered {
             governanceToken.locked(msg.sender).amount >= governanceToken.totalSupply() / stakeDivisor,
             "Locked amount is not enough."
         );
-        // ballot contract will do other checks for times.
         return new Ballot(admin, title, governanceToken, ballotEndTime,  lockTime);
     }
     

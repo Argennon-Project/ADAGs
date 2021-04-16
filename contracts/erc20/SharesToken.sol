@@ -27,8 +27,8 @@ abstract contract SharesToken is ERC20, Administered {
     }
     
     
-    function myProfit(uint16 sourceIndex) public view returns (uint) {
-        return trackers[sourceIndex].profitBalance(msg.sender);
+    function profit(address account, uint16 sourceIndex) public view returns (uint) {
+        return trackers[sourceIndex].profitBalance(account);
     }
     
     
