@@ -20,6 +20,7 @@ abstract contract SharesToken is ERC20, Administered {
     
     function registerProfitSource(IERC20 tokenContract) onlyBy(admin) public returns(uint sourceIndex) {
         // admin must NOT add a token that already exists in this list.
+        require(!canControl(tokenContract), "Already registered.");
         ProfitSource storage newSource = trackers.push();
         newSource.fiatToken = tokenContract;
         newSource.sharesToken = this;
