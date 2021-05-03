@@ -8,12 +8,12 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./../utils/Administered.sol";
 
 /**
- * @title A token representing a share which is eligible to recieve profits 
+ * @title A token representing a share which is eligible to receive profits
  * @author aybehrouz
- * This token represents a share in some entity which entitles the owners to recieve profits. Multiple ERC20
+ * This token represents a share in some entity which entitles the owners to receive profits. Multiple ERC20
  * tokens could be defined as profit sources by `registerProfitSource` method. When Any amount of these
  * registered tokens is sent to the address of this ERC20 contract, it will be distributed between holders of
- * this token. The amount of recieved profit will be proportional to the balance of a user relative to 
+ * this token. The amount of received profit will be proportional to the balance of a user relative to
  * the total supply of the token.
  */
 abstract contract SharesToken is ERC20, Administered {

@@ -16,7 +16,6 @@ contract MintableERC20 is ERC20, Owned {
     mapping(address => uint) public mintingAllowances;
 
     
-    
     constructor(address _owner,
         string memory _name, string memory _symbol, 
         uint _slope, uint _initialSupply, uint _duration
@@ -41,9 +40,10 @@ contract MintableERC20 is ERC20, Owned {
             timestamp = duration + startTime;
         return slope * (timestamp - startTime) + initialSupply;
     }
-    
+
+
     /**
-     * Grants the allowance of minting `amount` new tokens to the `minter`. To prevent certain type of attackes, it is
+     * Grants the allowance of minting `amount` new tokens to the `minter`. To prevent certain type of attacks, it is
      * required that the current minting allowance of 'minter' be zero. So for updating the allowance amount you first
      * need to set it to zero. 
      * 
@@ -57,12 +57,13 @@ contract MintableERC20 is ERC20, Owned {
         mintingAllowances[minter] = amount;
         emit ApprovedMinting(minter, amount);
     }
+
   
     /**
      * Mints `amount` new tokens and sends it to `recipient`. Only `owner` can call this method or an address who has enough
      * minting allowance.
      * 
-     * @param recipient the address who will recieve the new tokens.
+     * @param recipient the address who will receive the new tokens.
      * @param amount the raw amount to be minted.
      */
     function mint(address recipient, uint amount) public {

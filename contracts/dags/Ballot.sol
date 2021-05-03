@@ -8,7 +8,7 @@ import "./../utils/Administered.sol";
 
 
 contract Ballot is Administered {
-    // Solidity offical docs recommends bytes32 over string.
+    // Solidity official docs recommends bytes32 over string.
     mapping(address => uint128) public votes;
     uint public totalWeight;
     

@@ -23,7 +23,7 @@ contract Administered is AccessControlled, PossessiveContract {
     }
    
     /**
-     * This method withraws any ERC20 tokens or Ethers that belongs to this contract and the contract is unable to
+     * This method withdraws any ERC20 tokens or Ethers that belongs to this contract and the contract is unable to
      * control them. Main usage of this method is for recovering trapped funds in the contract's address.
      * Only `admin` can call this method.
      * 

@@ -168,7 +168,7 @@ function validate(CrowdFundingConfig memory conf) pure returns (CrowdFundingConf
     // require  0.1 < redemptionRatio < 1
     require(
         Rational.ceil(Rational.mul(conf.redemptionRatio, 10 * INVERTED_PRECISION)) < 10 * INVERTED_PRECISION,
-        "Invalid redemeption ratio."
+        "Invalid redemption ratio."
     );
     require(conf.price.a > 0, "Price can not be zero.");
     return conf;

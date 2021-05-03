@@ -21,20 +21,22 @@ abstract contract LockableERC20 is ERC20 {
     
     
     /**
-     * Gets the defined lock for an address. An account can't transfer any tokens as long as its balance is lower 
-     * than `threshold` amount. The lock will be active till `releaseTime`, and it can not be canceled by any
-     * means. A lock can only be extended.
+     * Returns the information of the defined lock for an address. An account can't transfer any tokens as long as
+     * its balance is lower than `threshold` amount. The lock will be active till `releaseTime`, and it can not 
+     * be canceled by any means. A lock can only be extended.
      */
     mapping(address => Lock) public locksData;
     
     
-    event LockUpdated(address account, uint128 amount, uint128 timestamp);
+    event LockUpdated(address account, uint128 amount, uint128 releaseTime);
+    
     
     /**
-     * Gets the amount of tokens that are locked in 'account'.
-     * @param
+     * Returns the actual amount of tokens that are locked in an account. The balance of `account` will always be
+     * higher than the locked amount.
+     *
      * @return a `LockedTokens` struct which its first field is the amount of locked tokens and its second field
-     * is the timestamp that they will be released.
+     * is the timestamp that the tokens will be unlocked after.
      */
     function locked(address account) public view returns(LockedTokens memory) {
         return LockedTokens({
@@ -49,12 +51,13 @@ abstract contract LockableERC20 is ERC20 {
      * Extends the defined lock on your account. This operation is irreversible.
      * 
      * @param amountToIncrease will be added to the current lock threshold, which will increase the amount
-     * of locked tokens.
-     * @param timeToExtend will be added to the current lock's release time, which will increase the duration of lock.
+     * of locked tokens threshold.
+     * @param timeToExtend will be added to the current lock's release time, which will increase the duration of
+     * the lock.
      */
     function extendLock(uint128 amountToIncrease, uint128 timeToExtend) public {
-        // we do not check the user balance and let the user to increase his lock. this will enable use cases that an account
-        // could act like a timed locked smart contract.
+        // we do not check the user balance and let the user to increase his lock threshold beyond his balance. 
+        // this will enable use cases that an account could act like a timed locked smart contract.
         
         // here solidity should be able to detect overflows.
         locksData[msg.sender].threshold += amountToIncrease;
@@ -71,7 +74,7 @@ abstract contract LockableERC20 is ERC20 {
             locksData[from].releaseTime = 0;
             return;
         }
-        require(balanceOf(from) - amount >= locksData[msg.sender].threshold, "Can't move locked tokens.");
+        require(balanceOf(from) >= locksData[msg.sender].threshold + amount, "Not enough non-locked tokens.");
     }
 }
     
