@@ -18,4 +18,5 @@ contract Owned is AccessControlled {
     function setOwner(address newOwner) onlyBy(owner) public virtual {
         owner = newOwner;
     }
+    
 }

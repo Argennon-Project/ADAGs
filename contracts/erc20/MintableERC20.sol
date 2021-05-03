@@ -28,7 +28,9 @@ contract MintableERC20 is ERC20, Owned {
         duration = _duration;
     }
     
-   
+    
+    event ApprovedMinting(address minter, uint amount);
+    
     
     function allowedSupply(uint timestamp) public view virtual returns (uint) {
         // we should be careful about overflows and we should not let the function fails due to overflow.
@@ -40,15 +42,29 @@ contract MintableERC20 is ERC20, Owned {
         return slope * (timestamp - startTime) + initialSupply;
     }
     
-    
+    /**
+     * Grants the allowance of minting `amount` new tokens to the `minter`. To prevent certain type of attackes, it is
+     * required that the current minting allowance of 'minter' be zero. So for updating the allowance amount you first
+     * need to set it to zero. 
+     * 
+     * @param minter is the address who is allowed to mint tokens.
+     * @param amount is the maximum allowed amount of minting.
+     */
     function approveMinting(address minter, uint amount) onlyBy(owner) public {
         // to prevent unintentional double usage of allowances by minters, we update allowance only if it was zero before.
         require(mintingAllowances[minter] == 0, "minter already has a non-zero allowance.");
         // we don't need to check anything about amount.
         mintingAllowances[minter] = amount;
+        emit ApprovedMinting(minter, amount);
     }
   
-    
+    /**
+     * Mints `amount` new tokens and sends it to `recipient`. Only `owner` can call this method or an address who has enough
+     * minting allowance.
+     * 
+     * @param recipient the address who will recieve the new tokens.
+     * @param amount the raw amount to be minted.
+     */
     function mint(address recipient, uint amount) public {
         if (msg.sender != owner) {
             require(mintingAllowances[msg.sender] >= amount, "amount exceeds allowance.");
@@ -58,7 +74,6 @@ contract MintableERC20 is ERC20, Owned {
     }
     
     
-    // this function should not be virtual
     function _mint(address account, uint amount) internal virtual override {
         // first we need to mint, then we can check the condition. because we don't know how the totalSupply
         // would change.

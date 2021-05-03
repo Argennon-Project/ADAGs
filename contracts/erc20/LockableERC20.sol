@@ -20,9 +20,22 @@ abstract contract LockableERC20 is ERC20 {
     }
     
     
+    /**
+     * Gets the defined lock for an address. An account can't transfer any tokens as long as its balance is lower 
+     * than `threshold` amount. The lock will be active till `releaseTime`, and it can not be canceled by any
+     * means. A lock can only be extended.
+     */
     mapping(address => Lock) public locksData;
     
     
+    event LockUpdated(address account, uint128 amount, uint128 timestamp);
+    
+    /**
+     * Gets the amount of tokens that are locked in 'account'.
+     * @param
+     * @return a `LockedTokens` struct which its first field is the amount of locked tokens and its second field
+     * is the timestamp that they will be released.
+     */
     function locked(address account) public view returns(LockedTokens memory) {
         return LockedTokens({
             // minimum can't be bigger than an uint128, so the cast is safe.
@@ -32,6 +45,13 @@ abstract contract LockableERC20 is ERC20 {
     }
     
     
+    /**
+     * Extends the defined lock on your account. This operation is irreversible.
+     * 
+     * @param amountToIncrease will be added to the current lock threshold, which will increase the amount
+     * of locked tokens.
+     * @param timeToExtend will be added to the current lock's release time, which will increase the duration of lock.
+     */
     function extendLock(uint128 amountToIncrease, uint128 timeToExtend) public {
         // we do not check the user balance and let the user to increase his lock. this will enable use cases that an account
         // could act like a timed locked smart contract.
@@ -39,6 +59,7 @@ abstract contract LockableERC20 is ERC20 {
         // here solidity should be able to detect overflows.
         locksData[msg.sender].threshold += amountToIncrease;
         locksData[msg.sender].releaseTime += timeToExtend;
+        emit LockUpdated(msg.sender, locksData[msg.sender].threshold, locksData[msg.sender].releaseTime);
     }
     
 

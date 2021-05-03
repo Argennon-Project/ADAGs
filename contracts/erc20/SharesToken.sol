@@ -7,12 +7,20 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./../utils/Administered.sol";
 
-
+/**
+ * @title A token representing a share which is eligible to recieve profits 
+ * @author aybehrouz
+ * This token represents a share in some entity which entitles the owners to recieve profits. Multiple ERC20
+ * tokens could be defined as profit sources by `registerProfitSource` method. When Any amount of these
+ * registered tokens is sent to the address of this ERC20 contract, it will be distributed between holders of
+ * this token. The amount of recieved profit will be proportional to the balance of a user relative to 
+ * the total supply of the token.
+ */
 abstract contract SharesToken is ERC20, Administered {
     using ProfitTracker for ProfitSource; 
     
     
-    ProfitSource[] private trackers;
+    ProfitSource[] public trackers;
 
 
     event ProfitSent(address recipient, uint amount, IERC20 token);
@@ -27,12 +35,22 @@ abstract contract SharesToken is ERC20, Administered {
         return trackers.length - 1;
     }
     
-    
+    /**
+     * Gets the amount of profit that `account` has acquired in the ERC20 token specified
+     * by `sourceIndex`.
+     * 
+     * @param sourceIndex is the index of the ERC20 token in the `trackers` list.
+     * @return the total amount of gained profit.
+     */
     function profit(address account, uint16 sourceIndex) public view returns (uint) {
         return trackers[sourceIndex].profitBalance(account);
     }
     
-    
+    /**
+     * Withdraws the requested `amount` of the sender's profit in the token specified by `sourceIndex`
+     * 
+     * @param sourceIndex is the index of the ERC20 token in the `trackers` list.
+     */
     function withdrawProfit(uint256 amount, uint16 sourceIndex) public {
         trackers[sourceIndex].withdrawProfit(msg.sender, amount);
         emit ProfitSent(msg.sender, amount, trackers[sourceIndex].fiatToken);
