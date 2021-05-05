@@ -4,7 +4,14 @@
 pragma solidity ^0.8.0;
 
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+// for truffle use these imports:
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
+
+
+// for Remix use these imports:
+// import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+// import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 
 interface PossessiveContract {
