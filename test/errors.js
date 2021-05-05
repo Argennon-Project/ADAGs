@@ -1,7 +1,10 @@
 
-exports.LOCK_ERROR = "Error: Returned error: VM Exception while processing transaction: revert Not enough non-locked tokens. -- Reason given: Not enough non-locked tokens..";
+exports.LOCKED_ERROR = "Error: Returned error: VM Exception while processing transaction: revert Not enough " +
+    "non-locked tokens. -- Reason given: Not enough non-locked tokens..";
+exports.LOCK_UPDATE_ERROR = "Error: Returned error: VM Exception while processing transaction: revert Locks can only " +
+    "be extended. -- Reason given: Locks can only be extended..";
 
-exports.expect = async function (promise, error) {
+exports.expectError = async function (promise, error) {
     let passed = false;
     try {
         await promise;

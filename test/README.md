@@ -1,11 +1,11 @@
-Unit tests can be run using truffle suit. To run unit test by truffle suit follow these steps:
+Unit tests can be run using truffle suit. To run unit tests by truffle follow these steps:
 
 Use truffle to initialize a new project:
 
     cd MyProject
     truffle init
 
-Install OpenZeppelin in your new project
+Install OpenZeppelin in your new project:
 
     npm init -y
     npm install --save-exact openzeppelin-solidity
@@ -20,7 +20,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 
 Configure truffle to use the right solc compiler version by changing `truffle-config.js` file:
 
-```json
+```
 // Configure your compilers
   compilers: {
     solc: {

@@ -28,11 +28,12 @@ abstract contract LockableERC20 is ERC20 {
     
     
     event LockUpdated(address account, uint128 amount, uint128 releaseTime);
-    
-    
+
+
     /**
-     * Returns the actual amount of tokens that are locked in an account. The balance of `account` will always be
-     * higher than the locked amount.
+     * Returns the actual amount of tokens that are locked in an account till the release time. The balance of
+     * `account` will always be higher than the locked amount. The release time may have been expired and should
+     * always be checked.
      *
      * @return a `LockedTokens` struct which its first field is the amount of locked tokens and its second field
      * is the timestamp that the tokens will be unlocked after.
@@ -49,31 +50,39 @@ abstract contract LockableERC20 is ERC20 {
     /**
      * Extends the defined lock on your account. This operation is irreversible.
      * 
-     * @param amountToIncrease will be added to the current lock threshold, which will increase the amount
-     * of locked tokens threshold.
-     * @param timeToExtend will be added to the current lock's release time, which will increase the duration of
-     * the lock.
+     * @param threshold is the maximum amount of locked tokens. When the balance of your account is higher than this
+     * threshold, the extra token may be transferred.
+     * @param releaseTime is the lock's release time. After this time the lock will be deactivated.
      */
-    function extendLock(uint128 amountToIncrease, uint128 timeToExtend) public {
+    function setLock(uint128 threshold, uint128 releaseTime) public {
         // we do not check the user balance and let the user to increase his lock threshold beyond his balance. 
         // this will enable use cases that an account could act like a timed locked smart contract.
-        
-        // here solidity should be able to detect overflows.
-        locksData[msg.sender].threshold += amountToIncrease;
-        locksData[msg.sender].releaseTime += timeToExtend;
+        _updateLock(msg.sender);
+        require(
+            threshold >= locksData[msg.sender].threshold &&
+            releaseTime >= locksData[msg.sender].releaseTime,
+            "Locks can only be extended."
+        );
+        locksData[msg.sender].threshold = threshold;
+        locksData[msg.sender].releaseTime = releaseTime;
         emit LockUpdated(msg.sender, locksData[msg.sender].threshold, locksData[msg.sender].releaseTime);
     }
-    
+
 
     function _beforeTokenTransfer(address from, address, uint256 amount) internal override virtual {
+        // we update the lock after this check to reduce transfer's gas consumption
         if (locksData[from].threshold == 0)
             return;
-        if (locksData[from].releaseTime < block.timestamp) {
-            locksData[from].threshold = 0;
-            locksData[from].releaseTime = 0;
-            return;
-        }
+        _updateLock(from);
         require(balanceOf(from) >= locksData[msg.sender].threshold + amount, "Not enough non-locked tokens.");
+    }
+
+
+    function _updateLock(address account) internal {
+        if (locksData[account].releaseTime < block.timestamp) {
+            locksData[account].threshold = 0;
+            locksData[account].releaseTime = 0;
+        }
     }
 }
     

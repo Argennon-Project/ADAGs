@@ -5,52 +5,61 @@ contract('LockableERC20', (accounts) => {
 
     let lockableToken;
 
-    before(async () => {
+    beforeEach(async () => {
         lockableToken = await LockableTestToken.new(accounts[0], 1000);
     })
 
-    it('should transfer and lock tokens', async () => {
-        await lockableToken.extendLock(300, Math.floor(Date.now() / 1000) - 200, {from: accounts[1]});
-
+    it('should transfer and then lock tokens', async () => {
+        await lockableToken.setLock(300, Math.floor(Date.now() / 1000) + 200, {from: accounts[1]});
         await lockableToken.transfer(accounts[1], 200, {from: accounts[0]});
-        const balance = await lockableToken.balanceOf.call(accounts[1]);
-        assert.equal(balance.toNumber(), 200, "200 was not transferred.");
+        assert.equal(
+            (await lockableToken.balanceOf.call(accounts[1])).toNumber(),
+            200,
+            "200 was not transferred."
+        );
 
         const lock = await lockableToken.locked.call(accounts[1]);
         assert.equal(lock.amount.valueOf(), 200, "200 was not locked.");
 
-        Errors.expect(lockableToken.transfer(accounts[0], 100, {from: accounts[1]}), Errors.LOCK_ERROR);
+        Errors.expectError(
+            lockableToken.transfer(accounts[0], 100, {from: accounts[1]}),
+            Errors.LOCKED_ERROR
+        );
     });
 
     it('should extend lock', async () => {
-        const lockableToken = await LockableTestToken.new(accounts[0], 1000);
-        await lockableToken.transfer(accounts[1], 400, {from: accounts[0]});
-        const balance = await lockableToken.balanceOf.call(accounts[1]);
-        assert.equal(balance.toNumber(), 400, "400 was not transferred.");
+        await lockableToken.transfer(accounts[1], 200, {from: accounts[0]});
+        assert.equal(
+            (await lockableToken.balanceOf.call(accounts[1])).toNumber(),
+            200,
+            "200 was not transferred."
+        );
+
+        await lockableToken.setLock(200, Math.floor(Date.now() / 1000) - 1000, {from: accounts[1]});
+        lockableToken.transfer(accounts[2], 100, {from: accounts[1]});
+        assert.equal(
+            (await lockableToken.balanceOf.call(accounts[2])).toNumber(),
+            100,
+            "100 was not transferred."
+        );
+        await lockableToken.setLock(50, Math.floor(Date.now() / 1000) + 1000, {from: accounts[1]});
+        await lockableToken.setLock(150, Math.floor(Date.now() / 1000) + 1000, {from: accounts[1]});
+        Errors.expectError(
+            lockableToken.setLock(200, Math.floor(Date.now() / 1000) + 900, {from: accounts[1]}),
+            Errors.LOCK_UPDATE_ERROR
+        );
+
+        await lockableToken.transfer(accounts[1], 100, {from: accounts[0]});
+        // first transfer should be successful.
+        await lockableToken.transfer(accounts[2], 50, {from: accounts[1]});
+        Errors.expectError(
+            lockableToken.transfer(accounts[2], 1, {from: accounts[1]}),
+            Errors.LOCKED_ERROR
+        );
+        assert.equal(
+            (await lockableToken.balanceOf.call(accounts[2])).toNumber(),
+            150,
+            "Error in acc2's final balance."
+        );
     });
-
-    /*
-    it('should send coin correctly', async () => {
-      const metaCoinInstance = await MetaCoin.deployed();
-
-      // Setup 2 accounts.
-      const accountOne = accounts[0];
-      const accountTwo = accounts[1];
-
-      // Get initial balances of first and second account.
-      const accountOneStartingBalance = (await metaCoinInstance.getBalance.call(accountOne)).toNumber();
-      const accountTwoStartingBalance = (await metaCoinInstance.getBalance.call(accountTwo)).toNumber();
-
-      // Make transaction from first account to second.
-      const amount = 10;
-      await metaCoinInstance.sendCoin(accountTwo, amount, { from: accountOne });
-
-      // Get balances of first and second account after the transactions.
-      const accountOneEndingBalance = (await metaCoinInstance.getBalance.call(accountOne)).toNumber();
-      const accountTwoEndingBalance = (await metaCoinInstance.getBalance.call(accountTwo)).toNumber();
-
-
-      assert.equal(accountOneEndingBalance, accountOneStartingBalance - amount, "Amount wasn't correctly taken from the sender");
-      assert.equal(accountTwoEndingBalance, accountTwoStartingBalance + amount, "Amount wasn't correctly sent to the receiver");
-    });*/
 });
