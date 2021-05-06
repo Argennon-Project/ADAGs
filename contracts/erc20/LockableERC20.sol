@@ -61,7 +61,7 @@ abstract contract LockableERC20 is ERC20 {
         require(
             threshold >= locksData[msg.sender].threshold &&
             releaseTime >= locksData[msg.sender].releaseTime,
-            "Locks can only be extended."
+            "locks can only be extended"
         );
         locksData[msg.sender].threshold = threshold;
         locksData[msg.sender].releaseTime = releaseTime;
@@ -74,7 +74,7 @@ abstract contract LockableERC20 is ERC20 {
         if (locksData[from].threshold == 0)
             return;
         _updateLock(from);
-        require(balanceOf(from) >= locksData[msg.sender].threshold + amount, "Not enough non-locked tokens.");
+        require(balanceOf(from) >= locksData[msg.sender].threshold + amount, "not enough non-locked tokens");
     }
 
 

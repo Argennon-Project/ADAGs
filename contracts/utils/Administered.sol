@@ -31,7 +31,7 @@ contract Administered is AccessControlled, PossessiveContract {
      * @param amount is the raw amount to withdraw.
      */
     function withdrawToken(IERC20 token, uint256 amount) onlyBy(admin) public virtual {
-        require(!canControl(token), "Withdrawal not allowed.");
+        require(!canControl(token), "withdrawal not allowed");
         // we don't need to check transfer's return value.
         if (address(token) == address(0))
             admin.transfer(amount);

@@ -27,7 +27,7 @@ abstract contract SharesToken is ERC20, Administered {
     
     function registerProfitSource(IERC20 tokenContract) onlyBy(admin) public returns(uint sourceIndex) {
         // admin must NOT add a token that already exists in this list.
-        require(!canControl(tokenContract), "Already registered.");
+        require(!canControl(tokenContract), "already registered");
         ProfitSource storage newSource = trackers.push();
         newSource.fiatToken = tokenContract;
         newSource.sharesToken = this;
@@ -117,7 +117,7 @@ library ProfitTracker {
     
     
     function withdrawProfit(ProfitSource storage self, address recipient, uint amount) internal {
-        require(amount <= profitBalance(self, recipient), "Profit balance is not enough.");
+        require(amount <= profitBalance(self, recipient), "profit balance is not enough");
         self.profitDeltas[recipient] -= int(amount << DELTAS_SHIFT);
         self.withdrawalSum += amount;
         
@@ -130,7 +130,7 @@ library ProfitTracker {
     
     function _tokensGainedProfitShifted(ProfitSource storage self, uint tokenAmount)
     private view returns (RationalNumber memory) {
-        require(tokenAmount < self.sharesToken.totalSupply(), "amount is too high.");
+        require(tokenAmount < self.sharesToken.totalSupply(), "amount is too high");
         
         uint totalGained = self.withdrawalSum + self.fiatToken.balanceOf(address(this));
         if (totalGained < PROFIT_DISTRIBUTION_THRESHOLD)

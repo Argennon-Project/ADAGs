@@ -31,7 +31,7 @@ interface LockableToken {
 
 interface MintableToken {
     function mint(address recipient, uint amount) external;
-    function approveMinting(address minter, uint amount) external;
+    function increaseMintingAllowance(address minter, uint amount) external;
     function setOwner(address newOwner) external;
 }
 
@@ -75,10 +75,10 @@ library Rational {
         // now we check to see if we have enough precision or not.
         // our error is r / b so our fractional error is (r / b) / (a / b) and we should have (a / r) > 1 / e. 
         if (down) {
-            require(self.a / r > INVERTED_PRECISION, "Not enough precision.");
+            require(self.a / r > INVERTED_PRECISION, "not enough precision");
             return q;
         }
-        require(self.a / (self.b - r) > INVERTED_PRECISION, "Not enough precision.");
+        require(self.a / (self.b - r) > INVERTED_PRECISION, "not enough precision");
         return q + 1;
     }
 }

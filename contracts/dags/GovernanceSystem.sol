@@ -116,17 +116,15 @@ contract GovernanceSystem is Administered {
     function _createCF(bytes storage data) internal {
         (CrowdFundingConfig memory cfConfig) = abi.decode(data, (CrowdFundingConfig));
         CrowdFunding result = new CrowdFunding(admin, address(governanceToken), cfConfig);
-        governanceToken.approveMinting(address(result), cfConfig.totalSupply);
+        governanceToken.increaseMintingAllowance(address(result), cfConfig.totalSupply);
         crowdFundings.push(result);
     }
     
     
     function _approveMinter(bytes storage data) internal {
         (address minter, uint amount) = abi.decode(data, (address, uint));
-        // first we have to set the allowance to zero to make sure the call will not fail in case that minter has
-        // a non-zero allowance.
-        governanceToken.approveMinting(minter, 0);
-        governanceToken.approveMinting(minter, amount);
+        // the new amount will be added to the previous allowance amount
+        governanceToken.increaseMintingAllowance(minter, amount);
     }
     
     
