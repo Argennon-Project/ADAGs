@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: 
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 
 pragma solidity ^0.8.0;
@@ -10,7 +10,7 @@ import "./../utils/Administered.sol";
  * @title A token representing a share which is eligible to receive profits
  * @author aybehrouz
  * This token represents a share in some entity which entitles the owners to receive profits. Multiple ERC20
- * tokens could be defined as profit sources by `registerProfitSource` method. When Any amount of these
+ * tokens could be defined as profit sources by `registerProfitSource` method. When any amount of these
  * registered tokens is sent to the address of this ERC20 contract, it will be distributed between holders of
  * this token. The amount of received profit will be proportional to the balance of a user relative to
  * the total supply of the token.
@@ -24,7 +24,16 @@ abstract contract SharesToken is ERC20, Administered {
 
     event ProfitSent(address recipient, uint amount, IERC20 token);
     
-    
+    /**
+     * Registers a new profit source which must be an ERC20 contract. After registration, the balance of this contract
+     * address in the registered ERC20 token will be considered the profit of shareholders, and it will be distributed
+     * between holders of this token.
+     *
+     * Only `admin` can call this method.
+     *
+     * @return sourceIndex which is the index of the registered profit source which acts as an identifier of the source,
+     * and is used as `sourceIndex` parameter of several other methods of this contract.
+     */
     function registerProfitSource(IERC20 tokenContract) onlyBy(admin) public returns(uint sourceIndex) {
         // admin must NOT add a token that already exists in this list.
         require(!canControl(tokenContract), "already registered");

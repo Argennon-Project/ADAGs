@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 const Errors = require('./errors.js');
 const LockableTestToken = artifacts.require("LockableTestToken");
 
