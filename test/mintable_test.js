@@ -42,11 +42,11 @@ contract("MintableERC20", (accounts) => {
         await mintableToken.increaseMintingAllowance(accounts[1], 300000, {from: owner});
         await Errors.expectError(
             mintableToken.mint(accounts[2], 200000, {from: owner}),
-            Errors.EXCEEDS_MAX_SUPPLY_LIMIT
+            Errors.EXCEEDS_MAX_SUPPLY_ERROR
         );
         await Errors.expectError(
             mintableToken.mint(accounts[2], 200000, {from: accounts[1]}),
-            Errors.EXCEEDS_MAX_SUPPLY_LIMIT
+            Errors.EXCEEDS_MAX_SUPPLY_ERROR
         );
         assert.equal(
             (await mintableToken.balanceOf.call(accounts[2])).toNumber(),
@@ -59,22 +59,22 @@ contract("MintableERC20", (accounts) => {
         const now = Math.floor(Date.now() / 1000);
         mintableToken = await MintableToken.new(owner, "", "", 2n ** 128n , 2n ** 130n, now + 1000, 2 ** 14);
         assert.equal(
-            (await mintableToken.allowedSupply.call(now + 500)).valueOf(),
+            (await mintableToken.maxAllowedSupply.call(now + 500)).valueOf(),
             2n ** 128n,
             "max total supply is invalid at point_1"
         );
         assert.equal(
-            (await mintableToken.allowedSupply.call(now + 1000 + 2 ** 10)).valueOf(),
+            (await mintableToken.maxAllowedSupply.call(now + 1000 + 2 ** 10)).valueOf(),
             2n ** 128n + 3n * 2n ** 124n,
             "max total supply is invalid at point_2"
         );
         assert.equal(
-            (await mintableToken.allowedSupply.call(now + 1000 + 2 ** 12)).valueOf(),
+            (await mintableToken.maxAllowedSupply.call(now + 1000 + 2 ** 12)).valueOf(),
             2n ** 128n + 3n * 2n ** 126n,
             "max total supply is invalid at point_3"
         );
         assert.equal(
-            (await mintableToken.allowedSupply.call(now + 100000)).valueOf(),
+            (await mintableToken.maxAllowedSupply.call(now + 100000)).valueOf(),
             2n ** 130n,
             "max total supply is invalid at point_4"
         );

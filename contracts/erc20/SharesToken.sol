@@ -6,6 +6,13 @@ pragma solidity ^0.8.0;
 
 import "./../utils/Administered.sol";
 
+
+interface StakeRegistry {
+    function stakeOf(address account) external view returns (uint);
+    function totalStake() external view returns (uint);
+}
+
+
 /**
  * @title A token representing a share which is eligible to receive profits
  * @author aybehrouz
@@ -15,7 +22,7 @@ import "./../utils/Administered.sol";
  * this token. The amount of received profit will be proportional to the balance of a user relative to
  * the total supply of the token.
  */
-abstract contract SharesToken is ERC20, Administered {
+abstract contract SharesToken is StakeRegistry, ERC20, Administered {
     using ProfitTracker for ProfitSource; 
     
     
@@ -23,7 +30,8 @@ abstract contract SharesToken is ERC20, Administered {
 
 
     event ProfitSent(address recipient, uint amount, IERC20 token);
-    
+
+
     /**
      * Registers a new profit source which must be an ERC20 contract. After registration, the balance of this contract
      * address in the registered ERC20 token will be considered the profit of shareholders, and it will be distributed
@@ -39,10 +47,11 @@ abstract contract SharesToken is ERC20, Administered {
         require(!canControl(tokenContract), "already registered");
         ProfitSource storage newSource = trackers.push();
         newSource.fiatToken = tokenContract;
-        newSource.sharesToken = this;
+        newSource.stakeRegistry = this;
         return trackers.length - 1;
     }
-    
+
+
     /**
      * Gets the amount of profit that `account` has acquired in the ERC20 token specified
      * by `sourceIndex`.
@@ -53,7 +62,8 @@ abstract contract SharesToken is ERC20, Administered {
     function profit(address account, uint16 sourceIndex) public view returns (uint) {
         return trackers[sourceIndex].profitBalance(account);
     }
-    
+
+
     /**
      * Withdraws the requested `amount` of the sender's profit in the token specified by `sourceIndex`
      * 
@@ -79,6 +89,16 @@ abstract contract SharesToken is ERC20, Administered {
         }
         return false;
     }
+
+
+    function stakeOf(address account) public view override virtual returns (uint) {
+        return balanceOf(account);
+    }
+
+
+    function totalStake() public view override virtual returns (uint) {
+        return totalSupply();
+    }
 }
 
 
@@ -86,7 +106,7 @@ struct ProfitSource {
     // profit[address] = balance * perTokenProfit + profitDeltas[address] / 2 ^ DELTAS_SHIFT 
     mapping(address => int) profitDeltas;
     IERC20 fiatToken;
-    IERC20 sharesToken;
+    StakeRegistry stakeRegistry;
     uint withdrawalSum;
 }
 
@@ -116,7 +136,7 @@ library ProfitTracker {
     
     
     function profitBalance(ProfitSource storage self, address recipient) internal view returns (uint) {
-        uint userBalance = self.sharesToken.balanceOf(recipient);
+        uint userBalance = self.stakeRegistry.stakeOf(recipient);
         int rawProfit = int(_tokensGainedProfitShifted(self, userBalance).floor()) + self.profitDeltas[recipient];
         if (rawProfit < 0)
             rawProfit = 0;
@@ -139,7 +159,7 @@ library ProfitTracker {
     
     function _tokensGainedProfitShifted(ProfitSource storage self, uint tokenAmount)
     private view returns (RationalNumber memory) {
-        require(tokenAmount < self.sharesToken.totalSupply(), "amount is too high");
+        require(tokenAmount < self.stakeRegistry.totalStake(), "amount is too high");
         
         uint totalGained = self.withdrawalSum + self.fiatToken.balanceOf(address(this));
         if (totalGained < PROFIT_DISTRIBUTION_THRESHOLD)
@@ -148,6 +168,6 @@ library ProfitTracker {
         // first we need to convert the unit of our total gained profit into deltas unit.
         totalGained = totalGained << DELTAS_SHIFT;
         
-        return RationalNumber(tokenAmount * totalGained, self.sharesToken.totalSupply());
+        return RationalNumber(tokenAmount * totalGained, self.stakeRegistry.totalStake());
     }
 }

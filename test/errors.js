@@ -4,7 +4,7 @@ exports.NOT_AUTHORIZED_ERROR = "Error: Returned error: VM Exception while proces
     "sender not authorized -- Reason given: sender not authorized.";
 exports.MINT_ALLOWANCE_ERROR = "Error: Returned error: VM Exception while processing transaction: revert amount " +
     "exceeds allowance -- Reason given: amount exceeds allowance.";
-exports.EXCEEDS_MAX_SUPPLY_LIMIT = "Error: Returned error: VM Exception while processing transaction: revert " +
+exports.EXCEEDS_MAX_SUPPLY_ERROR = "Error: Returned error: VM Exception while processing transaction: revert " +
     "totalSupply exceeds limit -- Reason given: totalSupply exceeds limit.";
 exports.LOCKED_ERROR = "Error: Returned error: VM Exception while processing transaction: revert not enough " +
     "non-locked tokens -- Reason given: not enough non-locked tokens.";

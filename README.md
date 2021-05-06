@@ -5,19 +5,21 @@ of ARG token is as follows:
 
 - After lunch of the Argennon blockchain the ARG tokens will be convertible in 1:1 ratio to the main currency of the
   Argennon blockchain.
-- The ARG ERC20 contract is a profit distributor. That means when an amount of ERC20 tokens (for instance USDT or WETH)
-  is sent to its address, that amount will be distributed between all ARG holders. When, an ICO is held the earnings of
-  the ICO will be sent to the ARG ERC20 contract address and hence it will be distributed between ARG holders.
+- The ARG ERC20 contract is a profit distributor. That means when some amount of a registered ERC20 token (for instance
+  USDT or WETH) is sent to its address, that amount will be distributed between all ARG holders. When, a crowdfunding is
+  done the earnings of the crowdfunding will be sent to the ARG ERC20 contract address and hence it will be distributed
+  between ARG holders.
 - Holders of ARG token are eligible to vote in the Argennon Distributed Autonomous Governance system (ADAGs). The ADAGs
-  is a smart contract which decides about new ICOs, their configuration and minting new ARG tokens.
+  is a smart contract which decides about new crowdfunding campaigns, their configuration and minting new ARG tokens.
 
-Several crowdfunding may be held before the lunch of the Argennon blockchain, all of them will follow these rules:
+Several crowdfunding campaigns may be held before the lunch of the Argennon blockchain, all of them will follow these
+rules:
 
-- Any crowdfunding is held using a smart contract: the CF contract, and has its own token: the ICO token. Users may buy
-  ICO tokens from the CF contract. A user can burn his ICO tokens and convert them to ARG token in 1:1 ratio at any time
-  using the CF contract.
+- Any crowdfunding is conducted using a smart contract: the CF contract, and has its own token: the ICO token. Users may
+  buy ICO tokens from the CF contract. A user can burn his ICO tokens and convert them to the ARG token in 1:1 ratio
+  using the CF contract at any time.
 - The ICO token is redeemable. This means that anyone can redeem his ICO tokens by using the CF contract and get a
-  refund. The redemption price depends on the time since the start of the crowdfunding and the amount of funds that the
+  refund. The redemption price depends on the time since the start of the crowdfunding and the amount of funds the
   crowdfunding has raised so far:
     - If the amount of raised funds has not reached some predefined threshold, a user can redeem at 100% price.
     - If the amount of raised funds has reached the threshold, then the redemption price will drop to the configured
@@ -37,5 +39,5 @@ The minting of the ARG ERC20 token will follow these rules:
 - 1 billion -> first crowdfunding which will be sold for 50,000$
 
 The minting of the remaining 34 billion will be decided by the ADAGs, but it has to be limited to 5 billion per year at
-max. This limit is imposed by ARG token ERC20 contract. After the lunch of the Argennon blockchain, all unminted ARG
+max. This limit is imposed by the ARG token ERC20 contract. After the lunch of the Argennon blockchain, all unminted ARG
 tokens will become the reserve of the ADAGs counterpart on the Argennon blockchain.
