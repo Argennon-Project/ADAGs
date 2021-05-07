@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 
 
 import "./erc20/MintableERC20.sol";
-import "./erc20/SharesToken.sol";
+import "./erc20/DistributorERC20.sol";
 import "./erc20/LockableERC20.sol";
 
 
@@ -23,7 +23,7 @@ uint constant FOUNDERS_INITIAL_MINT_APPROVAL = 1e15;
 
 
 
-contract ArgennonToken is LockableERC20, MintableERC20, SharesToken {
+contract ArgennonToken is LockableERC20, MintableERC20, DistributorERC20 {
    
     
     constructor(address payable _admin, address _owner) 
@@ -55,14 +55,11 @@ contract ArgennonToken is LockableERC20, MintableERC20, SharesToken {
         MintableERC20._mint(account, amount);
     }
     
-    
-    function _transfer(address sender, address recipient, uint256 amount) internal override(ERC20, SharesToken) {
-        SharesToken._transfer(sender, recipient, amount);
-    }
-    
-    
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal override(ERC20, LockableERC20) {
+
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal
+    override(ERC20, LockableERC20, DistributorERC20) {
         LockableERC20._beforeTokenTransfer(from, to, amount);
+        DistributorERC20._beforeTokenTransfer(from, to, amount);
     }
 }
   

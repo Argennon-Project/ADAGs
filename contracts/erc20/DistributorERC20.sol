@@ -10,6 +10,7 @@ import "./../utils/Administered.sol";
 interface StakeRegistry {
     function stakeOf(address account) external view returns (uint);
     function totalStake() external view returns (uint);
+    function isExcludedFromProfits(address account) external view returns (bool);
 }
 
 
@@ -22,11 +23,12 @@ interface StakeRegistry {
  * this token. The amount of received profit will be proportional to the balance of a user relative to
  * the total supply of the token.
  */
-abstract contract SharesToken is StakeRegistry, ERC20, Administered {
+abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
     using ProfitTracker for ProfitSource; 
     
     
     ProfitSource[] public trackers;
+    mapping(address => bool) private isExcluded;
 
 
     event ProfitSent(address recipient, uint amount, IERC20 token);
@@ -53,6 +55,18 @@ abstract contract SharesToken is StakeRegistry, ERC20, Administered {
 
 
     /**
+     * This function is intended for registering addresses of smart contracts that are unable to withdraw profits.
+     * Address of liquidity pools or exchanges should be registered by this function to make sure their received profits
+     * are not lost.
+     *
+     * When an account is excluded from profits, it can not be re-included later. Only `admin` can call this method.
+     */
+    function excludeFromProfits(address account) onlyBy(admin) public {
+        isExcluded[account] = true;
+    }
+
+
+    /**
      * Gets the amount of profit that `account` has acquired in the ERC20 token specified
      * by `sourceIndex`.
      * 
@@ -73,15 +87,8 @@ abstract contract SharesToken is StakeRegistry, ERC20, Administered {
         trackers[sourceIndex].withdrawProfit(msg.sender, amount);
         emit ProfitSent(msg.sender, amount, trackers[sourceIndex].fiatToken);
     }
-    
-    
-    function _transfer(address sender, address recipient, uint256 amount) internal virtual override {
-        super._transfer(sender, recipient, amount);
-        for (uint i = 0; i < trackers.length; i++)
-            trackers[i].transferShare(sender, recipient, amount);
-    }
-    
-    
+
+
     function canControl(IERC20 token) public view override virtual returns (bool) {
         for (uint i = 0; i < trackers.length; i++) {
             if (trackers[i].fiatToken == token)
@@ -98,6 +105,17 @@ abstract contract SharesToken is StakeRegistry, ERC20, Administered {
 
     function totalStake() public view override virtual returns (uint) {
         return totalSupply();
+    }
+
+
+    function isExcludedFromProfits(address account) public view override virtual returns (bool) {
+        return account == address(0) || isExcluded[account];
+    }
+
+
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override {
+        for (uint i = 0; i < trackers.length; i++)
+            trackers[i].transferStake(from, to, amount);
     }
 }
 
@@ -118,23 +136,37 @@ uint constant PROFIT_DISTRIBUTION_THRESHOLD = 1e9;
 library ProfitTracker {
     using Rational for RationalNumber;
     
-     
-    function transferShare(ProfitSource storage self, address sender, address recipient, uint amount) internal {
+    // If newly minted stakes (tokens) should not get any shares from previously gained profits, when minting new tokens
+    // this function should be called before updating the total stake, and the sender address should be an address
+    // which is excluded from profits.
+    function transferStake(ProfitSource storage self, address sender, address recipient, uint amount) internal {
         RationalNumber memory profit = _tokensGainedProfitShifted(self, amount);
         if (profit.a == 0)
             return;
         // It's very important that we do the rounding of numbers in a way that users do not get any extra profits.
-        // Otherwise an attacker would be able to drain all the profits of the system by transferring a small amount
-        // of share repeatedly between his accounts and taking advantage of calculation errors.
-        // We did the rounding in a way that in this scenario the attacker will only burn his own profits.
-        // Still an attacker is able to burn another user's profits by repeatedly sending small amounts of share to him.
-        // To mitigate this problem we try to keep the error of calculations low by stopping low transfers.
-        // RationalNumber library stops a transfer when it detects that the error in calculation is too high.
-        self.profitDeltas[sender] += int(profit.floor());
+        // Otherwise an attacker would be able to take advantage of calculation errors and drain all the profits of
+        // the system by transferring a small amount of share repeatedly between multiple accounts.
+        //
+        // We've done the roundings in a way that in such a scenario the attacker will only burn his own profits.
+        // However, still an attacker would able to burn another user's profits by repeatedly sending small amounts
+        // of stake tokens to him.
+        //
+        // To mitigate this problem, we try to keep the calculation error as low as possible by preventing low amount
+        // transfers. RationalNumber library stops a transfer when it detects that the calculation error is too high.
+        //
+        // When an account which is excluded from profits, tries to transfer his stake, we essentially withdraw his
+        // profits and then deposit it back to the profit pool. This simple method is very useful, specially when
+        // new tokens is minted, and we want to make sure the newly minted tokens will not get any shares from
+        // previous profits.
+        if (self.stakeRegistry.isExcludedFromProfits(sender)) {
+            self.withdrawalSum += (profit.floor() >> DELTAS_SHIFT);
+        } else {
+            self.profitDeltas[sender] += int(profit.floor());
+        }
         self.profitDeltas[recipient] -= int(profit.ceil());
     }
-    
-    
+
+
     function profitBalance(ProfitSource storage self, address recipient) internal view returns (uint) {
         uint userBalance = self.stakeRegistry.stakeOf(recipient);
         int rawProfit = int(_tokensGainedProfitShifted(self, userBalance).floor()) + self.profitDeltas[recipient];
@@ -146,6 +178,7 @@ library ProfitTracker {
     
     
     function withdrawProfit(ProfitSource storage self, address recipient, uint amount) internal {
+        require(!self.stakeRegistry.isExcludedFromProfits(recipient), "account is excluded");
         require(amount <= profitBalance(self, recipient), "profit balance is not enough");
         self.profitDeltas[recipient] -= int(amount << DELTAS_SHIFT);
         self.withdrawalSum += amount;
