@@ -85,5 +85,3 @@ abstract contract LockableERC20 is ERC20 {
         }
     }
 }
-    
-    

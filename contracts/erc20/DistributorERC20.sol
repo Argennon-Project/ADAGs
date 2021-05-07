@@ -192,8 +192,6 @@ library ProfitTracker {
     
     function _tokensGainedProfitShifted(ProfitSource storage self, uint tokenAmount)
     private view returns (RationalNumber memory) {
-        require(tokenAmount < self.stakeRegistry.totalStake(), "amount is too high");
-        
         uint totalGained = self.withdrawalSum + self.fiatToken.balanceOf(address(this));
         if (totalGained < PROFIT_DISTRIBUTION_THRESHOLD)
             return RationalNumber(0, 1);

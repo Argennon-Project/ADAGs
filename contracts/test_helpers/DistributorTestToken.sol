@@ -8,9 +8,11 @@ import "./../erc20/DistributorERC20.sol";
 
 
 contract DistributorTestToken is DistributorERC20 {
-    constructor(address payable admin, uint initial)
-    ERC20("Distributor test", "DST")
-    Administered(admin) {
-        _mint(admin, initial);
+    constructor(address payable admin)
+    ERC20("Distributor test", "DST") Administered(admin) { }
+
+
+    function mint(address recipient, uint amount) public {
+        _mint(recipient, amount);
     }
 }

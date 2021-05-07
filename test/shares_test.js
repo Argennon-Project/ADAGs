@@ -7,32 +7,54 @@ const TestToken = artifacts.require("LockableTestToken");
 contract("DistributorERC20", (accounts) => {
 
     let sharesToken, fiatToken, admin;
+    const decimals = 1000000000;
 
     beforeEach(async () => {
         admin = accounts[0];
-        sharesToken = await DistributorToken.new(admin, 1000);
-        fiatToken = await TestToken.new(admin, 100000000000);
+        sharesToken = await DistributorToken.new(admin);
+        await sharesToken.mint(admin, 1000);
+        fiatToken = await TestToken.new(admin, 100 * decimals);
         await sharesToken.registerProfitSource(fiatToken.address);
     });
 
-    async function checkProfits(profits, sourceIndex) {
+    async function checkProfits(profits, sourceIndex, name) {
         for (let i = 0; i < profits.length; i++) {
             assert.equal(
                 (await sharesToken.profit.call(accounts[i], sourceIndex)).valueOf(),
-                profits[i],
-                `acc${i} profit is wrong`
+                profits[i] * decimals,
+                `In ${name} profit of acc${i} is wrong`
             );
         }
     }
+
+    it("enables users to withdraw their profit", async () => {
+        await sharesToken.transfer(accounts[1], 600, {from: admin});
+
+        await fiatToken.transfer(sharesToken.address, 15 * decimals, {from: admin});
+
+        await Errors.expectError(
+            sharesToken.withdrawProfit(10 * decimals, 0, {from: accounts[1]}),
+            Errors.BALANCE_LOW_ERROR
+        );
+        await sharesToken.withdrawProfit(9 * decimals, 0, {from: accounts[1]});
+        await Errors.expectError(
+            sharesToken.withdrawProfit(1, 0, {from: accounts[1]}),
+            Errors.BALANCE_LOW_ERROR
+        );
+        assert.equal(
+            (await fiatToken.balanceOf.call(accounts[1])).valueOf(),
+            9 * decimals,
+            "Error in acc1 final balance"
+        );
+    });
 
     it("distributes profits based on account balances", async () => {
         await sharesToken.transfer(accounts[1], 100, {from: admin});
         await sharesToken.transfer(accounts[2], 200, {from: admin});
 
-        const decimals = 1000000000;
         await fiatToken.transfer(sharesToken.address, 10 * decimals, {from: admin});
 
-        await checkProfits([7, 1, 2] * decimals, 0);
+        await checkProfits([7, 1, 2] , 0);
 
         await sharesToken.withdrawProfit(decimals, 0, {from: accounts[2]});
         await sharesToken.transfer(admin, 50, {from: accounts[2]});
@@ -47,7 +69,7 @@ contract("DistributorERC20", (accounts) => {
 
         await fiatToken.transfer(sharesToken.address, 5 * decimals, {from: admin});
 
-        await checkProfits([45, 25, 30] * decimals / 10, 0);
+        await checkProfits([5.5, 2.5, 3], 0, "final");
 
         await sharesToken.withdrawProfit(decimals, 0, {from: accounts[2]});
         assert.equal(
@@ -55,6 +77,36 @@ contract("DistributorERC20", (accounts) => {
             2 * decimals,
             "Error in acc2 final balance"
         );
+    });
+
+    it("should not give profits to newly minted tokens", async () => {
+        sharesToken = await DistributorToken.new(admin);
+        await sharesToken.registerProfitSource(fiatToken.address);
+        assert.equal(
+            (await sharesToken.totalSupply.call()).valueOf(),
+            0,
+            "cant reinitialize token"
+        );
+
+        await sharesToken.mint(admin, 500);
+        await fiatToken.transfer(sharesToken.address, 10 * decimals, {from: admin});
+        await sharesToken.mint(accounts[1], 1000);
+        await checkProfits([10, 0], 0, "test1");
+
+        await fiatToken.transfer(sharesToken.address, 6 * decimals, {from: admin});
+        await sharesToken.mint(accounts[2], 300);
+        await checkProfits([12, 4, 0], 0, "test2");
+
+        await sharesToken.withdrawProfit(4 * decimals, 0, {from: admin});
+        await sharesToken.withdrawProfit(2 * decimals, 0, {from: accounts[1]});
+        // profits: [8, 2, 0]
+        await sharesToken.transfer(accounts[2], 200, {from: admin});
+        await sharesToken.transfer(admin, 400, {from: accounts[1]});
+        // balances: [700, 600, 500]
+        await fiatToken.transfer(sharesToken.address, 9 * decimals, {from: admin});
+        // gained profits: [3.5, 3, 2.5]
+        await sharesToken.mint(accounts[3], 750);
+        await checkProfits([11.5, 5, 2.5, 0], 0, "test3");
     });
 });
 

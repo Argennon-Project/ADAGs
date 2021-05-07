@@ -12,6 +12,8 @@ exports.LOCK_UPDATE_ERROR = "Error: Returned error: VM Exception while processin
     "be extended -- Reason given: locks can only be extended.";
 exports.BAD_INPUT_ERROR = "Error: Returned error: VM Exception while processing transaction: revert bad inputs " +
     "-- Reason given: bad inputs.";
+exports.BALANCE_LOW_ERROR = "Error: Returned error: VM Exception while processing transaction: revert profit balance " +
+    "is not enough -- Reason given: profit balance is not enough.";
 
 exports.expectError = async function (promise, error) {
     let passed = false;

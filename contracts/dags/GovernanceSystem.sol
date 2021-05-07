@@ -134,4 +134,3 @@ contract GovernanceSystem is Administered {
         selfdestruct(admin);
     }
 }
-
