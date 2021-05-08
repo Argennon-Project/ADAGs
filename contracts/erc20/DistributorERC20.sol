@@ -15,7 +15,7 @@ interface StakeRegistry {
 
 
 /**
- * @title A token representing a share which is eligible to receive profits
+ * @title An ERC20 token representing a share which is eligible to receive profits
  * @author aybehrouz
  * This token represents a share in some entity which entitles the owners to receive profits. Multiple ERC20
  * tokens could be defined as profit sources by `registerProfitSource` method. When any amount of these
@@ -59,7 +59,8 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
      * Address of liquidity pools or exchanges should be registered by this function to make sure their received profits
      * are not lost.
      *
-     * When an account is excluded from profits, it can not be re-included later. Only `admin` can call this method.
+     * When an account is excluded from profits, it can not be removed from the exclusion list later. Only `admin`
+     * can call this method.
      */
     function excludeFromProfits(address account) onlyBy(admin) public {
         isExcluded[account] = true;
@@ -67,8 +68,7 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
 
 
     /**
-     * Gets the amount of profit that `account` has acquired in the ERC20 token specified
-     * by `sourceIndex`.
+     * Gets the amount of profit that `account` has acquired in the ERC20 token specified by `sourceIndex`.
      * 
      * @param sourceIndex is the index of the ERC20 token in the `trackers` list.
      * @return the total amount of gained profit.
@@ -79,7 +79,7 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
 
 
     /**
-     * Withdraws the requested `amount` of the sender's profit in the token specified by `sourceIndex`
+     * Withdraws the requested `amount` of the sender's profit in the ERC20 token specified by `sourceIndex`.
      * 
      * @param sourceIndex is the index of the ERC20 token in the `trackers` list.
      */

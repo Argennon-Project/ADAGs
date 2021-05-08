@@ -13,8 +13,8 @@ string constant NAME = "Argennon Token";
 string constant SYMBOL = "ARG";
 uint8 constant DECIMALS = 6;
 uint constant CAP = 50e15;
-uint constant INITIAL_SUPPLY = 15e15;
-uint constant DURATION = 2555 days;
+uint constant INITIAL_SUPPLY = 20e15;
+uint constant DURATION = 2190 days;
 
 
 address constant FOUNDER = address(0x14723A09ACff6D2A60DcdF7aA4AFf308FDDC160C);
@@ -28,7 +28,7 @@ contract ArgennonToken is LockableERC20, MintableERC20, DistributorERC20 {
     
     constructor(address payable _admin, address _owner) 
     Administered(_admin)
-    MintableERC20(_owner, NAME, SYMBOL, INITIAL_SUPPLY, CAP, block.timestamp, DURATION) {
+    MintableERC20(_owner, NAME, SYMBOL, INITIAL_SUPPLY, CAP, block.timestamp + 365 days, DURATION) {
         // we have to use low level functions because the msg.sender != owner and higher level functions will fail.
         // this will reduce our gas usage too.
         ERC20._mint(FOUNDER, FOUNDERS_SHARE);
