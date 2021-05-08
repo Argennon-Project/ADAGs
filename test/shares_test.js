@@ -21,8 +21,8 @@ contract("DistributorERC20", (accounts) => {
         for (let i = 0; i < profits.length; i++) {
             assert.equal(
                 (await sharesToken.profit.call(accounts[i], sourceIndex)).valueOf(),
-                profits[i] * decimals,
-                `In ${name} profit of acc${i} is wrong`
+                Math.round(profits[i] * decimals),
+                `In ${name}, the profit of acc${i} is wrong`
             );
         }
     }
@@ -34,12 +34,12 @@ contract("DistributorERC20", (accounts) => {
 
         await Errors.expectError(
             sharesToken.withdrawProfit(10 * decimals, 0, {from: accounts[1]}),
-            Errors.BALANCE_LOW_ERROR
+            Errors.LOW_BALANCE_ERROR
         );
         await sharesToken.withdrawProfit(9 * decimals, 0, {from: accounts[1]});
         await Errors.expectError(
             sharesToken.withdrawProfit(1, 0, {from: accounts[1]}),
-            Errors.BALANCE_LOW_ERROR
+            Errors.LOW_BALANCE_ERROR
         );
         assert.equal(
             (await fiatToken.balanceOf.call(accounts[1])).valueOf(),
@@ -91,11 +91,11 @@ contract("DistributorERC20", (accounts) => {
         await sharesToken.mint(admin, 500);
         await fiatToken.transfer(sharesToken.address, 10 * decimals, {from: admin});
         await sharesToken.mint(accounts[1], 1000);
-        await checkProfits([10, 0], 0, "test1");
+        await checkProfits([10, 0], 0, "check1");
 
         await fiatToken.transfer(sharesToken.address, 6 * decimals, {from: admin});
         await sharesToken.mint(accounts[2], 300);
-        await checkProfits([12, 4, 0], 0, "test2");
+        await checkProfits([12, 4, 0], 0, "check2");
 
         await sharesToken.withdrawProfit(4 * decimals, 0, {from: admin});
         await sharesToken.withdrawProfit(2 * decimals, 0, {from: accounts[1]});
@@ -106,7 +106,53 @@ contract("DistributorERC20", (accounts) => {
         await fiatToken.transfer(sharesToken.address, 9 * decimals, {from: admin});
         // gained profits: [3.5, 3, 2.5]
         await sharesToken.mint(accounts[3], 750);
-        await checkProfits([11.5, 5, 2.5, 0], 0, "test3");
+        await checkProfits([11.5, 5, 2.5, 0], 0, "check3");
+    });
+
+    it("can exclude accounts from getting profits", async () => {
+        await sharesToken.transfer(accounts[1], 400, {from: admin});
+        await sharesToken.transfer(accounts[2], 200, {from: admin});
+
+        await Errors.expectError(
+            sharesToken.excludeFromProfits(accounts[1], {from: accounts[1]}),
+            Errors.NOT_AUTHORIZED_ERROR
+        );
+        await sharesToken.excludeFromProfits(accounts[1], {from: admin});
+
+        await fiatToken.transfer(sharesToken.address, 10 * decimals, {from: admin});
+        await checkProfits([4, 4, 2], 0, "initial_basic");
+        await Errors.expectError(
+            sharesToken.withdrawProfit(2 * decimals, 0, {from: accounts[1]}),
+            Errors.EXCLUDED_ERROR
+        );
+
+        await sharesToken.transfer(accounts[1], 100, {from: admin});
+        await sharesToken.transfer(accounts[2], 500, {from: accounts[1]});
+        // balance: [3, 0, 7] gained: [1.2, 0, 2.8]
+        await checkProfits([5.2, 0, 4.8], 0, "basic");
+
+        await sharesToken.transfer(accounts[1], 100, {from: admin});
+        await sharesToken.transfer(accounts[1], 200, {from: accounts[2]});
+        await fiatToken.transfer(sharesToken.address, 5 * decimals, {from: admin});
+        // balance: [2, 3, 5] gained: [1, 1.5, 2.5]
+        await sharesToken.transfer(accounts[1], 200, {from: accounts[2]});
+        await sharesToken.transfer(accounts[2], 100, {from: accounts[1]});
+        await checkProfits([6.2, 1.5, 7.3], 0, "initial_advanced");
+        await sharesToken.transfer(accounts[2], 100, {from: accounts[1]});
+        await sharesToken.transfer(admin, 200, {from: accounts[1]});
+        await checkProfits([6.2, 1.5, 7.3], 0, "initial_advanced_r");
+
+        await sharesToken.transfer(accounts[2], 100, {from: admin});
+        await sharesToken.transfer(admin, 50, {from: accounts[1]});
+        // gained: (1 - 1.9 / 3) * 0.15 * [3.5, 0.5, 6] = [0.1925, ..]
+        await checkProfits([6.3925, 0.9775, 7.63], 0, "advanced_1");
+
+        await sharesToken.transfer(accounts[1], 50, {from: accounts[2]});
+        await sharesToken.transfer(admin, 50, {from: accounts[1]});
+        await checkProfits([6.3925, 0.9775, 7.63], 0, "advanced_1_r");
+        // gained: 0.09775 * [4.5, 0, 5.5] = [0.439875, 0, 0.537625]
+        await sharesToken.transfer(admin, 50, {from: accounts[1]});
+        await checkProfits([6.832375, 0, 8.167625], 0, "advanced_2");
     });
 });
 

@@ -143,6 +143,7 @@ library ProfitTracker {
         RationalNumber memory profit = _tokensGainedProfitShifted(self, amount);
         if (profit.a == 0)
             return;
+
         // It's very important that we do the rounding of numbers in a way that users do not get any extra profits.
         // Otherwise an attacker would be able to take advantage of calculation errors and drain all the profits of
         // the system by transferring a small amount of share repeatedly between multiple accounts.
@@ -153,17 +154,17 @@ library ProfitTracker {
         //
         // To mitigate this problem, we try to keep the calculation error as low as possible by preventing low amount
         // transfers. RationalNumber library stops a transfer when it detects that the calculation error is too high.
-        //
-        // When an account which is excluded from profits, tries to transfer his stake, we essentially withdraw his
-        // profits and then deposit it back to the profit pool. This simple method is very useful, specially when
-        // new tokens is minted, and we want to make sure the newly minted tokens will not get any shares from
-        // previous profits.
-        if (self.stakeRegistry.isExcludedFromProfits(sender)) {
-            self.withdrawalSum += (profit.floor() >> DELTAS_SHIFT);
-        } else {
-            self.profitDeltas[sender] += int(profit.floor());
-        }
+        self.profitDeltas[sender] += int(profit.floor());
         self.profitDeltas[recipient] -= int(profit.ceil());
+
+        // When an account which is excluded from profits, tries to transfer his stake, we essentially withdraw
+        // the positive profit of that transferred stake (if any) and then deposit it back to the profit pool.
+        // This simple method is very useful, specially when new tokens is minted, and we want to make sure the
+        // newly minted tokens will not get any shares from the previous profits.
+        if (self.stakeRegistry.isExcludedFromProfits(sender) && self.profitDeltas[sender] > 0) {
+            self.withdrawalSum += uint(self.profitDeltas[sender]) >> DELTAS_SHIFT;
+            self.profitDeltas[sender] = 0;
+        }
     }
 
 
