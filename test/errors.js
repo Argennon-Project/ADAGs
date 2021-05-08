@@ -16,6 +16,10 @@ exports.LOW_BALANCE_ERROR = "Error: Returned error: VM Exception while processin
     "is not enough -- Reason given: profit balance is not enough.";
 exports.EXCLUDED_ERROR = "Error: Returned error: VM Exception while processing transaction: revert account is " +
     "excluded -- Reason given: account is excluded.";
+exports.WITHDRAW_NOT_ALLOWED_ERROR = "Error: Returned error: VM Exception while processing transaction: revert " +
+    "withdrawal not allowed -- Reason given: withdrawal not allowed.";
+exports.ALREADY_REGISTERED_ERROR = "Error: Returned error: VM Exception while processing transaction: revert already " +
+    "registered -- Reason given: already registered.";
 
 exports.expectError = async function (promise, error) {
     let passed = false;

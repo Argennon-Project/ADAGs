@@ -14,7 +14,7 @@ contract("DistributorERC20", (accounts) => {
         sharesToken = await DistributorToken.new(admin);
         await sharesToken.mint(admin, 1000);
         fiatToken = await TestToken.new(admin, 100 * decimals);
-        await sharesToken.registerProfitSource(fiatToken.address);
+        await sharesToken.registerProfitSource(fiatToken.address, {from: admin});
     });
 
     async function checkProfits(profits, sourceIndex, name) {
@@ -26,6 +26,43 @@ contract("DistributorERC20", (accounts) => {
             );
         }
     }
+
+    it("allows admin to register new profit sources", async () => {
+        await Errors.expectError(
+            sharesToken.registerProfitSource(fiatToken.address, {from: accounts[1]}),
+            Errors.NOT_AUTHORIZED_ERROR
+        );
+        await sharesToken.registerProfitSource(accounts[1], {from: admin});
+        await sharesToken.registerProfitSource(accounts[2], {from: admin});
+        await sharesToken.registerProfitSource(accounts[3], {from: admin});
+        await Errors.expectError(
+            sharesToken.registerProfitSource(accounts[2], {from: admin}),
+            Errors.ALREADY_REGISTERED_ERROR
+        );
+
+        await Errors.expectError(
+            sharesToken.recoverFunds(accounts[1], 100, {from: admin}),
+            Errors.WITHDRAW_NOT_ALLOWED_ERROR
+        );
+
+        const testToken = await TestToken.new(admin, 10 * decimals);
+        await testToken.transfer(sharesToken.address, 2 * decimals, {from: admin});
+        assert.equal(
+            (await testToken.balanceOf.call(admin)).valueOf(),
+            8 * decimals,
+            "Error in transfer"
+        );
+        await Errors.expectError(
+            sharesToken.recoverFunds(testToken.address, 2 * decimals, {from: accounts[1]}),
+            Errors.NOT_AUTHORIZED_ERROR
+        );
+        await sharesToken.recoverFunds(testToken.address, 2 * decimals, {from: admin});
+        assert.equal(
+            (await testToken.balanceOf.call(admin)).valueOf(),
+            10 * decimals,
+            "Error in admin final balance"
+        );
+    });
 
     it("enables users to withdraw their profit", async () => {
         await sharesToken.transfer(accounts[1], 600, {from: admin});
@@ -81,7 +118,7 @@ contract("DistributorERC20", (accounts) => {
 
     it("should not give profits to newly minted tokens", async () => {
         sharesToken = await DistributorToken.new(admin);
-        await sharesToken.registerProfitSource(fiatToken.address);
+        await sharesToken.registerProfitSource(fiatToken.address, {from: admin});
         assert.equal(
             (await sharesToken.totalSupply.call()).valueOf(),
             0,
