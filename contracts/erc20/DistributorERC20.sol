@@ -57,10 +57,11 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
     /**
      * This function is intended for registering addresses of smart contracts that are unable to withdraw profits.
      * Address of liquidity pools or exchanges should be registered by this function to make sure their received profits
-     * are not lost.
+     * are not lost. An excluded account is still able to withdraw its profits.
      *
      * When an account is excluded from profits, it can not be removed from the exclusion list later. Only `admin`
-     * can call this method.
+     * can call this method. Since excluded accounts are still able to withdraw their profits, this function does not
+     * give too much power to an admin.
      */
     function excludeFromProfits(address account) onlyBy(admin) public {
         isExcluded[account] = true;
@@ -179,7 +180,6 @@ library ProfitTracker {
     
     
     function withdrawProfit(ProfitSource storage self, address recipient, uint amount) internal {
-        require(!self.stakeRegistry.isExcludedFromProfits(recipient), "account is excluded");
         require(amount <= profitBalance(self, recipient), "profit balance is not enough");
         self.profitDeltas[recipient] -= int(amount << DELTAS_SHIFT);
         self.withdrawalSum += amount;

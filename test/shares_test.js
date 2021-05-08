@@ -41,7 +41,7 @@ contract("DistributorERC20", (accounts) => {
         );
 
         await Errors.expectError(
-            sharesToken.recoverFunds(accounts[1], 100, {from: admin}),
+            sharesToken.recoverFunds(accounts[3], 100, {from: admin}),
             Errors.WITHDRAW_NOT_ALLOWED_ERROR
         );
 
@@ -158,10 +158,6 @@ contract("DistributorERC20", (accounts) => {
 
         await fiatToken.transfer(sharesToken.address, 10 * decimals, {from: admin});
         await checkProfits([4, 4, 2], 0, "initial_basic");
-        await Errors.expectError(
-            sharesToken.withdrawProfit(2 * decimals, 0, {from: accounts[1]}),
-            Errors.EXCLUDED_ERROR
-        );
 
         await sharesToken.transfer(accounts[1], 100, {from: admin});
         await sharesToken.transfer(accounts[2], 500, {from: accounts[1]});
