@@ -85,6 +85,38 @@ contract("DistributorERC20", (accounts) => {
         );
     });
 
+    it("should detect overflow", async () => {
+        await sharesToken.mint(admin, 2n **250n);
+        await sharesToken.transfer(accounts[1], 2n ** 250n, {from: admin});
+
+        await fiatToken.transfer(sharesToken.address, 15 * decimals, {from: admin});
+        await Errors.expectError(
+            sharesToken.transfer(admin, 2n ** 250n, {from: accounts[1]}),
+            Errors.GENERAL_ERROR
+        );
+        await Errors.expectError(
+            sharesToken.transfer(admin, 2n ** 250n, {from: accounts[2]}),
+            Errors.GENERAL_ERROR
+        );
+    });
+
+    it("should handle underflow", async () => {
+        await sharesToken.mint(admin, 50n * 10n ** 15n);
+        await fiatToken.transfer(sharesToken.address, decimals, {from: admin});
+        await Errors.expectError(
+            sharesToken.transfer(accounts[1] , 1000000, {from: admin}),
+            Errors.PRECISION_ERROR
+        );
+        await sharesToken.transfer(accounts[1] , 2000000, {from: admin});
+    });
+
+    it("should handle small amount of profit", async () => {
+        await sharesToken.mint(admin, 50n * 10n ** 15n);
+        await fiatToken.transfer(sharesToken.address, 0.5 * decimals, {from: admin});
+        await sharesToken.transfer(accounts[1] , 1, {from: admin});
+        await sharesToken.transfer(accounts[1] , 1000000, {from: admin});
+    });
+
     it("distributes profits based on account balances", async () => {
         await sharesToken.transfer(accounts[1], 100, {from: admin});
         await sharesToken.transfer(accounts[2], 200, {from: admin});

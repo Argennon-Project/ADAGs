@@ -130,7 +130,7 @@ struct ProfitSource {
 }
 
 
-uint8 constant DELTAS_SHIFT = 36;
+uint8 constant DELTAS_SHIFT = 32;
 uint constant PROFIT_DISTRIBUTION_THRESHOLD = 1e9;
 
 

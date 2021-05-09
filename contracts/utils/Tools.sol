@@ -39,7 +39,7 @@ interface MintableToken {
 interface LockableMintable is MintableToken, LockableToken, PossessiveContract {}
 
 
-uint constant INVERTED_PRECISION = 1e7;
+uint constant INVERTED_PRECISION = 1e8;
 
 
 struct RationalNumber {

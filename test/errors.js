@@ -18,6 +18,9 @@ exports.WITHDRAW_NOT_ALLOWED_ERROR = "Error: Returned error: VM Exception while 
     "withdrawal not allowed -- Reason given: withdrawal not allowed.";
 exports.ALREADY_REGISTERED_ERROR = "Error: Returned error: VM Exception while processing transaction: revert already " +
     "registered -- Reason given: already registered.";
+exports.GENERAL_ERROR = "Error: Returned error: VM Exception while processing transaction: revert";
+exports.PRECISION_ERROR = "Error: Returned error: VM Exception while processing transaction: revert not enough " +
+    "precision -- Reason given: not enough precision.";
 
 exports.expectError = async function (promise, error) {
     let passed = false;
