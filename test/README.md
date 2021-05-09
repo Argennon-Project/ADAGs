@@ -1,3 +1,5 @@
+### Running Tests
+
 Unit tests can be run using truffle suit. To run unit tests by truffle follow these steps:
 
 Use truffle to initialize a new project:
@@ -36,6 +38,7 @@ Configure truffle to use the right solc compiler version by changing `truffle-co
     }
   },
 ```
+
 Now you should be able to run unit tests:
 
     truffle test
