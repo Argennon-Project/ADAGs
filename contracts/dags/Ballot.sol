@@ -29,13 +29,13 @@ contract Ballot is Administered {
         title = _title;
         lockTime = _lockTime;
         endTime = _endTime;
-        require(block.timestamp < _endTime && _endTime < _lockTime, "Ballot dates are invalid.");
+        require(block.timestamp < _endTime && _endTime < _lockTime, "Ballot dates are invalid");
     }
     
     
     function changeVoteTo(uint128 weight) onlyBefore(endTime) public  {
-        require(votingToken.locked(msg.sender).amount >= weight, "Increase your locked amount.");
-        require(votingToken.locked(msg.sender).releaseTime >= lockTime, "Increase your lock period.");
+        require(votingToken.locked(msg.sender).amount >= weight, "locked amount not enough");
+        require(votingToken.locked(msg.sender).releaseTime >= lockTime, "lock period is too short");
         totalWeight -= votes[msg.sender];
         totalWeight += weight;
         votes[msg.sender] = weight;

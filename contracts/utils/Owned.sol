@@ -11,6 +11,9 @@ contract Owned is AccessControlled {
     address public owner;
 
 
+    event OwnerChanged(address newOwner);
+
+
     constructor(address _owner) {
         owner = _owner;
     }
@@ -18,6 +21,7 @@ contract Owned is AccessControlled {
      
     function setOwner(address newOwner) onlyBy(owner) public virtual {
         owner = newOwner;
+        emit OwnerChanged(newOwner);
     }
     
 }

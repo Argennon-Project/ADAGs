@@ -11,7 +11,10 @@ import "./Tools.sol";
 contract Administered is AccessControlled {
     address payable public admin;
   
-    
+
+    event AdminChanged(address newAdmin);
+
+
     constructor(address payable _admin) {
         admin = _admin;
     }
@@ -19,8 +22,10 @@ contract Administered is AccessControlled {
 
     function setAdmin(address payable newAdmin) onlyBy(admin) public virtual {
         admin = newAdmin;
+        emit AdminChanged(newAdmin);
     }
-   
+
+
     /**
      * This method withdraws any ERC20 token or Ethers that belongs to this contract address and the contract is unable
      * to control them. Main usage of this method is for recovering trapped funds in the contract address. Withdrawal

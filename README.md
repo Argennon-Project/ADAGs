@@ -8,8 +8,11 @@ functionality of ARG token is as follows:
   holders. When a crowdfunding is done, the earnings of the crowdfunding will be sent to the ARG ERC20 contract address
   and hence it will be distributed between ARG holders.
 - Holders of the ARG token are eligible to vote in the Argennon Distributed Autonomous Governance system (ADAGs). The
-  ADAGs is a smart contract which decides about new crowdfunding campaigns, their configuration and minting of new ARG
-  tokens.
+  ADAGs (ai-dagz) is a smart contract which is able to perform *governance actions*. Actions such as starting new
+  crowdfunding campaigns, minting new ARG tokens and deploying new governance systems.
+    - In order to vote, a user needs to lock his ARG tokens for at least 6 months. During this period he will not be
+      able to transfer his tokens.
+    - Any proposal that gets more than 60% (3/5) of the total ARG supply votes will be accepted by the ADAGs.
 
 Several crowdfunding campaigns may be held before the lunch of the Argennon blockchain, all of them will follow these
 rules:
