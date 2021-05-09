@@ -32,7 +32,7 @@ contract ArgennonToken is LockableERC20, MintableERC20, DistributorERC20 {
         // we have to use low level functions because the msg.sender != owner and higher level functions will fail.
         // this will reduce our gas usage too.
         ERC20._mint(FOUNDER, FOUNDERS_SHARE);
-        mintingAllowances[FOUNDER] = FOUNDERS_INITIAL_MINT_APPROVAL;
+        mintingAllowances[_owner] = FOUNDERS_INITIAL_MINT_APPROVAL;
     }
     
     

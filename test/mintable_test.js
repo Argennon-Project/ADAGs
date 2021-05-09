@@ -37,6 +37,34 @@ contract("MintableERC20", (accounts) => {
         );
     });
 
+    it("allows owner to set a new owner", async () => {
+        await mintableToken.mint(accounts[2], 100, {from: owner});
+        await Errors.expectError(
+            mintableToken.mint(accounts[2], 100, {from: accounts[1]}),
+            Errors.MINT_ALLOWANCE_ERROR
+        );
+        await Errors.expectError(
+            mintableToken.setOwner(accounts[1], {from: accounts[1]}),
+            Errors.NOT_AUTHORIZED_ERROR
+        );
+        await mintableToken.setOwner(accounts[1], {from: owner});
+        await Errors.expectError(
+            mintableToken.mint(accounts[2], 100, {from: owner}),
+            Errors.MINT_ALLOWANCE_ERROR
+        );
+        await Errors.expectError(
+            mintableToken.setOwner(accounts[1], {from: owner}),
+            Errors.NOT_AUTHORIZED_ERROR
+        );
+        await mintableToken.mint(accounts[2], 100, {from: accounts[1]});
+        await mintableToken.setOwner(accounts[2], {from: accounts[1]});
+        assert.equal(
+            (await mintableToken.balanceOf.call(accounts[2])).toNumber(),
+            200,
+            "200 was not minted"
+        );
+    });
+
     it("doesn't let exceeding the total supply limit", async () => {
         await mintableToken.mint(accounts[2], 100000, {from: owner});
         await mintableToken.increaseMintingAllowance(accounts[1], 300000, {from: owner});

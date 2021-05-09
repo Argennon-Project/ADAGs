@@ -27,7 +27,7 @@ contract("DistributorERC20", (accounts) => {
         }
     }
 
-    it("allows admin to register new profit sources", async () => {
+    it("allows admin to register new profit sources and recover funds", async () => {
         await Errors.expectError(
             sharesToken.registerProfitSource(fiatToken.address, {from: accounts[1]}),
             Errors.NOT_AUTHORIZED_ERROR
@@ -186,6 +186,59 @@ contract("DistributorERC20", (accounts) => {
         // gained: 0.09775 * [4.5, 0, 5.5] = [0.439875, 0, 0.537625]
         await sharesToken.transfer(admin, 50, {from: accounts[1]});
         await checkProfits([6.832375, 0, 8.167625], 0, "advanced_2");
+    });
+
+    it('can handle minting and transferring', async () => {
+        sharesToken = await DistributorToken.new(admin);
+        await sharesToken.registerProfitSource(sharesToken.address, {from: admin}); // register a dummy source
+        await sharesToken.registerProfitSource(fiatToken.address, {from: admin});
+        assert.equal(
+            (await sharesToken.totalSupply.call()).valueOf(),
+            0,
+            "cant reinitialize token"
+        );
+
+        await sharesToken.mint(admin, 500);
+        await sharesToken.mint(accounts[1], 300);
+        await sharesToken.transfer(accounts[2], 100, {from: admin});
+        await fiatToken.transfer(sharesToken.address, 8 * decimals, {from: admin});
+        await checkProfits([4, 3, 1], 1, "initial");
+
+        await sharesToken.transfer(accounts[2], 100, {from: accounts[1]});
+        await sharesToken.transfer(admin, 100, {from: accounts[1]});
+        await sharesToken.transfer(accounts[1], 50, {from: accounts[2]});
+        // balance: [5 1.5 1.5] -> [2.5 0.75 0.75]
+        await fiatToken.transfer(sharesToken.address, 4 * decimals, {from: admin});
+        await sharesToken.mint(accounts[1], 50);
+        await sharesToken.mint(accounts[2], 150);
+        await sharesToken.transfer(accounts[2], 100, {from: accounts[1]});
+        await checkProfits([6.5, 3.75, 1.75], 1, "mint_1");
+
+        // balance: [5 1 4]
+        await fiatToken.transfer(sharesToken.address, 10 * decimals, {from: admin});
+        await sharesToken.transfer(accounts[1], 100, {from: accounts[2]});
+        await sharesToken.transfer(accounts[1], 100, {from: admin});
+        await checkProfits([11.5, 4.75, 5.75], 1, "transfer_1");
+
+        await sharesToken.mint(admin, 200);
+        await sharesToken.mint(accounts[1], 300);
+        await checkProfits([11.5, 4.75, 5.75], 1, "mint_2");
+
+        // balance: [6 6 3] -> [1.2 1.2 0.6]
+        await fiatToken.transfer(sharesToken.address, 3 * decimals, {from: admin});
+        await checkProfits([12.7, 5.95, 6.35], 1, "mint_3");
+
+        await sharesToken.withdrawProfit(2 * decimals, 1, {from: accounts[1]});
+        await sharesToken.withdrawProfit(3 * decimals, 1, {from: accounts[2]});
+        await sharesToken.mint(accounts[3], 500);
+        await sharesToken.transfer(accounts[3], 100, {from: accounts[1]});
+        await sharesToken.transfer(admin, 200, {from: accounts[2]});
+        await sharesToken.transfer(accounts[3], 300, {from: admin});
+        await checkProfits([12.7, 3.95, 3.35, 0], 1, "withdraw");
+
+        // balance [5 5 1 9] -> [2.5 2.5 0.5 4.5]
+        await fiatToken.transfer(sharesToken.address, 10 * decimals, {from: admin});
+        await checkProfits([15.2, 6.45, 3.85, 4.5], 1, "mint_4");
     });
 });
 
