@@ -47,7 +47,8 @@ Argennons will be mainly used as staking rewards.
 The minting of the ARG ERC20 token will follow these rules:
 
 - **10 billion:** founder's share.
-- **1 billion:** founder's initial reserve which will be given to early contributors as rewards.
+- **1 billion:** founder's initial reserve which will be granted to early contributors. **All these grants are
+  documented [here](https://github.com/aybehrouz/ADAGs/blob/main/grants.md).**
 - **1 billion:** first crowdfunding which will be sold for 50,000$.
 
 The minting of the remaining ARG ERC20 tokens will be decided by the ADAGs, but it has to be limited by the maximum
