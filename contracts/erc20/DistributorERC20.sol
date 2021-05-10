@@ -13,6 +13,8 @@ interface StakeRegistry {
     function isExcludedFromProfits(address account) external view returns (bool);
 }
 
+uint8 constant MAX_SOURCE_COUNT = 32;
+
 
 /**
  * @title An ERC20 token representing a share which is eligible to receive profits
@@ -47,9 +49,12 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
     function registerProfitSource(IERC20 tokenContract) onlyBy(admin) public returns(uint sourceIndex) {
         // admin must NOT add a token that already exists in this list.
         require(!canControl(tokenContract), "already registered");
+        // we make sure the source has balanceOf function.
+        tokenContract.balanceOf(address(this));
         ProfitSource storage newSource = trackers.push();
         newSource.fiatToken = tokenContract;
         newSource.stakeRegistry = this;
+        require(trackers.length <= MAX_SOURCE_COUNT, "max source count reached");
         return trackers.length - 1;
     }
 
@@ -74,7 +79,7 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
      * @param sourceIndex is the index of the ERC20 token in the `trackers` list.
      * @return the total amount of gained profit.
      */
-    function profit(address account, uint16 sourceIndex) public view returns (uint) {
+    function profit(address account, uint8 sourceIndex) public view returns (uint) {
         return trackers[sourceIndex].profitBalance(account);
     }
 
@@ -84,7 +89,7 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
      * 
      * @param sourceIndex is the index of the ERC20 token in the `trackers` list.
      */
-    function withdrawProfit(uint256 amount, uint16 sourceIndex) public {
+    function withdrawProfit(uint256 amount, uint8 sourceIndex) public {
         trackers[sourceIndex].withdrawProfit(msg.sender, amount);
         emit ProfitSent(msg.sender, amount, trackers[sourceIndex].fiatToken);
     }
@@ -130,9 +135,9 @@ struct ProfitSource {
 }
 
 
-uint8 constant DELTAS_SHIFT = 32;
+uint8 constant DELTAS_SHIFT = 36;
 uint constant PROFIT_DISTRIBUTION_THRESHOLD = 1e9;
-
+uint constant MAX_TOTAL_PROFIT = 2 ** 160;
 
 library ProfitTracker {
     using Rational for RationalNumber;
@@ -155,6 +160,7 @@ library ProfitTracker {
         //
         // To mitigate this problem, we try to keep the calculation error as low as possible by preventing low amount
         // transfers. RationalNumber library stops a transfer when it detects that the calculation error is too high.
+        // the cast to int is safe as long as self.stakeRegistry.totalStake() > 2
         self.profitDeltas[sender] += int(profit.floor());
         self.profitDeltas[recipient] -= int(profit.ceil());
 
@@ -163,6 +169,7 @@ library ProfitTracker {
         // This simple method is very useful, specially when new tokens is minted, and we want to make sure the
         // newly minted tokens will not get any shares from the previous profits.
         if (self.stakeRegistry.isExcludedFromProfits(sender) && self.profitDeltas[sender] > 0) {
+            // the cast is safe
             self.withdrawalSum += uint(self.profitDeltas[sender]) >> DELTAS_SHIFT;
             self.profitDeltas[sender] = 0;
         }
@@ -171,16 +178,18 @@ library ProfitTracker {
 
     function profitBalance(ProfitSource storage self, address recipient) internal view returns (uint) {
         uint userBalance = self.stakeRegistry.stakeOf(recipient);
+        // the cast to int is safe as long as self.stakeRegistry.totalStake() > 2
         int rawProfit = int(_tokensGainedProfitShifted(self, userBalance).floor()) + self.profitDeltas[recipient];
         if (rawProfit < 0)
             rawProfit = 0;
-        // now the conversion from int to uint is completely safe.
+        // now that rawProfit >= 0 the conversion from int to uint is safe.
         return uint(rawProfit) >> DELTAS_SHIFT;
     }
     
     
     function withdrawProfit(ProfitSource storage self, address recipient, uint amount) internal {
         require(amount <= profitBalance(self, recipient), "profit balance is not enough");
+        // this cast is tricky but it's safe because the amount is lower than profit balance.
         self.profitDeltas[recipient] -= int(amount << DELTAS_SHIFT);
         self.withdrawalSum += amount;
         
@@ -193,13 +202,22 @@ library ProfitTracker {
     
     function _tokensGainedProfitShifted(ProfitSource storage self, uint tokenAmount)
     private view returns (RationalNumber memory) {
-        uint totalGained = self.withdrawalSum + self.fiatToken.balanceOf(address(this));
-        if (totalGained < PROFIT_DISTRIBUTION_THRESHOLD)
+        uint totalGained;
+        // We have not changed the state of our contract yet, so reentrancy in this external call is safe and would be
+        // like a normal call to another function of the contract.
+        // We should not let this function fail due to an error in the external call as much as possible. However
+        // high gas consumption in the external call would be still an issue and could make our token unusable.
+        try self.fiatToken.balanceOf(address(this)) returns (uint fiatBalance) {
+            totalGained = self.withdrawalSum + fiatBalance;
+        } catch {
+            totalGained = self.withdrawalSum;
+        }
+        if (totalGained < PROFIT_DISTRIBUTION_THRESHOLD || totalGained >= MAX_TOTAL_PROFIT)
             return RationalNumber(0, 1);
        
         // first we need to convert the unit of our total gained profit into deltas unit.
         totalGained = totalGained << DELTAS_SHIFT;
-        
+        // overflows should never happen that's why we have MAX_TOTAL_PROFIT.
         return RationalNumber(tokenAmount * totalGained, self.stakeRegistry.totalStake());
     }
 }

@@ -32,16 +32,24 @@ contract("DistributorERC20", (accounts) => {
             sharesToken.registerProfitSource(fiatToken.address, {from: accounts[1]}),
             Errors.NOT_AUTHORIZED_ERROR
         );
-        await sharesToken.registerProfitSource(accounts[1], {from: admin});
-        await sharesToken.registerProfitSource(accounts[2], {from: admin});
-        await sharesToken.registerProfitSource(accounts[3], {from: admin});
         await Errors.expectError(
-            sharesToken.registerProfitSource(accounts[2], {from: admin}),
+            sharesToken.registerProfitSource(accounts[1], {from: admin}),
+            Errors.GENERAL_ERROR
+        );
+
+        const fiat1 = await TestToken.new(admin, 100 * decimals);
+        const fiat2 = await TestToken.new(admin, 100 * decimals);
+        const fiat3 = await TestToken.new(admin, 100 * decimals);
+        await sharesToken.registerProfitSource(fiat1.address, {from: admin});
+        await sharesToken.registerProfitSource(fiat2.address, {from: admin});
+        await sharesToken.registerProfitSource(fiat3.address, {from: admin});
+        await Errors.expectError(
+            sharesToken.registerProfitSource(fiat2.address, {from: admin}),
             Errors.ALREADY_REGISTERED_ERROR
         );
 
         await Errors.expectError(
-            sharesToken.recoverFunds(accounts[3], 100, {from: admin}),
+            sharesToken.recoverFunds(fiat3.address, 100, {from: admin}),
             Errors.WITHDRAW_NOT_ALLOWED_ERROR
         );
 
@@ -86,6 +94,11 @@ contract("DistributorERC20", (accounts) => {
     });
 
     it("should detect overflow", async () => {
+        const fiat2 = await TestToken.new(admin, 2n ** 256n - 1n);
+        await sharesToken.registerProfitSource(fiat2.address, {from: admin});
+        await fiat2.transfer(sharesToken.address, 2n ** 256n - 1n, {from: admin});
+        await sharesToken.transfer(accounts[2], 1000, {from: admin});
+
         await sharesToken.mint(admin, 2n **250n);
         await sharesToken.transfer(accounts[1], 2n ** 250n, {from: admin});
 
@@ -104,10 +117,14 @@ contract("DistributorERC20", (accounts) => {
         await sharesToken.mint(admin, 50n * 10n ** 15n);
         await fiatToken.transfer(sharesToken.address, decimals, {from: admin});
         await Errors.expectError(
-            sharesToken.transfer(accounts[1] , 1000000, {from: admin}),
+            sharesToken.transfer(accounts[1] , 35000, {from: admin}),
             Errors.PRECISION_ERROR
         );
-        await sharesToken.transfer(accounts[1] , 2000000, {from: admin});
+        await sharesToken.transfer(accounts[1] , 78000, {from: admin})
+        await sharesToken.transfer(accounts[1] , 80000, {from: admin});
+        await sharesToken.transfer(accounts[1] , 125000, {from: admin});
+        await sharesToken.transfer(accounts[1] , 155000, {from: admin});
+        await sharesToken.transfer(accounts[1] , 224540, {from: admin});
     });
 
     it("should handle small amount of profit", async () => {
