@@ -5,7 +5,7 @@
 The Argennon token (ARG) is an ERC20 token intended to represent an investor's share in the Argennon project. The
 functionality of the ARG token is as follows:
 
-- After lunch of the Argennon blockchain the ARG token will be convertible in 1:1 ratio to the main currency of the
+- After the launch of the Argennon blockchain the ARG token will be convertible in 1:1 ratio to the main currency of the
   Argennon blockchain.
 - The ARG ERC20 contract is a profit distributor. That means when an amount of an ERC20 token which is registered as a
   profit source in the contract, is sent to the contract address, that amount will be distributed between all ARG
@@ -19,7 +19,7 @@ functionality of the ARG token is as follows:
 
 ### Crowdfunding Campaigns
 
-Several crowdfunding campaigns may be held before the lunch of the Argennon blockchain, all of them will follow these
+Several crowdfunding campaigns may be held before the launch of the Argennon blockchain, all of them will follow these
 rules:
 
 - Every crowdfunding is conducted using a smart contract: the *CF contract*, and it has its own token: the *ICO token*.
@@ -41,7 +41,7 @@ rules:
 ### Token Dynamics
 
 The final total supply of the Argennon currency will be 100 billion. The ARG ERC20 token on the other hand, will have a
-50 billion cap. Consequently, 50 billion Argennons will be minted only after the lunch of the Argennon blockchain. These
+50 billion cap. Consequently, 50 billion Argennons will be minted only after the launch of the Argennon blockchain. These
 Argennons will be mainly used as staking rewards.
 
 The minting of the ARG ERC20 token will follow these rules:
@@ -57,5 +57,5 @@ maximum supply of 20 billion is allowed, and after that, the maximum allowed sup
 years until it reaches the 50 billion cap. It should be noted that this is a hard limit on the **maximum** supply of the
 ARG ERC20 token and the actual supply may be lower than this amount.
 
-After the lunch of the Argennon blockchain, all unminted ARG ERC20 tokens will be considered as the reserve of the ADAGs
+After the launch of the Argennon blockchain, all unminted ARG ERC20 tokens will be considered as the reserve of the ADAGs
 counterpart on the Argennon blockchain.
