@@ -40,12 +40,22 @@ contract("DistributorERC20", (accounts) => {
         const fiat1 = await TestToken.new(admin, 100 * decimals);
         const fiat2 = await TestToken.new(admin, 100 * decimals);
         const fiat3 = await TestToken.new(admin, 100 * decimals);
+        const fiat4 = await TestToken.new(admin, 100 * decimals);
         await sharesToken.registerProfitSource(fiat1.address, {from: admin});
         await sharesToken.registerProfitSource(fiat2.address, {from: admin});
         await sharesToken.registerProfitSource(fiat3.address, {from: admin});
         await Errors.expectError(
             sharesToken.registerProfitSource(fiat2.address, {from: admin}),
             Errors.ALREADY_REGISTERED_ERROR
+        );
+        await Errors.expectError(
+            sharesToken.finalizeProfitSources({from: accounts[1]}),
+            Errors.NOT_AUTHORIZED_ERROR
+        );
+        await sharesToken.finalizeProfitSources({from: admin});
+        await Errors.expectError(
+            sharesToken.registerProfitSource(fiat4.address, {from: admin}),
+            Errors.FINAL_SOURCES_ERROR
         );
 
         await Errors.expectError(
@@ -68,7 +78,7 @@ contract("DistributorERC20", (accounts) => {
         assert.equal(
             (await testToken.balanceOf.call(admin)).valueOf(),
             10 * decimals,
-            "Error in admin final balance"
+            "Error in final balance of admin"
         );
     });
 

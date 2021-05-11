@@ -31,6 +31,7 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
     
     ProfitSource[] public trackers;
     mapping(address => bool) private isExcluded;
+    bool public finalProfitSources = false;
 
 
     event ProfitSent(address recipient, uint amount, IERC20 token);
@@ -41,12 +42,13 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
      * address in the registered ERC20 token will be considered the profit of shareholders, and it will be distributed
      * between holders of this token.
      *
-     * Only `admin` can call this method.
+     * Only `admin` can call this method. If the profit sources are finalized this method will fail.
      *
      * @return sourceIndex which is the index of the registered profit source which acts as an identifier of the source,
      * and is used as `sourceIndex` parameter of several other methods of this contract.
      */
     function registerProfitSource(IERC20 tokenContract) onlyBy(admin) public returns(uint sourceIndex) {
+        require(!finalProfitSources, "profit sources are final");
         // admin must NOT add a token that already exists in this list.
         require(!canControl(tokenContract), "already registered");
         // we make sure the source has balanceOf function.
@@ -56,6 +58,15 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
         newSource.stakeRegistry = this;
         require(trackers.length <= MAX_SOURCE_COUNT, "max source count reached");
         return trackers.length - 1;
+    }
+
+
+    /**
+     * Finalizes the ERC20 profit sources of the contract. After calling this method no new profit sources can be
+     * registered, and `registerProfitSource` will always fail.
+     */
+    function finalizeProfitSources() onlyBy(admin) public {
+        finalProfitSources = true;
     }
 
 

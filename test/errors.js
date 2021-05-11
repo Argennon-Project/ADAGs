@@ -21,6 +21,8 @@ exports.ALREADY_REGISTERED_ERROR = "Error: Returned error: VM Exception while pr
 exports.GENERAL_ERROR = "Error: Returned error: VM Exception while processing transaction: revert";
 exports.PRECISION_ERROR = "Error: Returned error: VM Exception while processing transaction: revert not enough " +
     "precision -- Reason given: not enough precision.";
+exports.FINAL_SOURCES_ERROR = "Error: Returned error: VM Exception while processing transaction: revert profit " +
+    "sources are final -- Reason given: profit sources are final.";
 
 exports.expectError = async function (promise, error) {
     let passed = false;
