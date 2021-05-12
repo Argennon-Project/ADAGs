@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: AGPL-3.0-only
 
 
 pragma solidity ^0.8.0;
@@ -7,11 +7,10 @@ pragma solidity ^0.8.0;
 import "./../utils/Administered.sol";
 
 
-interface StakeRegistry {
-    function stakeOf(address account) external view returns (uint);
-    function totalStake() external view returns (uint);
+interface StakeToken is IERC20 {
     function isExcludedFromProfits(address account) external view returns (bool);
 }
+
 
 uint8 constant MAX_SOURCE_COUNT = 32;
 
@@ -25,7 +24,7 @@ uint8 constant MAX_SOURCE_COUNT = 32;
  * this token. The amount of received profit will be proportional to the balance of a user relative to
  * the total supply of the token.
  */
-abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
+abstract contract DistributorERC20 is StakeToken, ERC20, Administered {
     using ProfitTracker for ProfitSource; 
     
     
@@ -55,7 +54,7 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
         tokenContract.balanceOf(address(this));
         ProfitSource storage newSource = trackers.push();
         newSource.fiatToken = tokenContract;
-        newSource.stakeRegistry = this;
+        newSource.stakeToken = this;
         require(trackers.length <= MAX_SOURCE_COUNT, "max source count reached");
         return trackers.length - 1;
     }
@@ -115,16 +114,6 @@ abstract contract DistributorERC20 is StakeRegistry, ERC20, Administered {
     }
 
 
-    function stakeOf(address account) public view override virtual returns (uint) {
-        return balanceOf(account);
-    }
-
-
-    function totalStake() public view override virtual returns (uint) {
-        return totalSupply();
-    }
-
-
     function isExcludedFromProfits(address account) public view override virtual returns (bool) {
         return account == address(0) || isExcluded[account];
     }
@@ -141,7 +130,7 @@ struct ProfitSource {
     // profit[address] = balance * perTokenProfit + profitDeltas[address] / 2 ^ DELTAS_SHIFT 
     mapping(address => int) profitDeltas;
     IERC20 fiatToken;
-    StakeRegistry stakeRegistry;
+    StakeToken stakeToken;
     uint withdrawalSum;
 }
 
@@ -179,7 +168,7 @@ library ProfitTracker {
         // the positive profit of that transferred stake (if any) and then deposit it back to the profit pool.
         // This simple method is very useful, specially when new tokens is minted, and we want to make sure the
         // newly minted tokens will not get any shares from the previous profits.
-        if (self.stakeRegistry.isExcludedFromProfits(sender) && self.profitDeltas[sender] > 0) {
+        if (self.stakeToken.isExcludedFromProfits(sender) && self.profitDeltas[sender] > 0) {
             // the cast is safe
             self.withdrawalSum += uint(self.profitDeltas[sender]) >> DELTAS_SHIFT;
             self.profitDeltas[sender] = 0;
@@ -188,7 +177,7 @@ library ProfitTracker {
 
 
     function profitBalance(ProfitSource storage self, address recipient) internal view returns (uint) {
-        uint userBalance = self.stakeRegistry.stakeOf(recipient);
+        uint userBalance = self.stakeToken.balanceOf(recipient);
         // the cast to int is safe as long as self.stakeRegistry.totalStake() > 2
         int rawProfit = int(_tokensGainedProfitShifted(self, userBalance).floor()) + self.profitDeltas[recipient];
         if (rawProfit < 0)
@@ -229,6 +218,6 @@ library ProfitTracker {
         // first we need to convert the unit of our total gained profit into deltas unit.
         totalGained = totalGained << DELTAS_SHIFT;
         // overflows should never happen that's why we have MAX_TOTAL_PROFIT.
-        return RationalNumber(tokenAmount * totalGained, self.stakeRegistry.totalStake());
+        return RationalNumber(tokenAmount * totalGained, self.stakeToken.totalSupply());
     }
 }

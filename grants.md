@@ -1,5 +1,5 @@
 
-| **Current Supply** | **10,009,000,000** |  
+| **Current Supply** | **5,009,000,000** |  
 | :--- | --- | 
 | **Total Grants Given** | **9,000,000** |
 

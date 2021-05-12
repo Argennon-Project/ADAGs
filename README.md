@@ -41,21 +41,21 @@ rules:
 ### Token Dynamics
 
 The final total supply of the Argennon currency will be 100 billion. The ARG ERC20 token on the other hand, will have a
-50 billion cap. Consequently, 50 billion Argennons will be minted only after the launch of the Argennon blockchain. These
-Argennons will be mainly used as staking rewards.
+50 billion cap. Consequently, 50 billion Argennons will be minted only after the launch of the Argennon blockchain.
+These Argennons will be mainly used as staking rewards.
 
 The minting of the ARG ERC20 token will follow these rules:
 
-- **10 billion:** founder's share.
-- **1 billion:** founder's initial reserve which will be granted to early contributors. **All these grants are
+- **5 billion:** founder's share.
+- **5 billion:** founder's initial reserve which will be granted to early contributors. **All these grants are
   documented [here](https://github.com/aybehrouz/ADAGs/blob/main/grants.md).**
-- **1 billion:** first crowdfunding which will be sold for 50,000$.
+- **1 billion:** first crowdfunding which will be sold for 100,000$.
 
-The minting of the remaining ARG ERC20 tokens will be decided by the ADAGs, but it has to be limited by the maximum
-supply defined by the ARG ERC20 contract. This maximum allowed supply is a function of time. For the first year a
-maximum supply of 20 billion is allowed, and after that, the maximum allowed supply increases 5 billion per year for 6
-years until it reaches the 50 billion cap. It should be noted that this is a hard limit on the **maximum** supply of the
-ARG ERC20 token and the actual supply may be lower than this amount.
+The minting of ARG ERC20 tokens will be decided by the ADAGs, but it has to be limited by the maximum supply defined by
+the ARG ERC20 contract. This maximum allowed supply is a function of time. For the first year a maximum supply of 10
+billion is allowed, and after that, the maximum allowed supply increases 5 billion per year until it reaches the 50
+billion cap. It should be noted that this is a hard limit on the **maximum** supply of the ARG ERC20 token and the
+actual supply may be lower than this amount.
 
-After the launch of the Argennon blockchain, all unminted ARG ERC20 tokens will be considered as the reserve of the ADAGs
-counterpart on the Argennon blockchain.
+After the launch of the Argennon blockchain, all unminted ARG ERC20 tokens with respect to the 50 billion cap, will be
+considered as the reserve of the ADAGs counterpart on the Argennon blockchain.

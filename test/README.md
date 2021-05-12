@@ -2,10 +2,12 @@
 
 Unit tests can be run using truffle suit. To run unit tests by truffle follow these steps:
 
-Use truffle to initialize a new project:
+ Use truffle to initialize a new project:
 
-    cd MyProject
+    mkdir MyProject && cd MyProject
     truffle init
+
+Copy `contracts` and `test` into `MyProject` Directory.
 
 Install OpenZeppelin in your new project:
 

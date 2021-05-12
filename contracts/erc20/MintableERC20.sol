@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: AGPL-3.0-only
 
 
 pragma solidity ^0.8.0;
@@ -8,10 +8,10 @@ import "./../utils/Owned.sol";
 
 
 contract MintableERC20 is ERC20, Owned {
-    uint immutable private slope;
-    uint immutable private duration;
-    uint immutable private startTime;
-    uint immutable private initialMaxSupply;
+    uint immutable public slope;
+    uint immutable public duration;
+    uint immutable public startTime;
+    uint immutable public initialMaxSupply;
     mapping(address => uint) public mintingAllowances;
 
 
