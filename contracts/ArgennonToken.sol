@@ -22,16 +22,13 @@ uint constant FOUNDERS_SHARE = 5e15;
 uint constant FOUNDERS_INITIAL_MINT_APPROVAL = 5e15;
 
 
-
 contract ArgennonToken is LockableERC20, MintableERC20, DistributorERC20 {
-   
-    
-    constructor(address payable _admin, address _owner) 
+    constructor(address payable _admin, address _owner)
     Administered(_admin)
     MintableERC20(_owner, NAME, SYMBOL, INITIAL_SUPPLY, CAP, block.timestamp + 365 days, DURATION) {
         // we have to use low level functions because the msg.sender != owner and higher level functions will fail.
         // this will reduce our gas usage too.
-        ERC20._mint(FOUNDER, FOUNDERS_SHARE);
+        _mint(FOUNDER, FOUNDERS_SHARE);
         mintingAllowances[FOUNDER] = FOUNDERS_INITIAL_MINT_APPROVAL - 1e15;
         mintingAllowances[_admin] = 1e15;
     }
@@ -52,11 +49,6 @@ contract ArgennonToken is LockableERC20, MintableERC20, DistributorERC20 {
     }
     
     
-    function _mint(address account, uint256 amount) internal override(ERC20, MintableERC20) {
-        MintableERC20._mint(account, amount);
-    }
-    
-
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal
     override(ERC20, LockableERC20, DistributorERC20) {
         LockableERC20._beforeTokenTransfer(from, to, amount);

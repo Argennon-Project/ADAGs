@@ -34,12 +34,13 @@ abstract contract DistributorERC20 is StakeToken, ERC20, Administered {
 
 
     event ProfitSent(address recipient, uint amount, IERC20 token);
+    event ProfitSourceRegistered(IERC20 token, uint sourceIndex);
 
 
     /**
-     * Registers a new profit source which must be an ERC20 contract. After registration, the balance of this contract
-     * address in the registered ERC20 token will be considered the profit of shareholders, and it will be distributed
-     * between holders of this token.
+     * Registers a new profit source which must be an ERC20 token. After registration, the balance of the contract
+     * in the registered ERC20 token will be considered as the profit of shareholders, and it will be
+     * distributed between share holders.
      *
      * Only `admin` can call this method. If the profit sources are finalized this method will fail.
      *
@@ -56,6 +57,7 @@ abstract contract DistributorERC20 is StakeToken, ERC20, Administered {
         newSource.fiatToken = tokenContract;
         newSource.stakeToken = this;
         require(trackers.length <= MAX_SOURCE_COUNT, "max source count reached");
+        ProfitSourceRegistered(tokenContract, trackers.length - 1);
         return trackers.length - 1;
     }
 
@@ -104,7 +106,9 @@ abstract contract DistributorERC20 is StakeToken, ERC20, Administered {
         emit ProfitSent(msg.sender, amount, trackers[sourceIndex].fiatToken);
     }
 
-
+    /**
+     * @inheritdoc Administered
+     */
     function canControl(IERC20 token) public view override virtual returns (bool) {
         for (uint i = 0; i < trackers.length; i++) {
             if (trackers[i].fiatToken == token)
@@ -137,13 +141,14 @@ struct ProfitSource {
 
 uint8 constant DELTAS_SHIFT = 36;
 uint constant PROFIT_DISTRIBUTION_THRESHOLD = 1e9;
-uint constant MAX_TOTAL_PROFIT = 2 ** 160;
+uint constant MAX_TOTAL_PROFIT = 2 ** 160 - 1;
+
 
 library ProfitTracker {
     using Rational for RationalNumber;
     
-    // If newly minted stakes (tokens) should not get any shares from previously gained profits, when minting new tokens
-    // this function should be called before updating the total stake, and the sender address should be an address
+    // If newly minted stakes (tokens) should not get any shares from previously gained profits, this function should
+    // be called before updating the total stake when minting new tokens, and the sender address should be an address
     // which is excluded from profits.
     function transferStake(ProfitSource storage self, address sender, address recipient, uint amount) internal {
         RationalNumber memory profit = _tokensGainedProfitShifted(self, amount);
@@ -160,7 +165,7 @@ library ProfitTracker {
         //
         // To mitigate this problem, we try to keep the calculation error as low as possible by preventing low amount
         // transfers. RationalNumber library stops a transfer when it detects that the calculation error is too high.
-        // the cast to int is safe as long as self.stakeRegistry.totalStake() > 2
+        // the cast to int is safe as long as self.stakeToken.totalSupply() > 2
         self.profitDeltas[sender] += int(profit.floor());
         self.profitDeltas[recipient] -= int(profit.ceil());
 
@@ -178,7 +183,7 @@ library ProfitTracker {
 
     function profitBalance(ProfitSource storage self, address recipient) internal view returns (uint) {
         uint userBalance = self.stakeToken.balanceOf(recipient);
-        // the cast to int is safe as long as self.stakeRegistry.totalStake() > 2
+        // the cast to int is safe as long as self.stakeToken.totalSupply() > 2
         int rawProfit = int(_tokensGainedProfitShifted(self, userBalance).floor()) + self.profitDeltas[recipient];
         if (rawProfit < 0)
             rawProfit = 0;
@@ -190,34 +195,47 @@ library ProfitTracker {
     function withdrawProfit(ProfitSource storage self, address recipient, uint amount) internal {
         require(amount <= profitBalance(self, recipient), "profit balance is not enough");
         // this cast is tricky but it's safe because the amount is lower than profit balance.
-        self.profitDeltas[recipient] -= int(amount << DELTAS_SHIFT);
+        self.profitDeltas[recipient] -= int(amount) << DELTAS_SHIFT;
         self.withdrawalSum += amount;
         
         // we assume fiatToken is a trusted contract, however reentrancy will not cause the `msg.sender` to
         // withdraw more than `profitBalance(msg.sender)`.
         bool success = self.fiatToken.transfer(recipient, amount);
-        require(success);
+        require(success, "error in token transfer");
     }
-    
-    
+
+    // we should not let this function fail due to an overflow.
     function _tokensGainedProfitShifted(ProfitSource storage self, uint tokenAmount)
     private view returns (RationalNumber memory) {
-        uint totalGained;
         // We have not changed the state of our contract yet, so reentrancy in this external call is safe and would be
         // like a normal call to another function of the contract.
         // We should not let this function fail due to an error in the external call as much as possible. However
         // high gas consumption in the external call would be still an issue and could make our token unusable.
+        uint totalGained;
         try self.fiatToken.balanceOf(address(this)) returns (uint fiatBalance) {
-            totalGained = self.withdrawalSum + fiatBalance;
+            // we need to prevent overflows
+            if (fiatBalance >= MAX_TOTAL_PROFIT / 2) {
+                totalGained = MAX_TOTAL_PROFIT / 2;
+            }
+            else {
+                totalGained = fiatBalance;
+            }
         } catch {
-            totalGained = self.withdrawalSum;
+            totalGained = 0;
         }
-        if (totalGained < PROFIT_DISTRIBUTION_THRESHOLD || totalGained >= MAX_TOTAL_PROFIT)
+        // prevent overflows
+        if (self.withdrawalSum >= MAX_TOTAL_PROFIT / 2) {
+            totalGained += MAX_TOTAL_PROFIT / 2;
+        }
+        else {
+            totalGained += self.withdrawalSum;
+        }
+        if (totalGained < PROFIT_DISTRIBUTION_THRESHOLD)
             return RationalNumber(0, 1);
-       
+
         // first we need to convert the unit of our total gained profit into deltas unit.
         totalGained = totalGained << DELTAS_SHIFT;
-        // overflows should never happen that's why we have MAX_TOTAL_PROFIT.
+        // an overflow here will prevent the token transfer.
         return RationalNumber(tokenAmount * totalGained, self.stakeToken.totalSupply());
     }
 }

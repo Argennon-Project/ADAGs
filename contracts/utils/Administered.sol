@@ -33,7 +33,7 @@ contract Administered is AccessControlled {
      *
      * Only `admin` can call this method.
      * 
-     * @param token is the address of the ERC20 contract that you want to withdraw from the contract's
+     * @param token is the address of the ERC20 token contract that you want to withdraw from the contract's
      * address. Use `address(0)` to withdraw Ether.
      * @param amount is the raw amount to withdraw.
      */

@@ -109,8 +109,8 @@ contract("DistributorERC20", (accounts) => {
         await fiat2.transfer(sharesToken.address, 2n ** 256n - 1n, {from: admin});
         await sharesToken.transfer(accounts[2], 1000, {from: admin});
 
-        await sharesToken.mint(admin, 2n **250n);
-        await sharesToken.transfer(accounts[1], 2n ** 250n, {from: admin});
+        await sharesToken.mint(admin, 10n ** 17n);
+        await sharesToken.transfer(accounts[1], 10n ** 17n, {from: admin});
 
         await fiatToken.transfer(sharesToken.address, 15 * decimals, {from: admin});
         await Errors.expectError(
@@ -138,10 +138,12 @@ contract("DistributorERC20", (accounts) => {
     });
 
     it("should handle small amount of profit", async () => {
-        await sharesToken.mint(admin, 50n * 10n ** 15n);
-        await fiatToken.transfer(sharesToken.address, 0.5 * decimals, {from: admin});
+        await sharesToken.mint(admin, 10n * 10n ** 15n);
+        await fiatToken.transfer(sharesToken.address, 100, {from: admin});
         await sharesToken.transfer(accounts[1] , 1, {from: admin});
         await sharesToken.transfer(accounts[1] , 1000000, {from: admin});
+        await sharesToken.mint(admin, 10n * 10n ** 15n);
+        await sharesToken.transfer(admin , 10, {from: accounts[1]});
     });
 
     it("distributes profits based on account balances", async () => {

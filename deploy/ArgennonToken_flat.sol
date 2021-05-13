@@ -597,7 +597,7 @@ contract MintableERC20 is ERC20, Owned {
 
 
     /**
-     * Returns the maximum allowed total supply of the token for the specified time. The maximum supply is an
+     * Returns the maximum allowed total supply of the token for the specified `timestamp`. The maximum supply is an
      * increasing function of time. Exceeding allowed supply limit is impossible.
      *
      * @param timestamp is the time stamp in seconds as is in block.timestamp.
@@ -618,31 +618,26 @@ contract MintableERC20 is ERC20, Owned {
      * @param minter is the address who is allowed to mint tokens.
      * @param amount is the amount that the allowance will increase. This value will be added to the previous allowance.
      */
-    function increaseMintingAllowance(address minter, uint amount) onlyBy(owner) public {
+    function increaseMintingAllowance(address minter, uint amount) onlyBy(owner) public virtual {
         mintingAllowances[minter] += amount;
         emit MintingAllowanceIncreased(minter, amount);
     }
 
   
     /**
-     * Mints `amount` new tokens and sends it to `recipient`. Only `owner` can call this method or an address which
-     * has enough minting allowance. Minting of the new tokens can not increase the total supply beyond the allowed
-     * max supply.
+     * Mints `amount` new tokens and sends it to `recipient`. Only `owner` can use this method or an address which
+     * has enough minting allowance. When `owner` mints new tokens his allowance will be unaffected. Minting
+     * of the new tokens can not increase the total supply beyond the allowed max supply.
      * 
      * @param recipient the address who will receive the new tokens.
      * @param amount the raw amount to be minted.
      */
-    function mint(address recipient, uint amount) public {
+    function mint(address recipient, uint amount) public virtual {
         if (msg.sender != owner) {
-            require(mintingAllowances[msg.sender] >= amount, "amount exceeds allowance");
+            require(mintingAllowances[msg.sender] >= amount, "amount exceeds minting allowance");
             mintingAllowances[msg.sender] -= amount;
         }
         _mint(recipient, amount);
-    }
-    
-    
-    function _mint(address account, uint amount) internal virtual override {
-        super._mint(account, amount);
         require(totalSupply() <= maxAllowedSupply(block.timestamp), "totalSupply exceeds limit");
     }
 }
@@ -680,7 +675,7 @@ contract Administered is AccessControlled {
      *
      * Only `admin` can call this method.
      * 
-     * @param token is the address of the ERC20 contract that you want to withdraw from the contract's
+     * @param token is the address of the ERC20 token contract that you want to withdraw from the contract's
      * address. Use `address(0)` to withdraw Ether.
      * @param amount is the raw amount to withdraw.
      */
@@ -740,12 +735,13 @@ abstract contract DistributorERC20 is StakeToken, ERC20, Administered {
 
 
     event ProfitSent(address recipient, uint amount, IERC20 token);
+    event ProfitSourceRegistered(IERC20 token, uint sourceIndex);
 
 
     /**
-     * Registers a new profit source which must be an ERC20 contract. After registration, the balance of this contract
-     * address in the registered ERC20 token will be considered the profit of shareholders, and it will be distributed
-     * between holders of this token.
+     * Registers a new profit source which must be an ERC20 token. After registration, the balance of the contract
+     * in the registered ERC20 token will be considered as the profit of shareholders, and it will be
+     * distributed between share holders.
      *
      * Only `admin` can call this method. If the profit sources are finalized this method will fail.
      *
@@ -760,6 +756,7 @@ abstract contract DistributorERC20 is StakeToken, ERC20, Administered {
         newSource.fiatToken = tokenContract;
         newSource.stakeToken = this;
         require(trackers.length <= MAX_SOURCE_COUNT, "max source count reached");
+        ProfitSourceRegistered(tokenContract, trackers.length - 1);
         return trackers.length - 1;
     }
 
@@ -808,7 +805,9 @@ abstract contract DistributorERC20 is StakeToken, ERC20, Administered {
         emit ProfitSent(msg.sender, amount, trackers[sourceIndex].fiatToken);
     }
 
-
+    /**
+     * @inheritdoc Administered
+     */
     function canControl(IERC20 token) public view override virtual returns (bool) {
         for (uint i = 0; i < trackers.length; i++) {
             if (trackers[i].fiatToken == token)
@@ -840,7 +839,8 @@ struct ProfitSource {
 
 uint8 constant DELTAS_SHIFT = 36;
 uint constant PROFIT_DISTRIBUTION_THRESHOLD = 1e9;
-uint constant MAX_TOTAL_PROFIT = 2 ** 160;
+uint constant MAX_TOTAL_PROFIT = 2 ** 160 - 1;
+
 
 library ProfitTracker {
     using Rational for RationalNumber;
@@ -871,25 +871,35 @@ library ProfitTracker {
     
     function withdrawProfit(ProfitSource storage self, address recipient, uint amount) internal {
         require(amount <= profitBalance(self, recipient), "profit balance is not enough");
-        self.profitDeltas[recipient] -= int(amount << DELTAS_SHIFT);
+        self.profitDeltas[recipient] -= int(amount) << DELTAS_SHIFT;
         self.withdrawalSum += amount;
         
         bool success = self.fiatToken.transfer(recipient, amount);
-        require(success);
+        require(success, "error in token transfer");
     }
-    
-    
+
     function _tokensGainedProfitShifted(ProfitSource storage self, uint tokenAmount)
     private view returns (RationalNumber memory) {
         uint totalGained;
         try self.fiatToken.balanceOf(address(this)) returns (uint fiatBalance) {
-            totalGained = self.withdrawalSum + fiatBalance;
+            if (fiatBalance >= MAX_TOTAL_PROFIT / 2) {
+                totalGained = MAX_TOTAL_PROFIT / 2;
+            }
+            else {
+                totalGained = fiatBalance;
+            }
         } catch {
-            totalGained = self.withdrawalSum;
+            totalGained = 0;
         }
-        if (totalGained < PROFIT_DISTRIBUTION_THRESHOLD || totalGained >= MAX_TOTAL_PROFIT)
+        if (self.withdrawalSum >= MAX_TOTAL_PROFIT / 2) {
+            totalGained += MAX_TOTAL_PROFIT / 2;
+        }
+        else {
+            totalGained += self.withdrawalSum;
+        }
+        if (totalGained < PROFIT_DISTRIBUTION_THRESHOLD)
             return RationalNumber(0, 1);
-       
+
         totalGained = totalGained << DELTAS_SHIFT;
         return RationalNumber(tokenAmount * totalGained, self.stakeToken.totalSupply());
     }
@@ -921,7 +931,7 @@ abstract contract LockableERC20 is ERC20 {
     mapping(address => Lock) public locksData;
     
     
-    event LockUpdated(address account, uint128 amount, uint128 releaseTime);
+    event LockUpdated(address account, uint128 threshold, uint128 releaseTime);
 
 
     /**
@@ -995,18 +1005,16 @@ uint constant DURATION = 2920 days;
 
 address constant FOUNDER = address(0x1BE77304cA7b3B0FBFaa3cd0F6dd47B360936c0d);
 uint constant FOUNDERS_SHARE = 5e15;
-uint constant FOUNDERS_INITIAL_MINT_APPROVAL = 1e15;
-
+uint constant FOUNDERS_INITIAL_MINT_APPROVAL = 5e15;
 
 
 contract ArgennonToken is LockableERC20, MintableERC20, DistributorERC20 {
-   
-    
-    constructor(address payable _admin, address _owner) 
+    constructor(address payable _admin, address _owner)
     Administered(_admin)
     MintableERC20(_owner, NAME, SYMBOL, INITIAL_SUPPLY, CAP, block.timestamp + 365 days, DURATION) {
-        ERC20._mint(FOUNDER, FOUNDERS_SHARE);
-        mintingAllowances[_admin] = FOUNDERS_INITIAL_MINT_APPROVAL;
+        _mint(FOUNDER, FOUNDERS_SHARE);
+        mintingAllowances[FOUNDER] = FOUNDERS_INITIAL_MINT_APPROVAL - 1e15;
+        mintingAllowances[_admin] = 1e15;
     }
     
     
@@ -1025,11 +1033,6 @@ contract ArgennonToken is LockableERC20, MintableERC20, DistributorERC20 {
     }
     
     
-    function _mint(address account, uint256 amount) internal override(ERC20, MintableERC20) {
-        MintableERC20._mint(account, amount);
-    }
-    
-
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal
     override(ERC20, LockableERC20, DistributorERC20) {
         LockableERC20._beforeTokenTransfer(from, to, amount);

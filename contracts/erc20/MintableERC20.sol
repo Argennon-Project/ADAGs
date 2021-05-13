@@ -42,7 +42,7 @@ contract MintableERC20 is ERC20, Owned {
 
 
     /**
-     * Returns the maximum allowed total supply of the token for the specified time. The maximum supply is an
+     * Returns the maximum allowed total supply of the token for the specified `timestamp`. The maximum supply is an
      * increasing function of time. Exceeding allowed supply limit is impossible.
      *
      * @param timestamp is the time stamp in seconds as is in block.timestamp.
@@ -65,7 +65,7 @@ contract MintableERC20 is ERC20, Owned {
      * @param minter is the address who is allowed to mint tokens.
      * @param amount is the amount that the allowance will increase. This value will be added to the previous allowance.
      */
-    function increaseMintingAllowance(address minter, uint amount) onlyBy(owner) public {
+    function increaseMintingAllowance(address minter, uint amount) onlyBy(owner) public virtual {
         // we don't need to check anything about amount. Solidity should detect overflows.
         mintingAllowances[minter] += amount;
         emit MintingAllowanceIncreased(minter, amount);
@@ -73,26 +73,21 @@ contract MintableERC20 is ERC20, Owned {
 
   
     /**
-     * Mints `amount` new tokens and sends it to `recipient`. Only `owner` can call this method or an address which
-     * has enough minting allowance. Minting of the new tokens can not increase the total supply beyond the allowed
-     * max supply.
+     * Mints `amount` new tokens and sends it to `recipient`. Only `owner` can use this method or an address which
+     * has enough minting allowance. When `owner` mints new tokens his allowance will be unaffected. Minting
+     * of the new tokens can not increase the total supply beyond the allowed max supply.
      * 
      * @param recipient the address who will receive the new tokens.
      * @param amount the raw amount to be minted.
      */
-    function mint(address recipient, uint amount) public {
+    function mint(address recipient, uint amount) public virtual {
         if (msg.sender != owner) {
-            require(mintingAllowances[msg.sender] >= amount, "amount exceeds allowance");
+            require(mintingAllowances[msg.sender] >= amount, "amount exceeds minting allowance");
             mintingAllowances[msg.sender] -= amount;
         }
-        _mint(recipient, amount);
-    }
-    
-    
-    function _mint(address account, uint amount) internal virtual override {
-        // first we need to mint, then we can check the condition. because we don't know how the totalSupply
+        // first we need to mint, then we can check the max supply condition. because we don't know how the totalSupply
         // would change.
-        super._mint(account, amount);
+        _mint(recipient, amount);
         require(totalSupply() <= maxAllowedSupply(block.timestamp), "totalSupply exceeds limit");
     }
 }

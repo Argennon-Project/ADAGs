@@ -27,7 +27,7 @@ abstract contract LockableERC20 is ERC20 {
     mapping(address => Lock) public locksData;
     
     
-    event LockUpdated(address account, uint128 amount, uint128 releaseTime);
+    event LockUpdated(address account, uint128 threshold, uint128 releaseTime);
 
 
     /**
@@ -55,7 +55,7 @@ abstract contract LockableERC20 is ERC20 {
      * @param releaseTime is the lock's release time. After this time the lock will be deactivated.
      */
     function setLock(uint128 threshold, uint128 releaseTime) public {
-        // we do not check the user balance and let the user to increase his lock threshold beyond his balance. 
+        // we do not check the user balance and let the user increase his lock threshold beyond his balance.
         // this will enable use cases that an account could act like a timed locked smart contract.
         _updateLock(msg.sender);
         require(
@@ -70,7 +70,7 @@ abstract contract LockableERC20 is ERC20 {
 
 
     function _beforeTokenTransfer(address from, address, uint256 amount) internal override virtual {
-        // we update the lock after this check to reduce transfer's gas consumption
+        // This if is added to save gas. we update the lock after this check to reduce transfer's gas consumption.
         if (locksData[from].threshold == 0)
             return;
         _updateLock(from);
