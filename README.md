@@ -9,7 +9,8 @@ persistence layer, seamlessly and efficiently by taking advantage of a smart dat
 On the other hand, Argennon blockchain uses a truly decentralized and secure proof of stake consensus protocol. Thanks
 to the efficient design of the AVM, participation in the Argennon consensus protocol does not require huge computational
 resources, and normal personal computers with limited computational power can actively participate in the Argennon
-consensus protocol.
+consensus protocol. Check the initial draft of the Argennon white
+paper [here](https://github.com/aybehrouz/AVM/blob/main/pdf/A.pdf).
 
 ### The Argennon ERC20 token
 

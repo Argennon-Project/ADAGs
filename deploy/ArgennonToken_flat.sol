@@ -756,7 +756,7 @@ abstract contract DistributorERC20 is StakeToken, ERC20, Administered {
         newSource.fiatToken = tokenContract;
         newSource.stakeToken = this;
         require(trackers.length <= MAX_SOURCE_COUNT, "max source count reached");
-        ProfitSourceRegistered(tokenContract, trackers.length - 1);
+        emit ProfitSourceRegistered(tokenContract, trackers.length - 1);
         return trackers.length - 1;
     }
 
