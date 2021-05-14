@@ -1,5 +1,16 @@
 ## The Argennon Decentralized Autonomous Governance <br>system (ADAGs /eɪ-dagz/)
 
+Argennon is a new innovative smart contract platform which tries to solve many shortcomings of existing platforms. The
+Argennon Virtual Machine is designed to be secure and efficient. Security issues such as reentrancy, complexities of
+integer arithmetic errors, and authorization problems does not exist for Argennon programmers. The Argennon Virtual
+Machine is scalable and very efficient at data storage. It is optimized for using a zero knowledge database as its
+persistence layer, seamlessly and efficiently by taking advantage of a smart data clustering algorithm.
+
+On the other hand, Argennon blockchain uses a truly decentralized and secure proof of stake consensus protocol. Thanks
+to the efficient design of the AVM, participation in the Argennon consensus protocol does not require huge computational
+resources, and normal personal computers with limited computational power can actively participate in the Argennon
+consensus protocol.
+
 ### The Argennon ERC20 token
 
 The Argennon token (ARG) is an ERC20 token intended to represent an investor's share in the Argennon project. The
