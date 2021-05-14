@@ -34,26 +34,44 @@ contract("LockableERC20", (accounts) => {
 
     it("should only extend locks", async () => {
         await lockableToken.transfer(accounts[1], 200, {from: accounts[0]});
+        const timestamp = Math.floor(Date.now() / 1000);
         assert.equal(
             (await lockableToken.balanceOf.call(accounts[1])).toNumber(),
             200,
             "200 was not transferred"
         );
 
-        await lockableToken.setLock(200, Math.floor(Date.now() / 1000) - 1000, {from: accounts[1]});
+        await lockableToken.setLock(200, timestamp - 1000, {from: accounts[1]});
+        let lockData = await lockableToken.locksData.call(accounts[1]);
+        assert.equal(lockData.threshold.valueOf(), 200, "lock threshold should be 200");
+        assert.equal(lockData.releaseTime.valueOf(), timestamp - 1000, "Release time was not correct");
+
         lockableToken.transfer(accounts[2], 100, {from: accounts[1]});
         assert.equal(
             (await lockableToken.balanceOf.call(accounts[2])).toNumber(),
             100,
             "100 was not transferred"
         );
-        await lockableToken.setLock(200, Math.floor(Date.now() / 1000) - 1000, {from: accounts[1]});
-        await lockableToken.setLock(50, Math.floor(Date.now() / 1000) + 1000, {from: accounts[1]});
-        await lockableToken.setLock(150, Math.floor(Date.now() / 1000) + 1000, {from: accounts[1]});
+        await lockableToken.setLock(150, timestamp - 2000, {from: accounts[1]});
+        lockData = await lockableToken.locksData.call(accounts[1]);
+        assert.equal(lockData.threshold.valueOf(), 150, "lock threshold should be 150");
+        assert.equal(lockData.releaseTime.valueOf(), timestamp - 2000, "Release time was not correct");
+
+
+        await lockableToken.setLock(50, timestamp + 1000, {from: accounts[1]});
+        await lockableToken.setLock(150, timestamp + 1000, {from: accounts[1]});
+        await lockableToken.setLock(150, timestamp + 1500, {from: accounts[1]});
         await Errors.expectError(
-            lockableToken.setLock(200, Math.floor(Date.now() / 1000) + 900, {from: accounts[1]}),
+            lockableToken.setLock(200, timestamp + 1400, {from: accounts[1]}),
             Errors.LOCK_UPDATE_ERROR
         );
+        await Errors.expectError(
+            lockableToken.setLock(140, timestamp + 2000, {from: accounts[1]}),
+            Errors.LOCK_UPDATE_ERROR
+        );
+        let lock = await lockableToken.locked.call(accounts[1]);
+        assert.equal(lock.amount.valueOf(), 100, "Amount of lock should be 100");
+        assert.equal(lock.releaseTime.valueOf(), timestamp + 1500, "Release time was not correct");
 
         await lockableToken.transfer(accounts[1], 100, {from: accounts[0]});
         // first transfer should be successful.
@@ -67,5 +85,8 @@ contract("LockableERC20", (accounts) => {
             150,
             "Error in acc2's final balance"
         );
+        lockData = await lockableToken.locksData.call(accounts[1]);
+        assert.equal(lockData.threshold.valueOf(), 150, "Amount of lock should be 150");
+        assert.equal(lockData.releaseTime.valueOf(), timestamp + 1500, "Release time was not correct");
     });
 });
