@@ -785,12 +785,13 @@ abstract contract DistributorERC20 is StakeToken, ERC20, Administered {
 
 
     /**
-     * Gets the amount of profit that `account` has acquired in the ERC20 token specified by `sourceIndex`.
+     * Gets the available balance of profits that `account` has in the ERC20 token specified by `sourceIndex`. This
+     * amount could be withdrawn by using `withdrawProfit` method.
      * 
      * @param sourceIndex is the index of the ERC20 token in the `trackers` list.
      * @return the total amount of gained profit.
      */
-    function profit(address account, uint8 sourceIndex) public view returns (uint) {
+    function balanceOfProfit(address account, uint8 sourceIndex) public view returns (uint) {
         return trackers[sourceIndex].profitBalance(account);
     }
 
