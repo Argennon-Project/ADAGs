@@ -87,6 +87,24 @@ contract("ArgennonToken", (accounts) => {
         // [0 500 300 800 1100 300] -> [0 7.5 4.5 12 16.5 4.5 (75)]
         await checkProfitsNonExact([0, 157.5, 144.5, 132, 46.5, 74.5], arg, 0, "after_exclude");
 
+        await Errors.expectError(
+            arg.withdrawProfit(2n ** 256n - 10n, 1, {from: accounts[1]}),
+            Errors.GENERAL_ERROR
+        );
+        await Errors.expectError(
+            arg.withdrawProfit(2n ** 256n - 10n, 0, {from: accounts[1]}),
+            Errors.LOW_BALANCE_ERROR
+        );
+        await Errors.expectError(
+            arg.withdrawProfit(145 * decimals, 0, {from: accounts[2]}),
+            Errors.LOW_BALANCE_ERROR
+        );
+
+        await Errors.expectError(
+            arg.registerProfitSource(accounts[6], {from: admin}),
+            Errors.GENERAL_ERROR
+        );
+
         assert.equal(
             (await arg.balanceOf.call(accounts[3])).valueOf(),
             800 * decimals * decimals,
@@ -106,6 +124,41 @@ contract("ArgennonToken", (accounts) => {
             1000 * decimals * decimals,
             "Error in locked tokens transfer"
         );
+
+        await Errors.expectError(
+            arg.mint(accounts[5], 100 * decimals, {from: accounts[6]}),
+            Errors.MINT_ALLOWANCE_ERROR
+        );
+        await Errors.expectError(
+            arg.setOwner(accounts[5], {from: accounts[6]}),
+            Errors.NOT_AUTHORIZED_ERROR
+        );
+        await arg.setOwner(accounts[6], {from: owner});
+        await Errors.expectError(
+            arg.setOwner(accounts[4], {from: owner}),
+            Errors.NOT_AUTHORIZED_ERROR
+        );
+        owner = accounts[6];
+
+        await arg.transfer(accounts[2], 450 * decimals * decimals, {from: accounts[1]});
+        await arg.transfer(accounts[0], 100 * decimals * decimals, {from: accounts[5]});
+        await arg.mint(accounts[0], 100 * decimals * decimals, {from: owner});
+        await arg.mint(accounts[4], 900 * decimals * decimals, {from: owner});
+        // [200 50 750 1000 2000 0] -> [20 5 75 100 200 0] 500
+        await fiat.transfer(arg.address, 900 * decimals, {from: admin});
+        await arg.mint(accounts[5], 500 * decimals * decimals, {from: owner});
+        await arg.mint(accounts[0], 500 * decimals * decimals, {from: owner});
+        await arg.transfer(accounts[1], 400 * decimals * decimals, {from: accounts[3]});
+        await Errors.expectError(
+            arg.mint(accounts[5], 10000, {from: owner}),
+            Errors.EXCEEDS_MAX_SUPPLY_ERROR
+        );
+        assert.equal(
+            (await arg.totalSupply.call()).valueOf(),
+            10000 * decimals * decimals,
+            "Error in totalSupply"
+        );
+        await checkProfitsNonExact([20, 162.5, 219.5, 232, 246.5, 74.5], arg, 0, "final");
     });
 
     it('can handle arithmetic errors', async () => {

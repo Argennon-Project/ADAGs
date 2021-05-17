@@ -96,8 +96,8 @@ contract("DistributorERC20", (accounts) => {
         await checkProfits([10, 2, 0], sharesToken, 0, "test1_s0");
         await checkProfits([10, 2, 8], sharesToken, 1, "test1_s1");
 
-        sharesToken.withdrawProfit(2 * decimals, 0, {from: accounts[1]});
-        sharesToken.withdrawProfit(4 * decimals, 1, {from: accounts[2]});
+        await sharesToken.withdrawProfit(2 * decimals, 0, {from: accounts[1]});
+        await sharesToken.withdrawProfit(4 * decimals, 1, {from: accounts[2]});
         assert.equal(
             (await fiatToken.balanceOf.call(accounts[1])).valueOf(),
             2 * decimals,
@@ -109,12 +109,32 @@ contract("DistributorERC20", (accounts) => {
             "Error in source1 withdrawal"
         );
 
-        //[800 300 900] -> [1.6 0.6 1.8] , [4 1.5 4.5]
+        // [800 300 900] -> [1.6 0.6 1.8] , [4 1.5 4.5]
         await fiatToken.transfer(sharesToken.address, 4 * decimals, {from: admin});
         await fiat2.transfer(sharesToken.address, 10 * decimals, {from: admin});
-        await sharesToken.transfer(accounts[1], 400, {from: accounts[0]});
+        await sharesToken.transfer(accounts[1], 800, {from: accounts[0]});
         await checkProfits([11.6, 0.6, 1.8], sharesToken, 0, "test2_s0");
         await checkProfits([14, 3.5, 8.5], sharesToken, 1, "test2_s1");
+
+        const fiat3 = await TestToken.new(admin, 100 * decimals);
+        await fiat3.transfer(sharesToken.address, 40 * decimals, {from: admin});
+
+        await sharesToken.transfer(accounts[2], 400, {from: accounts[1]});
+        // [0 700 1300] - > [0 14 26]
+        await sharesToken.registerProfitSource(fiat3.address, {from: admin});
+        await checkProfits([11.6, 0.6, 1.8], sharesToken, 0, "test3_s0");
+        await checkProfits([14, 3.5, 8.5], sharesToken, 1, "test3_s1");
+        await checkProfits([0, 14, 26], sharesToken, 2, "test3_s2");
+        await sharesToken.withdrawProfit(25 * decimals, 2, {from: accounts[2]});
+        assert.equal(
+            (await fiat3.balanceOf.call(accounts[2])).valueOf(),
+            25 * decimals,
+            "Error in source2 withdrawal for acc2"
+        );
+        await Errors.expectError(
+            sharesToken.withdrawProfit(1.5 * decimals, 2, {from: accounts[2]}),
+            Errors.LOW_BALANCE_ERROR
+        );
     });
 
     it("enables users to withdraw their profit", async () => {
@@ -130,6 +150,14 @@ contract("DistributorERC20", (accounts) => {
         await Errors.expectError(
             sharesToken.withdrawProfit(1, 0, {from: accounts[1]}),
             Errors.LOW_BALANCE_ERROR
+        );
+        await Errors.expectError(
+            sharesToken.withdrawProfit(2n ** 256n - 10n, 1, {from: accounts[1]}),
+            Errors.GENERAL_ERROR
+        );
+        await Errors.expectError(
+            sharesToken.withdrawProfit(1, 1, {from: accounts[1]}),
+            Errors.GENERAL_ERROR
         );
         assert.equal(
             (await fiatToken.balanceOf.call(accounts[1])).valueOf(),

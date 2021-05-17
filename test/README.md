@@ -45,3 +45,4 @@ Now you should be able to run unit tests:
 
     truffle test
 
+Tests may take several minutes to complete.
