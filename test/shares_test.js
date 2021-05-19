@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-const Errors = require('./errors.js');
+const Errors = require("./errors.js");
 const DistributorToken = artifacts.require("DistributorTestToken");
 const TestToken = artifacts.require("LockableTestToken");
 

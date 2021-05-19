@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-const Errors = require('./errors.js');
+const Errors = require("./errors.js");
 const Argennon = artifacts.require("ArgennonToken");
 const FiatToken = artifacts.require("LockableTestToken");
 
@@ -28,7 +28,7 @@ contract("ArgennonToken", (accounts) => {
         }
     }
 
-    it('can handle a normal use case', async () => {
+    it("can handle a normal use case", async () => {
         await arg.mint(accounts[1], 300 * decimals * decimals, {from: admin});
         await arg.mint(accounts[2], 200 * decimals * decimals, {from: admin});
         await arg.registerProfitSource(fiat.address, {from: admin});
@@ -161,7 +161,7 @@ contract("ArgennonToken", (accounts) => {
         await checkProfitsNonExact([20, 162.5, 219.5, 232, 246.5, 74.5], arg, 0, "final");
     });
 
-    it('can handle arithmetic errors', async () => {
+    it("can handle arithmetic errors", async () => {
         await arg.mint(accounts[1], 400 * decimals * decimals, {from: admin});
         await arg.mint(accounts[2], 100 * decimals * decimals, {from: admin});
         await arg.registerProfitSource(fiat.address, {from: admin});

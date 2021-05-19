@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-const Errors = require('./errors.js');
+const Errors = require("./errors.js");
 const MintableToken = artifacts.require("MintableERC20");
 
 contract("MintableERC20", (accounts) => {
@@ -83,7 +83,7 @@ contract("MintableERC20", (accounts) => {
         );
     });
 
-    it('should have a linear max total supply', async () => {
+    it("should have a linear max total supply", async () => {
         const now = Math.floor(Date.now() / 1000);
         mintableToken = await MintableToken.new(owner, "", "", 2n ** 128n , 2n ** 130n, now + 1000, 2 ** 14);
         assert.equal(
@@ -108,7 +108,7 @@ contract("MintableERC20", (accounts) => {
         );
     });
 
-    it('should check initial parameters', async () => {
+    it("should check initial parameters", async () => {
         const now = Math.floor(Date.now() / 1000);
         await MintableToken.new(owner, "", "", 2n ** 128n , 2n ** 128n, now + 1000, 5000);
         await Errors.expectError(
