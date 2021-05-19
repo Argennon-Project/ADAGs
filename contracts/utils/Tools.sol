@@ -51,8 +51,7 @@ struct RationalNumber {
 library Rational {
     function mul(RationalNumber memory self, uint m) internal pure returns(RationalNumber memory) {
         // Solidity should be able to detect overflows.
-        self.a = m * self.a;
-        return self;
+        return RationalNumber(self.a * m, self.b);
     }
     
     

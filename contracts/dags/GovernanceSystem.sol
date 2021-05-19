@@ -31,7 +31,7 @@ contract GovernanceSystem is Administered {
     
     
     // it authenticates the given ballot to make sure it's our ballot.
-    modifier authenticate(Ballot b) {require(proposals[b].active, "Ballot not found"); _;}
+    modifier authenticate(Ballot b) {require(proposals[b].active, "ballot not found"); _;}
    
     
     constructor(address payable _admin, LockableMintable _governanceToken)
@@ -97,17 +97,17 @@ contract GovernanceSystem is Administered {
     function _newBallot(uint128 ballotEndTime, bytes32 title) internal returns(Ballot) {
         require(
             ballotEndTime < block.timestamp + lockDuration / 2,
-            "Ballot end time is too far"
+            "ballot end time is too far"
         );
         // ballot contract will do other checks for times.
         uint128 lockTime = ballotEndTime + lockDuration; 
         require(
             governanceToken.locked(msg.sender).releaseTime >= lockTime,
-            "Lock time is not enough"
+            "lock time is not enough"
         );
         require(
             governanceToken.locked(msg.sender).amount >= governanceToken.totalSupply() / stakeDivisor,
-            "Locked amount is not enough"
+            "locked amount is not enough"
         );
         return new Ballot(admin, title, governanceToken, ballotEndTime,  lockTime);
     }

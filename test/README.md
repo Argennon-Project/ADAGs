@@ -46,3 +46,8 @@ Now you should be able to run unit tests:
     truffle test
 
 Tests may take several minutes to complete.
+
+To run a specific test, include the test file name in the command. For example to only run the tests included in
+`lockable_test.js` run this command:
+
+    truffle test test/lockable_test.js

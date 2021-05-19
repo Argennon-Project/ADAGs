@@ -29,7 +29,7 @@ contract Ballot is Administered {
         title = _title;
         lockTime = _lockTime;
         endTime = _endTime;
-        require(block.timestamp < _endTime && _endTime < _lockTime, "Ballot dates are invalid");
+        require(block.timestamp < _endTime && _endTime < _lockTime, "ballot dates are invalid");
     }
     
     

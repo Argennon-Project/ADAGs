@@ -11,8 +11,8 @@ contract CrowdFunding is ERC20, Administered {
     using Rational for RationalNumber;
     
     
-    CrowdFundingConfig private config;
-    address immutable private beneficiary;
+    CrowdFundingConfig public config;
+    address immutable public beneficiary;
     uint immutable public redemptionEndTime;
     bool public raisedInitialFund = false;
 
@@ -83,7 +83,7 @@ contract CrowdFunding is ERC20, Administered {
         // we assume that `fiatTokenContract` is a trusted ERC20 contract. Anyway, re-entrance will only cause the sender
         // to send more fiat tokens.
         bool success = config.fiatTokenContract.transferFrom(msg.sender, address(this), fiatAmount);
-        require(success, "Error in FIAT transfer.");
+        require(success, "error in payment");
         transfer(msg.sender, amount);
         
         // canWithdraw only changes once. when it becomes true it must remain true. We first check to see if it's not
@@ -101,18 +101,18 @@ contract CrowdFunding is ERC20, Administered {
      * Any one may call this method.
      */ 
     function withdraw(uint256 amount) public {
-        require(raisedInitialFund, "Withdrawals are not allowed yet.");
+        require(raisedInitialFund, "withdrawals are not yet allowed");
         // anyone can request withdrawals.
        
         if (block.timestamp <= redemptionEndTime) {
             uint256 circulation = totalSupply() - balanceOf(address(this));
             uint256 fiatThreshold = config.price.mul(config.redemptionRatio.mul(circulation).floor()).floor();
             uint256 balance = config.fiatTokenContract.balanceOf(address(this));
-            require(balance - amount >= fiatThreshold, "amount is too high.");
+            require(balance - amount >= fiatThreshold, "amount is too high");
         } 
 
         bool success = config.fiatTokenContract.transfer(beneficiary, amount);
-        require(success, "Error in Fiat transfer.");
+        require(success, "error in transfer");
     }
     
   
@@ -125,13 +125,13 @@ contract CrowdFunding is ERC20, Administered {
             // user wants to redeem his tokens.
             // we need to calculate the fiat refund amount before we transfer user's tokens.
             uint256 fiatRefund = calculateRefund(amount);
-            require(fiatRefund > 0, "Refund value is zero.");
+            require(fiatRefund > 0, "refund value is zero");
             
             super._transfer(sender, recipient, amount);
             
             // reentrancy will only cause the sender to redeem more tokens.
             bool success = config.fiatTokenContract.transfer(sender, fiatRefund);
-            require(success, "Error in Fiat transfer.");
+            require(success, "error in FIAT transfer");
             emit Redeemed(sender, amount, fiatRefund);
         } else {
             super._transfer(sender, recipient, amount);
@@ -158,17 +158,17 @@ struct CrowdFundingConfig {
 function validate(CrowdFundingConfig memory conf) pure returns (CrowdFundingConfig memory) {
     require(
         conf.redemptionDuration >= 3 days && conf.redemptionDuration <= 1095 days,
-        "Redemption duration must be between 3 days and 3 years."
+        "redemption duration must be between 3 days and 3 years"
     );
     require(
-         conf.minFiatForActivation < Rational.floor(Rational.mul(conf.price, conf.totalSupply)) - INVERTED_PRECISION,
-         "minFiatForActivation is too high."
+         conf.minFiatForActivation + INVERTED_PRECISION < Rational.floor(Rational.mul(conf.price, conf.totalSupply)),
+         "minFiatForActivation is too high"
     );
     // require  0.1 < redemptionRatio < 1
     require(
         Rational.ceil(Rational.mul(conf.redemptionRatio, 10 * INVERTED_PRECISION)) < 10 * INVERTED_PRECISION,
-        "Invalid redemption ratio."
+        "invalid redemption ratio"
     );
-    require(conf.price.a > 0, "Price can not be zero.");
+    require(conf.price.a > 0, "price can't be zero");
     return conf;
 }
