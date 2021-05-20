@@ -30,6 +30,8 @@ exports.Mintable = {
 exports.CrowdFunding = {
     NOT_YET_ALLOWED_ERROR: "Error: Returned error: VM Exception while processing transaction: revert withdrawals " +
         "are not yet allowed -- Reason given: withdrawals are not yet allowed.",
+    AMOUNT_TOO_HIGH_ERROR: "Error: Returned error: VM Exception while processing transaction: revert amount is too " +
+        "high -- Reason given: amount is too high.",
 };
 
 exports.expectError = async function (promise, error) {
@@ -49,11 +51,11 @@ exports.check = async function (f, wants, accounts, exact, name, decimals) {
         const want = Math.round(wants[i] * decimals);
         //console.log(got.toString());
         if (exact) {
-            assert.equal(got, want,  `In ${name}, for acc${i} got ${got} but we wanted ${want}`);
+            assert.equal(got, want,  `In ${name}, for acc${i}`);
         } else {
             assert.isOk(
                 want - got >= 0 && want - got <= 1,
-                `In ${name}, for acc${i} got ${got} but we wanted a value close to ${want}`
+                `In ${name}, for acc${i} got ${got} but wanted a value close to ${want}`
             );
         }
     }

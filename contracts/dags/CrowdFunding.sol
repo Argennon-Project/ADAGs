@@ -28,7 +28,7 @@ contract CrowdFunding is ERC20, Administered {
         config = validate(_config);
         beneficiary = _beneficiary;
         redemptionEndTime = block.timestamp + _config.redemptionDuration;
-        _mint(address(this), config.totalSupply);
+        _mint(address(this), _config.totalSupply);
     }
     
     
@@ -84,7 +84,8 @@ contract CrowdFunding is ERC20, Administered {
         // to send more fiat tokens.
         bool success = config.fiatTokenContract.transferFrom(msg.sender, address(this), fiatAmount);
         require(success, "error in payment");
-        transfer(msg.sender, amount);
+
+        this.transfer(msg.sender, amount);
         
         // canWithdraw only changes once. when it becomes true it must remain true. We first check to see if it's not
         // true then we check the condition. this will reduce gas consumption.
@@ -160,8 +161,9 @@ function validate(CrowdFundingConfig memory conf) pure returns (CrowdFundingConf
         conf.redemptionDuration >= 3 days && conf.redemptionDuration <= 1095 days,
         "redemption duration must be between 3 days and 3 years"
     );
+    require(conf.price.a > 0, "price can't be zero");
     require(
-         conf.minFiatForActivation + INVERTED_PRECISION < Rational.floor(Rational.mul(conf.price, conf.totalSupply)),
+         conf.minFiatForActivation < Rational.floor(Rational.mul(conf.price, conf.totalSupply / 2)),
          "minFiatForActivation is too high"
     );
     // require  0.1 < redemptionRatio < 1
@@ -169,6 +171,5 @@ function validate(CrowdFundingConfig memory conf) pure returns (CrowdFundingConf
         Rational.ceil(Rational.mul(conf.redemptionRatio, 10 * INVERTED_PRECISION)) < 10 * INVERTED_PRECISION,
         "invalid redemption ratio"
     );
-    require(conf.price.a > 0, "price can't be zero");
     return conf;
 }
