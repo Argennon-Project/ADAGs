@@ -2,10 +2,6 @@
 
 exports.NOT_AUTHORIZED_ERROR = "Error: Returned error: VM Exception while processing transaction: revert " +
     "sender not authorized -- Reason given: sender not authorized.";
-exports.MINT_ALLOWANCE_ERROR = "Error: Returned error: VM Exception while processing transaction: revert amount " +
-    "exceeds minting allowance -- Reason given: amount exceeds minting allowance.";
-exports.EXCEEDS_MAX_SUPPLY_ERROR = "Error: Returned error: VM Exception while processing transaction: revert " +
-    "totalSupply exceeds limit -- Reason given: totalSupply exceeds limit.";
 exports.LOCKED_ERROR = "Error: Returned error: VM Exception while processing transaction: revert not enough " +
     "non-locked tokens -- Reason given: not enough non-locked tokens.";
 exports.LOCK_UPDATE_ERROR = "Error: Returned error: VM Exception while processing transaction: revert locks can only " +
@@ -24,13 +20,41 @@ exports.PRECISION_ERROR = "Error: Returned error: VM Exception while processing 
 exports.FINAL_SOURCES_ERROR = "Error: Returned error: VM Exception while processing transaction: revert profit " +
     "sources are final -- Reason given: profit sources are final.";
 
+exports.Mintable = {
+    MINT_ALLOWANCE_ERROR: "Error: Returned error: VM Exception while processing transaction: revert amount " +
+        "exceeds minting allowance -- Reason given: amount exceeds minting allowance.",
+    EXCEEDS_MAX_SUPPLY_ERROR: "Error: Returned error: VM Exception while processing transaction: revert " +
+        "totalSupply exceeds limit -- Reason given: totalSupply exceeds limit.",
+}
+
+exports.CrowdFunding = {
+    NOT_YET_ALLOWED_ERROR: "Error: Returned error: VM Exception while processing transaction: revert withdrawals " +
+        "are not yet allowed -- Reason given: withdrawals are not yet allowed.",
+};
+
 exports.expectError = async function (promise, error) {
     let passed = false;
     try {
         await promise;
         passed = true;
     } catch (e) {
-        assert.equal(e.toString(), error,"Invalid error");
+        assert.equal(e.toString(), error, "Invalid error");
     }
     if (passed) throw(`No errors given, While expecting: ${error}`);
+}
+
+exports.check = async function (f, wants, accounts, exact, name, decimals) {
+    for (let i = 0; i < wants.length; i++) {
+        const got = (await f(accounts[i])).valueOf();
+        const want = Math.round(wants[i] * decimals);
+        //console.log(got.toString());
+        if (exact) {
+            assert.equal(got, want,  `In ${name}, for acc${i} got ${got} but we wanted ${want}`);
+        } else {
+            assert.isOk(
+                want - got >= 0 && want - got <= 1,
+                `In ${name}, for acc${i} got ${got} but we wanted a value close to ${want}`
+            );
+        }
+    }
 }

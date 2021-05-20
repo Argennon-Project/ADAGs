@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-const Errors = require("./errors.js");
+const Errors = require("./verifier");
 const Argennon = artifacts.require("ArgennonToken");
 const FiatToken = artifacts.require("LockableTestToken");
 
@@ -17,15 +17,16 @@ contract("ArgennonToken", (accounts) => {
     });
 
     async function checkProfitsNonExact(profits, sharesToken, sourceIndex, name) {
-        for (let i = 0; i < profits.length; i++) {
-            const got = await (sharesToken.balanceOfProfit.call(accounts[i], sourceIndex)).valueOf();
-            const want = Math.round(profits[i] * decimals);
-            //console.log(got.toString());
-            assert.isOk(
-                want - got >= 0 && want - got <= 1,
-                `In ${name}, the profit of acc${i} is ${got} but we wanted ${want}`
-            );
-        }
+        await Errors.check(
+            (x) => {
+                return sharesToken.balanceOfProfit.call(x, sourceIndex)
+            },
+            profits,
+            accounts,
+            false,
+            name,
+            decimals
+        );
     }
 
     it("can handle a normal use case", async () => {
@@ -35,7 +36,7 @@ contract("ArgennonToken", (accounts) => {
         await arg.mint(accounts[0], 500 * decimals * decimals, {from: admin});
         await Errors.expectError(
             arg.mint(accounts[2], 1, {from: admin}),
-            Errors.MINT_ALLOWANCE_ERROR
+            Errors.Mintable.MINT_ALLOWANCE_ERROR
         );
 
         // balances: [500 300 200 (5000)] -> [100 60 40 (1000)]
@@ -127,7 +128,7 @@ contract("ArgennonToken", (accounts) => {
 
         await Errors.expectError(
             arg.mint(accounts[5], 100 * decimals, {from: accounts[6]}),
-            Errors.MINT_ALLOWANCE_ERROR
+            Errors.Mintable.MINT_ALLOWANCE_ERROR
         );
         await Errors.expectError(
             arg.setOwner(accounts[5], {from: accounts[6]}),
@@ -151,7 +152,7 @@ contract("ArgennonToken", (accounts) => {
         await arg.transfer(accounts[1], 400 * decimals * decimals, {from: accounts[3]});
         await Errors.expectError(
             arg.mint(accounts[5], 10000, {from: owner}),
-            Errors.EXCEEDS_MAX_SUPPLY_ERROR
+            Errors.Mintable.EXCEEDS_MAX_SUPPLY_ERROR
         );
         assert.equal(
             (await arg.totalSupply.call()).valueOf(),

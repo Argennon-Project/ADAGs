@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-const Errors = require("./errors.js");
+const Errors = require("./verifier");
 const DistributorToken = artifacts.require("DistributorTestToken");
 const TestToken = artifacts.require("LockableTestToken");
 
@@ -18,13 +18,16 @@ contract("DistributorERC20", (accounts) => {
     });
 
     async function checkProfits(profits, sharesToken, sourceIndex, name) {
-        for (let i = 0; i < profits.length; i++) {
-            assert.equal(
-                (await sharesToken.balanceOfProfit.call(accounts[i], sourceIndex)).valueOf(),
-                Math.round(profits[i] * decimals),
-                `In ${name}, the profit of acc${i} is wrong`
-            );
-        }
+        await Errors.check(
+            (x) => {
+                return sharesToken.balanceOfProfit.call(x, sourceIndex)
+            },
+            profits,
+            accounts,
+            true,
+            name,
+            decimals
+        );
     }
 
     it("allows admin to register new profit sources and recover funds", async () => {

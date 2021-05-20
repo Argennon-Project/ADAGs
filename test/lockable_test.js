@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-const Errors = require("./errors.js");
+const Errors = require("./verifier");
 const LockableTestToken = artifacts.require("LockableTestToken");
 
 contract("LockableERC20", (accounts) => {

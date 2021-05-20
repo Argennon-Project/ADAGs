@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-const Errors = require("./errors.js");
+const Errors = require("./verifier");
 const MintableToken = artifacts.require("MintableERC20");
 
 contract("MintableERC20", (accounts) => {
@@ -16,7 +16,7 @@ contract("MintableERC20", (accounts) => {
         await mintableToken.mint(accounts[2], 100, {from: owner});
         await Errors.expectError(
             mintableToken.mint(accounts[2], 100, {from: accounts[1]}),
-            Errors.MINT_ALLOWANCE_ERROR
+            Errors.Mintable.MINT_ALLOWANCE_ERROR
         );
         await Errors.expectError(
             mintableToken.increaseMintingAllowance(accounts[1], 100, {from: accounts[1]}),
@@ -28,7 +28,7 @@ contract("MintableERC20", (accounts) => {
         await mintableToken.mint(accounts[2], 50, {from: accounts[1]});
         await Errors.expectError(
             mintableToken.mint(accounts[2], 1, {from: accounts[1]}),
-            Errors.MINT_ALLOWANCE_ERROR
+            Errors.Mintable.MINT_ALLOWANCE_ERROR
         );
         assert.equal(
             (await mintableToken.balanceOf.call(accounts[2])).toNumber(),
@@ -41,7 +41,7 @@ contract("MintableERC20", (accounts) => {
         await mintableToken.mint(accounts[2], 100, {from: owner});
         await Errors.expectError(
             mintableToken.mint(accounts[2], 100, {from: accounts[1]}),
-            Errors.MINT_ALLOWANCE_ERROR
+            Errors.Mintable.MINT_ALLOWANCE_ERROR
         );
         await Errors.expectError(
             mintableToken.setOwner(accounts[1], {from: accounts[1]}),
@@ -50,7 +50,7 @@ contract("MintableERC20", (accounts) => {
         await mintableToken.setOwner(accounts[1], {from: owner});
         await Errors.expectError(
             mintableToken.mint(accounts[2], 100, {from: owner}),
-            Errors.MINT_ALLOWANCE_ERROR
+            Errors.Mintable.MINT_ALLOWANCE_ERROR
         );
         await Errors.expectError(
             mintableToken.setOwner(accounts[1], {from: owner}),
@@ -70,11 +70,11 @@ contract("MintableERC20", (accounts) => {
         await mintableToken.increaseMintingAllowance(accounts[1], 300000, {from: owner});
         await Errors.expectError(
             mintableToken.mint(accounts[2], 200000, {from: owner}),
-            Errors.EXCEEDS_MAX_SUPPLY_ERROR
+            Errors.Mintable.EXCEEDS_MAX_SUPPLY_ERROR
         );
         await Errors.expectError(
             mintableToken.mint(accounts[2], 200000, {from: accounts[1]}),
-            Errors.EXCEEDS_MAX_SUPPLY_ERROR
+            Errors.Mintable.EXCEEDS_MAX_SUPPLY_ERROR
         );
         assert.equal(
             (await mintableToken.balanceOf.call(accounts[2])).toNumber(),
