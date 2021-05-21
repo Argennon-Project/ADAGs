@@ -7,7 +7,7 @@ const FiatToken = artifacts.require("LockableTestToken");
 
 contract("CrowdFunding", (accounts) => {
     const decimals = 1000000;
-    let admin = accounts[8], owner = accounts[9]
+    const admin = accounts[8], owner = accounts[9]
     let arg, fiat, cf;
     let normalConfig;
 
@@ -35,7 +35,95 @@ contract("CrowdFunding", (accounts) => {
         await fiat.transfer(accounts[3], 20000 * decimals, {from: admin});
     });
 
-    it("buy in phase 2", async () => {
+    it("enables users to buy ico tokens", async () => {
+        await fiat.approve(cf.address, 300 * decimals, {from: accounts[0]});
+        await Verifier.expectError(
+            cf.buy(4 * decimals * decimals, {from: accounts[0]}),
+            Verifier.ERC20.ALLOWANCE_ERROR
+        );
+        await fiat.approve(cf.address, 400 * decimals, {from: accounts[0]});
+        await cf.buy(4 * decimals * decimals, {from: accounts[0]});
+        assert.equal(
+            (await cf.balanceOf.call(accounts[0])).valueOf(),
+            4 * decimals * decimals,
+            "error in getting ico tokens"
+        );
+        assert.equal(
+            (await fiat.balanceOf.call(cf.address)).valueOf(),
+            400 * decimals,
+            "error in cf fiat balance"
+        );
+
+        // check arithmetic errors
+        await fiat.approve(cf.address, 1000 * decimals, {from: accounts[0]});
+        await Verifier.expectError(
+            cf.buy(333333333333, {from: accounts[0]}),
+            Verifier.PRECISION_ERROR
+        );
+        await cf.buy(1333333333333, {from: accounts[0]});
+        assert.equal(
+            (await fiat.balanceOf.call(cf.address)).valueOf(),
+            400 * decimals + 133333333 + 1,
+            "error in cf fiat balance"
+        );
+        assert.equal(
+            (await cf.balanceOf.call(accounts[0])).valueOf(),
+            4 * decimals * decimals + 1333333333333,
+            "error in acc0 ico token balance"
+        );
+
+        await fiat.approve(cf.address, 200 * decimals, {from: accounts[1]});
+        await cf.buy(999999999999, {from: accounts[1]});
+        assert.equal(
+            (await fiat.balanceOf.call(accounts[1])).valueOf(),
+            900 * decimals,
+            "error in acc1 fiat balance"
+        );
+
+        await fiat.approve(cf.address, 2n ** 254n, {from: admin});
+        await Verifier.expectError(
+            cf.buy(5e14, {from: admin}),
+            Verifier.ERC20.TRANSFER_ERROR
+        );
+
+        // overflow test
+        normalConfig.price = {a: 2000, b: 1000000};
+        cf = await CrowdFunding.new(admin, arg.address, normalConfig);
+        await Verifier.expectError(
+            cf.buy(2n ** 250n, {from: accounts[0]}),
+            Verifier.GENERAL_ERROR
+        );
+    });
+
+    it("allows withdrawal after redemption end time", async () => {
+        normalConfig.redemptionDuration = 10;
+        const deployTime = Math.floor(Date.now() / 1000);
+        cf = await CrowdFunding.new(admin, arg.address, normalConfig);
+        await arg.increaseMintingAllowance(cf.address, normalConfig.totalSupply, {from: owner});
+
+        await fiat.approve(cf.address, 400 * decimals, {from: accounts[0]});
+        await cf.buy(4 * decimals * decimals, {from: accounts[0]});
+        assert.equal(
+            (await fiat.balanceOf.call(cf.address)).valueOf(),
+            400 * decimals,
+            "error in payment"
+        );
+        await Verifier.expectError(
+            cf.withdraw(1),
+            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+        );
+
+        while (Math.floor(Date.now() / 1000) < deployTime + 12) ;
+
+        await cf.withdraw(400 * decimals);
+        assert.equal(
+            (await fiat.balanceOf.call(arg.address)).valueOf(),
+            400 * decimals,
+            "error in withdrawal"
+        );
+    });
+
+    it("guarantees the configured redemption price after initial phase", async () => {
         await fiat.approve(cf.address, 300 * decimals, {from: accounts[0]});
         await cf.buy(3 * decimals * decimals, {from: accounts[0]});
 
@@ -49,7 +137,8 @@ contract("CrowdFunding", (accounts) => {
             true, "initial fiat balance", decimals);
 
         // refund at 100%
-        await cf.transfer(cf.address, 2 * decimals * decimals, {from: accounts[1]});
+        await cf.transfer(cf.address, decimals * decimals, {from: accounts[1]});
+        await cf.transfer(cf.address, decimals * decimals, {from: accounts[1]});
         assert.equal(
             (await fiat.balanceOf.call(accounts[1])).valueOf(),
             400 * decimals,
@@ -68,7 +157,8 @@ contract("CrowdFunding", (accounts) => {
             87.5 * decimals,
             "error in beneficiary balance"
         );
-        await cf.transfer(cf.address, 4 * decimals * decimals, {from: accounts[2]});
+        await cf.transfer(cf.address, 3 * decimals * decimals, {from: accounts[2]});
+        await cf.transfer(cf.address, decimals * decimals, {from: accounts[2]});
         assert.equal(
             (await fiat.balanceOf.call(accounts[2])).valueOf(),
             (18500 + 350) * decimals,
@@ -79,6 +169,58 @@ contract("CrowdFunding", (accounts) => {
         await Verifier.expectError(
             cf.withdraw(1),
             Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+        );
+
+        // redemption at 80%
+        await cf.transfer(accounts[5], 4 * decimals * decimals, {from: accounts[2]});
+        await cf.transfer(cf.address, 2 * decimals * decimals, {from: accounts[5]});
+        assert.equal(
+            (await fiat.balanceOf.call(accounts[5])).valueOf(),
+            160 * decimals,
+            "error in acc5 balance"
+        );
+        await cf.transfer(cf.address, decimals * decimals, {from: accounts[5]});
+        assert.equal(
+            (await fiat.balanceOf.call(accounts[5])).valueOf(),
+            240 * decimals,
+            "error in acc5 balance"
+        );
+        assert.equal(
+            (await cf.calculateRefund.call(decimals * decimals)).valueOf(),
+            80 * decimals,
+            "error in redemption price"
+        );
+
+        // converting to arg
+        await cf.transfer(arg.address, 2 * decimals * decimals, {from: accounts[2]});
+        await cf.transfer(arg.address, decimals * decimals, {from: accounts[0]});
+        await Verifier.check(arg.balanceOf.call, [decimals, 0, 2 * decimals], accounts,
+            true, "arg balances after conversion", decimals);
+
+        // redemption at 17 * 0.8 / 14
+        const rp = 17 * 0.8 / 14;
+        await cf.transfer(cf.address, 1.5 * decimals * decimals, {from: accounts[0]});
+        assert.equal(
+            (await fiat.balanceOf.call(accounts[0])).valueOf(),
+            Math.floor((700 + 150 * rp) * decimals),
+            "error in acc0 refund"
+        );
+        assert.equal(
+            (await cf.calculateRefund.call(decimals * decimals)).valueOf(),
+            Math.floor(rp * 100 * decimals),
+            "error in redemption price"
+        );
+
+        // withdraw 12.5 * (rp - 0.8) * 100
+        await cf.withdraw(Math.floor(12.5 * (rp - 0.8) * 100 * decimals + 1));
+        await Verifier.expectError(
+            cf.withdraw(1),
+            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+        );
+        assert.equal(
+            (await cf.calculateRefund.call(decimals * decimals)).valueOf(),
+            Math.floor(80 * decimals),
+            "error in redemption price"
         );
     });
 
@@ -118,14 +260,14 @@ contract("CrowdFunding", (accounts) => {
             "error in refund to acc2"
         );
         assert.equal(
-            (await fiat.balanceOf.call(cf.address)).valueOf(),
-            290 * decimals,
-            "error in cf fiat balance"
+            (await cf.balanceOf.call(cf.address)).valueOf(),
+            normalConfig.totalSupply - 2900000 * decimals,
+            "error in cf balance"
         );
 
         await Verifier.expectError(
             cf.withdraw(1),
-            Verifier.CrowdFunding.NOT_YET_ALLOWED_ERROR
+            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
         );
 
         // converting to ARG
@@ -138,18 +280,59 @@ contract("CrowdFunding", (accounts) => {
             5e15 + 400000 * decimals,
             "error in arg total supply"
         );
+
+        // redemption after burning. we should not give extra money.
+        await cf.transfer(accounts[7], 1100000 * decimals, {from: accounts[0]});
+        await cf.transfer(cf.address, 100000 * decimals, {from: accounts[7]});
+        await cf.transfer(cf.address, 600000 * decimals, {from: accounts[7]});
+        assert.equal(
+            (await fiat.balanceOf.call(accounts[7])).valueOf(),
+            70 * decimals,
+            "error in acc7 redemption after burning"
+        );
+        // withdraw after burning
+        await cf.withdraw(40 * decimals);
+        await Verifier.expectError(
+            cf.withdraw(1),
+            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+        );
+
+        // redemption after sending money to the cf contract
+        await fiat.transfer(cf.address, 100 * decimals, {from: admin});
+        assert.equal(
+            (await cf.calculateRefund.call(decimals * decimals)).valueOf(),
+            100 * decimals,
+            "error in redemption price"
+        );
+        await cf.transfer(cf.address, 400000 * decimals, {from: accounts[7]});
+        assert.equal(
+            (await fiat.balanceOf.call(accounts[7])).valueOf(),
+            110 * decimals,
+            "error in acc7 redemption after burning"
+        );
+        // withdraw after sending money to the cf contract
+        await cf.withdraw(100 * decimals);
+        await Verifier.expectError(
+            cf.withdraw(1),
+            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+        );
+        assert.equal(
+            (await fiat.balanceOf.call(arg.address)).valueOf(),
+            140 * decimals,
+            "error in beneficiary balance"
+        );
+
+        await cf.transfer(accounts[5], 300000 * decimals, {from: accounts[1]});
+        await cf.transfer(cf.address, 300000 * decimals, {from: accounts[5]});
+        assert.equal(
+            (await fiat.balanceOf.call(accounts[5])).valueOf(),
+            30 * decimals,
+            "error in acc5 redemption"
+        );
     });
 
     it("checks constructor parameters", async () => {
-        fiat = await FiatToken.new(admin, 1000000 * decimals);
-        arg = fiat;
-
-
-        const cf = await CrowdFunding.new(
-            admin,
-            admin,
-            normalConfig
-        );
+        const cf = await CrowdFunding.new(admin, admin, normalConfig);
         assert.equal(
             (await cf.config.call()).fiatTokenContract.address,
             normalConfig.fiatTokenContract.address,
@@ -158,11 +341,73 @@ contract("CrowdFunding", (accounts) => {
         assert.equal((await cf.config.call()).price.b, normalConfig.price.b, "error in price");
         assert.equal((await cf.config.call()).redemptionRatio.a, normalConfig.redemptionRatio.a, "error in ratio");
 
-        const invalidDuration = normalConfig;
-        invalidDuration.redemptionDuration = 3600 * 24;
-        Verifier.expectError(
+        const invalidDuration = {...normalConfig};
+        invalidDuration.redemptionDuration = 3600 * 24 * 2000;
+        await Verifier.expectError(
             CrowdFunding.new(admin, admin, invalidDuration),
-            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+            Verifier.CrowdFunding.DURATION_ERROR
+        );
+
+        const invalidPrice = {...normalConfig};
+        invalidPrice.price = {a: 0, b: 1000};
+        await Verifier.expectError(
+            CrowdFunding.new(admin, admin, invalidPrice),
+            Verifier.CrowdFunding.ZERO_PRICE_ERROR
+        );
+        invalidPrice.price = {a: 100, b: 0};
+        await Verifier.expectError(
+            CrowdFunding.new(admin, admin, invalidPrice),
+            Verifier.GENERAL_ERROR
+        );
+
+        const invalidRatio = {...normalConfig};
+        invalidRatio.redemptionRatio = {a: 101, b: 100};
+        await Verifier.expectError(
+            CrowdFunding.new(admin, admin, invalidRatio),
+            Verifier.CrowdFunding.REDEMPTION_RATIO_ERROR
+        );
+        invalidRatio.redemptionRatio = {a: 999, b: 10000};
+        await Verifier.expectError(
+            CrowdFunding.new(admin, admin, invalidRatio),
+            Verifier.CrowdFunding.REDEMPTION_RATIO_ERROR
+        );
+        invalidRatio.redemptionRatio = {a: 999, b: 0};
+        await Verifier.expectError(
+            CrowdFunding.new(admin, admin, invalidRatio),
+            Verifier.CrowdFunding.REDEMPTION_RATIO_ERROR
+        );
+
+        const invalidActivation = {...normalConfig};
+        invalidActivation.minFiatForActivation = decimals * decimals;
+        await Verifier.expectError(
+            CrowdFunding.new(admin, admin, invalidActivation),
+            Verifier.CrowdFunding.MIN_ACTIVATION_ERROR
+        );
+    });
+
+    it("can handle underflow/overflow", async () => {
+        await fiat.approve(cf.address, 1500 * decimals, {from: accounts[2]});
+        await cf.buy(15 * decimals * decimals, {from: accounts[2]});
+
+        await Verifier.expectError(
+            cf.transfer(cf.address, 2n ** 250n, {from: accounts[2]}),
+            Verifier.GENERAL_ERROR
+        );
+        await Verifier.expectError(
+            cf.transfer(arg.address, 2n ** 250n, {from: accounts[2]}),
+            Verifier.ERC20.BURN_ERROR
+        );
+
+        await Verifier.expectError(
+            cf.transfer(cf.address, 99999999999, {from: accounts[2]}),
+            Verifier.PRECISION_ERROR
+        );
+        await cf.transfer(accounts[5], 1999999999999, {from: accounts[2]});
+        await cf.transfer(cf.address, 1999999999999, {from: accounts[5]});
+        assert.equal(
+            (await fiat.balanceOf.call(accounts[5])).valueOf(),
+            199999999,
+            "error in acc5 redemption"
         );
     });
 });

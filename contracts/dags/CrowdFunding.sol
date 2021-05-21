@@ -14,7 +14,7 @@ contract CrowdFunding is ERC20, Administered {
     CrowdFundingConfig public config;
     address immutable public beneficiary;
     uint immutable public redemptionEndTime;
-    bool public raisedInitialFund = false;
+    bool public activationThresholdReached = false;
 
    
     event Redeemed(address recipient, uint256 amountSent, uint256 amountReceived);
@@ -87,10 +87,10 @@ contract CrowdFunding is ERC20, Administered {
 
         this.transfer(msg.sender, amount);
         
-        // canWithdraw only changes once. when it becomes true it must remain true. We first check to see if it's not
-        // true then we check the condition. this will reduce gas consumption.
-        if (!raisedInitialFund) {
-            raisedInitialFund = (config.fiatTokenContract.balanceOf(address(this)) >= config.minFiatForActivation);
+        // activationThresholdReached only changes once. when it becomes true it must remain true. We first check to
+        // see if it's not true then we check the condition. this will reduce gas consumption.
+        if (!activationThresholdReached) {
+            activationThresholdReached = (config.fiatTokenContract.balanceOf(address(this)) >= config.minFiatForActivation);
         }
         emit Sold(msg.sender, amount);
     }
@@ -98,22 +98,27 @@ contract CrowdFunding is ERC20, Administered {
     /**
      * This method withdraws the requested `amount` of funds to the beneficiary address:`beneficiary'.
      * This will essentially decrease the redemption price of ICO tokens. However, the amount of
-     * withdrawal is limited to make sure the configured redemption policy will not be violated. 
+     * withdrawal is limited, In order to make sure the configured redemption policy will not be violated.
+     *
      * Any one may call this method.
-     */ 
-    function withdraw(uint256 amount) public {
-        require(raisedInitialFund, "withdrawals are not yet allowed");
+     */
+    function withdraw(uint amount) public {
         // anyone can request withdrawals.
-       
+        // after redemptionEndTime all withdrawal requests will be accepted.
         if (block.timestamp <= redemptionEndTime) {
-            uint256 circulation = totalSupply() - balanceOf(address(this));
-            uint256 fiatThreshold = config.price.mul(config.redemptionRatio.mul(circulation).floor()).floor();
-            uint256 balance = config.fiatTokenContract.balanceOf(address(this));
-            require(balance - amount >= fiatThreshold, "amount is too high");
-        } 
+            uint circulation = totalSupply() - balanceOf(address(this));
 
-        bool success = config.fiatTokenContract.transfer(beneficiary, amount);
-        require(success, "error in transfer");
+            uint fiatThreshold;
+            if (activationThresholdReached)
+                fiatThreshold = config.price.mul(config.redemptionRatio.mul(circulation).floor()).floor();
+            else
+                fiatThreshold = config.price.mul(circulation).floor();
+
+            uint balance = config.fiatTokenContract.balanceOf(address(this));
+            require(balance >= fiatThreshold + amount, "amount is too high");
+        }
+        // we don't need to check the return value of transfer.
+        config.fiatTokenContract.transfer(beneficiary, amount);
     }
     
   
@@ -126,8 +131,7 @@ contract CrowdFunding is ERC20, Administered {
             // user wants to redeem his tokens.
             // we need to calculate the fiat refund amount before we transfer user's tokens.
             uint256 fiatRefund = calculateRefund(amount);
-            require(fiatRefund > 0, "refund value is zero");
-            
+
             super._transfer(sender, recipient, amount);
             
             // reentrancy will only cause the sender to redeem more tokens.
@@ -158,17 +162,19 @@ struct CrowdFundingConfig {
 // Helper function for validating CrowdFunding configurations
 function validate(CrowdFundingConfig memory conf) pure returns (CrowdFundingConfig memory) {
     require(
-        conf.redemptionDuration >= 3 days && conf.redemptionDuration <= 1095 days,
-        "redemption duration must be between 3 days and 3 years"
+        conf.redemptionDuration <= 1095 days,
+        "redemption duration must be less than 3 years"
     );
     require(conf.price.a > 0, "price can't be zero");
     require(
          conf.minFiatForActivation < Rational.floor(Rational.mul(conf.price, conf.totalSupply / 2)),
          "minFiatForActivation is too high"
     );
-    // require  0.1 < redemptionRatio < 1
+    // require 0.1 <= redemptionRatio <= 1
     require(
-        Rational.ceil(Rational.mul(conf.redemptionRatio, 10 * INVERTED_PRECISION)) < 10 * INVERTED_PRECISION,
+        conf.redemptionRatio.b != 0 &&
+        conf.redemptionRatio.b >= conf.redemptionRatio.a &&
+        conf.redemptionRatio.b <= 10 * conf.redemptionRatio.a,
         "invalid redemption ratio"
     );
     return conf;
