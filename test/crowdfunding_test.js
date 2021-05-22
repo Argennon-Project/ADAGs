@@ -410,6 +410,39 @@ contract("CrowdFunding", (accounts) => {
             "error in acc5 redemption"
         );
     });
+
+    it("lets admin recover trapped funds", async () => {
+        await arg.mint(cf.address, 100 * decimals, {from: owner});
+
+        await Verifier.expectError(
+            cf.recoverFunds(arg.address, 100 * decimals, {from: owner}),
+            Verifier.NOT_AUTHORIZED_ERROR
+        );
+
+        await Verifier.expectError(
+            cf.recoverFunds(cf.address, 100 * decimals, {from: admin}),
+            Verifier.WITHDRAW_NOT_ALLOWED_ERROR
+        );
+        await Verifier.expectError(
+            cf.recoverFunds(fiat.address, 100 * decimals, {from: admin}),
+            Verifier.WITHDRAW_NOT_ALLOWED_ERROR
+        );
+        await cf.recoverFunds(arg.address, 50 * decimals, {from: admin});
+
+        await Verifier.expectError(
+            cf.setAdmin(accounts[5], {from: accounts[5]}),
+            Verifier.NOT_AUTHORIZED_ERROR
+        );
+        await cf.setAdmin(accounts[5], {from: admin});
+        await cf.recoverFunds(arg.address, 50 * decimals, {from: accounts[5]});
+        await Verifier.expectError(
+            cf.setAdmin(accounts[5], {from: admin}),
+            Verifier.NOT_AUTHORIZED_ERROR
+        );
+
+        await Verifier.check(arg.balanceOf.call, [50, 50], [admin, accounts[5]],
+            true, "final arg balance", decimals);
+    });
 });
 
 
