@@ -7,6 +7,42 @@ pragma solidity ^0.8.0;
 import "./../utils/Administered.sol";
 
 
+// we've arranged the variables in a way that they can be easily packed in 256 bit buckets.
+struct CrowdFundingConfig {
+    string name;
+    string symbol;
+    uint redemptionDuration;
+    uint minFiatForActivation;
+    uint totalSupply;
+    RationalNumber redemptionRatio;
+    RationalNumber price;
+    IERC20 fiatTokenContract;
+    MintableToken originalToken;
+}
+
+
+// Helper function for validating CrowdFunding configurations
+function validate(CrowdFundingConfig memory conf) pure returns (CrowdFundingConfig memory) {
+    require(
+        conf.redemptionDuration <= 1095 days,
+        "redemption duration must be less than 3 years"
+    );
+    require(conf.price.a > 0, "price can't be zero");
+    require(
+        conf.minFiatForActivation < Rational.floor(Rational.mul(conf.price, conf.totalSupply / 2)),
+        "minFiatForActivation is too high"
+    );
+    // require 0.1 <= redemptionRatio <= 1
+    require(
+        conf.redemptionRatio.b != 0 &&
+        conf.redemptionRatio.b >= conf.redemptionRatio.a &&
+        conf.redemptionRatio.b <= 10 * conf.redemptionRatio.a,
+        "invalid redemption ratio"
+    );
+    return conf;
+}
+
+
 contract CrowdFunding is ERC20, Administered {
     using Rational for RationalNumber;
     
@@ -142,40 +178,4 @@ contract CrowdFunding is ERC20, Administered {
             super._transfer(sender, recipient, amount);
         }
     }
-}
-
-
-// we've arranged the variables in a way that they can be easily packed in 256 bit buckets.
-struct CrowdFundingConfig {
-    string name;
-    string symbol;
-    uint redemptionDuration;
-    uint minFiatForActivation;
-    uint totalSupply;
-    RationalNumber redemptionRatio;
-    RationalNumber price;
-    IERC20 fiatTokenContract;
-    MintableToken originalToken;
-}
-
-
-// Helper function for validating CrowdFunding configurations
-function validate(CrowdFundingConfig memory conf) pure returns (CrowdFundingConfig memory) {
-    require(
-        conf.redemptionDuration <= 1095 days,
-        "redemption duration must be less than 3 years"
-    );
-    require(conf.price.a > 0, "price can't be zero");
-    require(
-         conf.minFiatForActivation < Rational.floor(Rational.mul(conf.price, conf.totalSupply / 2)),
-         "minFiatForActivation is too high"
-    );
-    // require 0.1 <= redemptionRatio <= 1
-    require(
-        conf.redemptionRatio.b != 0 &&
-        conf.redemptionRatio.b >= conf.redemptionRatio.a &&
-        conf.redemptionRatio.b <= 10 * conf.redemptionRatio.a,
-        "invalid redemption ratio"
-    );
-    return conf;
 }

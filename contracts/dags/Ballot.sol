@@ -8,41 +8,39 @@ import "./../utils/Administered.sol";
 
 
 contract Ballot is Administered {
-    // Solidity official docs recommends bytes32 over string.
-    mapping(address => uint128) public votes;
+    mapping(address => uint) public votes;
     uint public totalWeight;
-    
-    // title can be used for protecting voters against phishing attacks. An attacker may be able to fool voters to
-    // vote for his ballot by giving wrong information about what ballot is really about. To protect users, the
-    // data of ballot should be retrieved by getBallotData() method of GovernanceSystem contract.
-    bytes32 immutable public title;
-    uint128 immutable public endTime;
-    uint128 immutable public lockTime;
-    
-    address immutable private parent = msg.sender;
-    LockableToken immutable private votingToken;
+    uint immutable public endTime;
+    uint immutable public lockTime;
+    address immutable public parent = msg.sender;
+    LockableToken immutable public votingToken;
+
+
+    event Voted(address account, uint weight, uint total);
+    event Destroyed(Ballot b);
     
     
-    constructor(address payable _admin, bytes32 _title, LockableToken _votingToken, uint128 _endTime, uint128 _lockTime)
+    constructor(address payable _admin, LockableToken _votingToken, uint _endTime, uint _lockTime)
     Administered(_admin) {
         votingToken = _votingToken;
-        title = _title;
         lockTime = _lockTime;
         endTime = _endTime;
         require(block.timestamp < _endTime && _endTime < _lockTime, "ballot dates are invalid");
     }
     
     
-    function changeVoteTo(uint128 weight) onlyBefore(endTime) public  {
+    function changeVoteTo(uint weight) onlyBefore(endTime) public  {
         require(votingToken.locked(msg.sender).amount >= weight, "locked amount not enough");
         require(votingToken.locked(msg.sender).releaseTime >= lockTime, "lock period is too short");
         totalWeight -= votes[msg.sender];
         totalWeight += weight;
         votes[msg.sender] = weight;
+        emit Voted(msg.sender, weight, totalWeight);
     }
     
     
     function destroy() public onlyBy(parent) {
+        emit Destroyed(this);
         selfdestruct(admin);
     }
 }

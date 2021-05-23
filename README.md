@@ -14,7 +14,8 @@ consensus protocol, making it a truly decentralized protocol. You can check the 
 paper [here](https://raw.githubusercontent.com/aybehrouz/AVM/main/pdf/A.pdf).
 
 Until the launch of the Argennon mainnet, an ERC20 token and a governance system will be deployed on the Binance Smart
-Chain in order to represent investors' share in the project and giving them the ability to determine the project path.
+Chain in order to represent investors' share in the project and giving them the opportunity to determine the project
+path.
 
 ### The Argennon ERC20 token
 
@@ -23,14 +24,28 @@ launch of the Argennon blockchain, the ARG ERC20 token will be convertible in 1:
 Argennon blockchain. Meanwhile, the ARG ERC20 token will act as a governance token:
 
 - The ARG ERC20 contract is a profit distributor. That means when an amount of an ERC20 token which is registered as a
-  profit source, is sent to the contract address, that amount will be distributed between all ARG
-  holders, proportional to their ARG balance.
-- Holders of the ARG token are eligible to vote in the Argennon Decentralized Autonomous Governance system (ADAGs). The
-  ADAGs /eɪ-dagz/ is a smart contract which is able to perform *governance actions*. Actions such as starting a new
-  crowdfunding campaign, minting new ARG tokens and deploying a new governance system.
+  profit source, is sent to the contract address, that amount will be distributed between all ARG holders, proportional
+  to their ARG balance.
+- Holders of the ARG token are eligible to vote in the Argennon Decentralized Autonomous Governance system (ADAGs).
     - In order to vote, a user needs to lock his ARG tokens for at least 6 months. During this period he will not be
       able to transfer his tokens.
-    - Any proposal that gets more than 60% (3/5) of the total ARG supply votes will be accepted by the ADAGs.
+    - Any proposal that gets more than 66% (2/3) of the total ARG supply votes will be accepted by the ADAGs.
+
+### ADAGs
+
+The Argennon Decentralized Autonomous Governance system (ADAGs /eɪ-dagz/) is a smart contract which is able to perform
+*governance actions*. These actions, for the ADAGs version functioning on the Binance Smart Chain, include:
+
+- Starting new crowdfunding campaigns with different configurations
+- Minting new ARG tokens
+- Sending funds to any address as grants
+- Changing the threshold of voting weight needed for accepting a proposal
+    - can be changed between 0.55 and 0.8 of total ARG supply
+- Changing the minimum lock period required for voting
+    - can be changed between 120 and 730 days
+- Changing the required fee for creating a proposal
+    - can be changed between 0 and 2 BNB
+- Deploying a new governance system
 
 ### Crowdfunding Campaigns
 
@@ -40,21 +55,22 @@ of predefined rules:
 - Every crowdfunding is conducted using a smart contract: the *CF contract*, and it has its own token: the *ICO token*.
   Users may only buy *ICO tokens* from the *CF contract*. These ICO tokens can be burnt and converted to the ARG token
   in 1:1 ratio using the CF contract at any time.
-- The ICO token is redeemable. This means anyone can redeem his ICO tokens using the CF contract and get a refund.
-  The redemption price depends on the time since the start of the crowdfunding and the amount of funds the crowdfunding
-  has raised so far:
+- The ICO token is redeemable. This means anyone can redeem his ICO tokens using the CF contract and get a refund. The
+  redemption price depends on the time since the start of the crowdfunding and the amount of funds the crowdfunding has
+  raised so far:
     - If the amount of raised funds has not yet reached the threshold defined in the CF contract, a user may redeem at
       100% price.
     - If the amount of raised funds has reached the threshold, then the redemption price will drop to the price defined
       in the CF contract, which is determined by the ADAGs and usually is 90%. It is guaranteed that a user can redeem
       at that price for a configured time interval, which again is determined by the ADAGs and usually is one year.
       After that time interval, the ICO token may not be redeemable, and the user should only convert them to the ARG
-      token. 
+      token.
       (*Actually even after this time interval, the ICO tokens are still redeemable. However, since the contract will
       allow the withdrawal of funds, the redemption price could be anything based on the amount of remaining funds.*)
-      
-- When a crowdfunding is done, the earnings of the crowdfunding will automatically be sent to the ARG ERC20 contract
-  address and hence, it will be distributed between ARG holders.
+
+- When a crowdfunding is done, the earnings of the crowdfunding will be automatically sent to the ARG ERC20 contract
+  address and hence, it will be distributed between ARG holders, or it will be sent to the ADAGs smart contract and will
+  be used for grants.
 
 ### Token Dynamics
 

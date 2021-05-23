@@ -19,6 +19,8 @@ exports.PRECISION_ERROR = "Error: Returned error: VM Exception while processing 
     "precision -- Reason given: not enough precision.";
 exports.FINAL_SOURCES_ERROR = "Error: Returned error: VM Exception while processing transaction: revert profit " +
     "sources are final -- Reason given: profit sources are final.";
+exports.TOO_EARLY_ERROR = "Error: Returned error: VM Exception while processing transaction: revert too early -- " +
+    "Reason given: too early.";
 
 exports.ERC20 = {
     ALLOWANCE_ERROR: "Error: Returned error: VM Exception while processing transaction: revert " +
@@ -48,6 +50,18 @@ exports.CrowdFunding = {
     REDEMPTION_RATIO_ERROR: "Error: Returned error: VM Exception while processing transaction: revert invalid " +
         "redemption ratio -- Reason given: invalid redemption ratio.",
 };
+
+exports.Ballot = {
+    NOT_ENOUGH_LOCKED_ERROR: "Error: Returned error: VM Exception while processing transaction: revert locked amount " +
+        "not enough -- Reason given: locked amount not enough.",
+    LOCK_TOO_SHORT_ERROR: "Error: Returned error: VM Exception while processing transaction: revert lock period is " +
+        "too short -- Reason given: lock period is too short.",
+}
+
+exports.Governance = {
+    BALLOT_NOT_FOUND_ERROR: "Error: Returned error: VM Exception while processing transaction: revert ballot " +
+        "not found -- Reason given: ballot not found.",
+}
 
 exports.expectError = async function (promise, error) {
     let passed = false;
