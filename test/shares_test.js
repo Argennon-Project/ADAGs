@@ -65,6 +65,11 @@ contract("DistributorERC20", (accounts) => {
             sharesToken.recoverFunds(fiat3.address, 100, {from: admin}),
             Errors.WITHDRAW_NOT_ALLOWED_ERROR
         );
+        await fiatToken.transfer(sharesToken.address, 10 * decimals, {from: admin});
+        await Errors.expectError(
+            sharesToken.recoverFunds(fiatToken.address, 100, {from: admin}),
+            Errors.WITHDRAW_NOT_ALLOWED_ERROR
+        );
 
         const testToken = await TestToken.new(admin, 10 * decimals);
         await testToken.transfer(sharesToken.address, 2 * decimals, {from: admin});
@@ -165,7 +170,30 @@ contract("DistributorERC20", (accounts) => {
         assert.equal(
             (await fiatToken.balanceOf.call(accounts[1])).valueOf(),
             9 * decimals,
+            "Error in acc1 balance"
+        );
+        await sharesToken.transfer(accounts[2], 200, {from: accounts[1]});
+        // [400 , 400, 200] -> [8 8 4]
+        await fiatToken.transfer(sharesToken.address, 20 * decimals, {from: admin});
+        await sharesToken.withdrawProfit(8 * decimals, 0, {from: accounts[1]});
+        await sharesToken.withdrawProfit(4 * decimals, 0, {from: accounts[2]});
+        await Errors.expectError(
+            sharesToken.withdrawProfit(1, 0, {from: accounts[1]}),
+            Errors.LOW_BALANCE_ERROR
+        );
+        await Errors.expectError(
+            sharesToken.withdrawProfit(1, 0, {from: accounts[2]}),
+            Errors.LOW_BALANCE_ERROR
+        );
+        assert.equal(
+            (await fiatToken.balanceOf.call(accounts[1])).valueOf(),
+            17 * decimals,
             "Error in acc1 final balance"
+        );
+        assert.equal(
+            (await fiatToken.balanceOf.call(accounts[2])).valueOf(),
+            4 * decimals,
+            "Error in acc2 final balance"
         );
     });
 
