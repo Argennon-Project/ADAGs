@@ -62,13 +62,15 @@ contract GovernanceSystem is AccessControlled {
     event DecodedApproveMinter(address minter, uint amount);
     event DecodedGovernanceChange(address newGovernanceSystem);
     event DecodedGrant(address payable recipient, uint amount, IERC20 token);
-    event DecodedChangeSettings(address payable newAdmin, VotingConfig newVotingConfig);
+    event DecodedChangeOfSettings(address payable newAdmin, VotingConfig newVotingConfig);
+    event DecodedAdminReset(Administered target, address payable admin);
 
     event MinterApproved(address minter, uint amount);
     event CrowdFundingCreated(CrowdFunding newCf);
     event GovernanceSystemChanged(address newGovernanceSystem);
     event GrantGiven(address payable recipient, uint amount, IERC20 token);
     event SettingsChanged(address payable newAdmin, VotingConfig newVotingConfig);
+    event AdminReset(Administered target, address payable admin);
 
     event PaymentReceived(address sender, uint amount);
     event BallotCreated(Ballot newBallot, uint endTime);
@@ -96,6 +98,11 @@ contract GovernanceSystem is AccessControlled {
      */
     function DecodeBallotAction(Ballot ballot) authenticate(ballot) public {
         proposals[ballot].action(proposals[ballot].data, true);
+    }
+
+
+    function verifyOwnership() public {
+        governanceToken.setOwner(address(this));
     }
 
 
@@ -148,7 +155,14 @@ contract GovernanceSystem is AccessControlled {
         b = _newBallot(ballotEndTime);
         _saveProposal(b, _approveMinter, abi.encode(minter, amount));
     }
-    
+
+
+    function proposeAdminReset(Administered target, uint ballotEndTime)
+    public payable returns(Ballot b) {
+        b = _newBallot(ballotEndTime);
+        _saveProposal(b, _resetAdmin, abi.encode(target));
+    }
+
     
     function proposeRetirement(GovernanceSystem newSystem, uint ballotEndTime)
     public payable returns (Ballot b) {
@@ -172,7 +186,7 @@ contract GovernanceSystem is AccessControlled {
         Ballot b,
         function(bytes storage, bool) internal action,
         bytes memory data
-    ) internal virtual {
+    ) internal {
         proposals[b].data = data; 
         proposals[b].action = action;
         proposals[b].active = true;
@@ -245,13 +259,23 @@ contract GovernanceSystem is AccessControlled {
     function _changeSettings(bytes storage data, bool isForCheck) internal {
         (address payable newAdmin, VotingConfig memory newVotingConfig) = abi.decode(data, (address, VotingConfig));
         if (isForCheck) {
-            emit DecodedChangeSettings(newAdmin, newVotingConfig);
+            emit DecodedChangeOfSettings(newAdmin, newVotingConfig);
             return;
         }
         // we checked the values when we were creating the proposal so we don't check them here again.
         admin = newAdmin;
         votingConfig = newVotingConfig;
         emit SettingsChanged(newAdmin, newVotingConfig);
+    }
+
+    function _resetAdmin(bytes storage data, bool isForCheck) internal {
+        Administered target = abi.decode(data, (Administered));
+        if (isForCheck) {
+            emit DecodedAdminReset(target, admin);
+            return;
+        }
+        target.setAdmin(admin);
+        emit AdminReset(target, admin);
     }
 }
 

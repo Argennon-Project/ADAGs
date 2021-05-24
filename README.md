@@ -7,11 +7,12 @@ problems do not exist for Argennon programmers. The Argennon Virtual Machine is 
 storage. It is optimized for using a zero knowledge database as its persistence layer, seamlessly and efficiently by
 taking advantage of a smart data clustering algorithm.
 
-On the other hand, Argennon blockchain uses a truly decentralized and secure proof of stake consensus protocol. Thanks
-to the efficient design of the AVM, participation in the Argennon consensus protocol does not require huge computational
-resources, and normal personal computers with limited computational power can actively participate in the Argennon
-consensus protocol, making it a truly decentralized protocol. You can check the initial draft of the Argennon white
-paper [here](https://raw.githubusercontent.com/aybehrouz/AVM/main/pdf/A.pdf).
+On the other hand, the Argennon blockchain uses a truly decentralized and secure proof of stake consensus protocol.
+Thanks to the efficient design of the AVM, participation in the Argennon consensus protocol does not require huge
+computational resources, and normal personal computers with limited computational power can actively participate in the
+Argennon consensus protocol. This property makes the Argennon blockchain a truly decentralized blockchain. An initial
+draft of the Argennon white paper could be
+accessed [here](https://raw.githubusercontent.com/aybehrouz/AVM/main/pdf/A.pdf).
 
 Until the launch of the Argennon mainnet, an ERC20 token and a governance system will be deployed on the Binance Smart
 Chain in order to represent investors' share in the project and giving them the opportunity to determine the project
@@ -23,13 +24,13 @@ The Argennon token (ARG) is an ERC20 token intended to represent an investor's s
 launch of the Argennon blockchain, the ARG ERC20 token will be convertible in 1:1 ratio to the main currency of the
 Argennon blockchain. Meanwhile, the ARG ERC20 token will act as a governance token:
 
-- The ARG ERC20 contract is a profit distributor. That means when an amount of an ERC20 token which is registered as a
-  profit source, is sent to the contract address, that amount will be distributed between all ARG holders, proportional
-  to their ARG balance.
+- The ARG ERC20 smart contract is a profit distributor. That means when an amount of an ERC20 token which is registered
+  as a profit source, is sent to the contract address, that amount will be distributed between all ARG holders,
+  proportional to their ARG balance.
 - Holders of the ARG token are eligible to vote in the Argennon Decentralized Autonomous Governance system (ADAGs).
     - In order to vote, a user needs to lock his ARG tokens for at least 6 months. During this period he will not be
       able to transfer his tokens.
-    - Any proposal that gets more than 66% (2/3) of the total ARG supply votes will be accepted by the ADAGs.
+    - Any proposal that gets more than 66% (2/3) of the total ARG supply vote will be accepted by the ADAGs.
 
 ### ADAGs
 
@@ -45,6 +46,8 @@ The Argennon Decentralized Autonomous Governance system (ADAGs /eɪ-dagz/) is a 
     - can be changed between 120 and 730 days
 - Changing the required fee for creating a proposal
     - can be changed between 0 and 2 BNB
+- Changing the administrator of other Argennon contracts
+    - this operation is possible only if ADAGs is the current admin of that contract
 - Deploying a new governance system
 
 ### Crowdfunding Campaigns
@@ -70,7 +73,7 @@ of predefined rules:
 
 - When a crowdfunding is done, the earnings of the crowdfunding will be automatically sent to the ARG ERC20 contract
   address and hence, it will be distributed between ARG holders, or it will be sent to the ADAGs smart contract and will
-  be used for grants.
+  be used for grant programs.
 
 ### Token Dynamics
 
