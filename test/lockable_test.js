@@ -26,6 +26,10 @@ contract("LockableERC20", (accounts) => {
         assert.equal(lock.amount.valueOf(), 200, "Amount of lock should be 200");
         assert.equal(lock.releaseTime.valueOf(), timestamp, "Release time was not correct");
 
+        const lockData = await lockableToken.locksData.call(accounts[1]);
+        assert.equal(lockData.threshold.valueOf(), 300, "lock threshold should be 300");
+        assert.equal(lockData.releaseTime.valueOf(), timestamp, "Release time was not correct");
+
         await Errors.expectError(
             lockableToken.transfer(accounts[0], 100, {from: accounts[1]}),
             Errors.LOCKED_ERROR
@@ -46,7 +50,7 @@ contract("LockableERC20", (accounts) => {
         assert.equal(lockData.threshold.valueOf(), 200, "lock threshold should be 200");
         assert.equal(lockData.releaseTime.valueOf(), timestamp - 1000, "Release time was not correct");
 
-        lockableToken.transfer(accounts[2], 100, {from: accounts[1]});
+        await lockableToken.transfer(accounts[2], 100, {from: accounts[1]});
         assert.equal(
             (await lockableToken.balanceOf.call(accounts[2])).toNumber(),
             100,
@@ -88,5 +92,51 @@ contract("LockableERC20", (accounts) => {
         lockData = await lockableToken.locksData.call(accounts[1]);
         assert.equal(lockData.threshold.valueOf(), 150, "Amount of lock should be 150");
         assert.equal(lockData.releaseTime.valueOf(), timestamp + 1500, "Release time was not correct");
+    });
+
+    it("should release tokens after release time", async () => {
+        const start = Math.floor(Date.now() / 1000);
+        await lockableToken.setLock(100, start + 5, {from: accounts[1]});
+        await lockableToken.transfer(accounts[1], 200, {from: accounts[0]});
+        await lockableToken.transfer(accounts[2], 300, {from: accounts[0]});
+        await lockableToken.setLock(300, start + 5, {from: accounts[2]});
+
+
+        await lockableToken.transfer(accounts[3], 50, {from: accounts[1]});
+        await Errors.expectError(
+            lockableToken.transfer(accounts[3], 100, {from: accounts[1]}),
+            Errors.LOCKED_ERROR
+        );
+        await Errors.expectError(
+            lockableToken.transfer(accounts[3], 100, {from: accounts[2]}),
+            Errors.LOCKED_ERROR
+        );
+
+        while (Math.floor(Date.now() / 1000) < start + 7);
+
+        await lockableToken.transfer(accounts[3], 100, {from: accounts[1]});
+        await lockableToken.setLock(0, start + 15, {from: accounts[1]});
+        await Errors.expectError(
+            lockableToken.setLock(10, start + 10, {from: accounts[1]}),
+            Errors.LOCK_UPDATE_ERROR
+        );
+        await lockableToken.transfer(accounts[3], 50, {from: accounts[1]});
+        await Errors.expectError(
+            lockableToken.transfer(accounts[3], 1, {from: accounts[1]}),
+            Errors.ERC20.TRANSFER_ERROR
+        );
+
+        await lockableToken.setLock(200, start + 15, {from: accounts[2]});
+        await lockableToken.transfer(accounts[3], 100, {from: accounts[2]});
+        await Errors.expectError(
+            lockableToken.transfer(accounts[3], 1, {from: accounts[2]}),
+            Errors.LOCKED_ERROR
+        );
+
+        assert.equal(
+            (await lockableToken.balanceOf.call(accounts[3])).valueOf(),
+            300,
+            "Error in acc2's final balance"
+        );
     });
 });
