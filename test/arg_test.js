@@ -169,11 +169,15 @@ contract("ArgennonToken", (accounts) => {
 
         await arg.transfer(accounts[0], 500 * decimals * decimals, {from: accounts[4]});
         await arg.withdrawProfit(100 * decimals, 0, {from: accounts[4]});
-        await arg.withdrawProfit(50 * decimals, 0, {from: accounts[3]});
+        await arg.withdrawProfit(232399999, 0, {from: accounts[3]});
+        await Errors.expectError(
+            arg.withdrawProfit(1, 0, {from: accounts[3]}),
+            Errors.LOW_BALANCE_ERROR
+        );
         await arg.transfer(accounts[1], 200 * decimals * decimals, {from: accounts[5]});
         // [500 650 750 400 1500 1200] - > [5 6.5 7.5 4 15 12] 50
         await fiat.transfer(arg.address, 100 * decimals, {from: admin});
-        await checkProfitsNonExact([5, 169.45, 227.75, 186.4, 163.5, 87.9], arg, 0, "final_2");
+        await checkProfitsNonExact([5, 169.45, 227.75, 4, 163.5, 87.9], arg, 0, "final_2");
     });
 
     it("can handle arithmetic errors", async () => {

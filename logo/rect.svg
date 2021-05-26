@@ -18,7 +18,8 @@
    sodipodi:docname="rect.svg"
    inkscape:export-filename="/home/aybehrouz/rect.png"
    inkscape:export-xdpi="130"
-   inkscape:export-ydpi="130">
+   inkscape:export-ydpi="130"
+   enable-background="new">
   <defs
      id="defs1706">
     <filter
@@ -31,6 +32,16 @@
          in2="BackgroundImage"
          id="feBlend927" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter849">
+      <feBlend
+         inkscape:collect="always"
+         mode="color-burn"
+         in2="BackgroundImage"
+         id="feBlend851" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -39,9 +50,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="270.21353"
-     inkscape:cy="573.61573"
+     inkscape:zoom="0.34386925"
+     inkscape:cx="577.47577"
+     inkscape:cy="420.13189"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -57,7 +68,8 @@
      inkscape:snap-smooth-nodes="true"
      inkscape:snap-intersection-paths="true"
      inkscape:snap-bbox-midpoints="true"
-     inkscape:object-nodes="true" />
+     inkscape:object-nodes="true"
+     inkscape:snap-global="false" />
   <metadata
      id="metadata1709">
     <rdf:RDF>
@@ -73,7 +85,8 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     style="filter:url(#filter849);opacity:0.99">
     <rect
        inkscape:export-ydpi="130"
        inkscape:export-xdpi="130"
@@ -151,40 +164,47 @@
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:113.33333588px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#ffffff" /></flowRegion><flowPara
          id="flowPara1003-8"
          style="font-size:192px;fill:#ffffff">rgennon</flowPara></flowRoot>    <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.13491067;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.11015409;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
        id="rect966"
-       width="1.5"
+       width="1"
        height="98.346252"
        x="254.16986"
-       y="79.80484"
+       y="78.746506"
        inkscape:export-xdpi="130"
        inkscape:export-ydpi="130" />
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.13089614;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.17561559;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
        id="rect966-6"
-       width="1.5"
+       width="2.7"
        height="92.580399"
        x="260.86829"
        y="116.6506"
        inkscape:export-xdpi="130"
        inkscape:export-ydpi="130" />
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.11994098;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.10727848;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
        id="rect1031"
        width="159.55406"
-       height="1.5"
+       height="1.2"
        x="139.35139"
-       y="157.33162"
+       y="157.63162"
        inkscape:export-xdpi="130"
        inkscape:export-ydpi="130" />
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.11271842;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.14946266;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
        id="rect1031-7"
-       width="140.91666"
-       height="1.5"
+       width="137.64658"
+       height="2.7"
        x="68.975029"
-       y="162.3774"
+       y="162.76488"
        inkscape:export-xdpi="130"
        inkscape:export-ydpi="130" />
+    <rect
+       style="opacity:1;fill:#f9f9f9;fill-opacity:1;stroke-width:0.56040567;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+       id="rect2045"
+       width="74.300926"
+       height="0.69999999"
+       x="210.60838"
+       y="184.05219" />
   </g>
 </svg>

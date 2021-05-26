@@ -15,7 +15,9 @@ import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 
 
 interface PossessiveContract {
-     function canControl(IERC20 token) external view returns(bool);
+    function canControl(IERC20 token) external view returns(bool);
+    function setAdmin(address payable newAdmin) external;
+    function admin() external view returns(address payable);
 }
 
 

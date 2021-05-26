@@ -145,6 +145,7 @@ contract GovernanceSystem is AccessControlled {
 
     function proposeChangeOfSettings(address payable newAdmin, VotingConfig calldata newVotingConfig, uint ballotEndTime)
     public payable returns (Ballot b) {
+        require(newAdmin != address(this), "admin can't be the contract itself");
         b = _newBallot(ballotEndTime);
         _saveProposal(b, _changeSettings, abi.encode(newAdmin, validate(newVotingConfig)));
     }
@@ -164,10 +165,10 @@ contract GovernanceSystem is AccessControlled {
     }
 
     
-    function proposeRetirement(GovernanceSystem newSystem, uint ballotEndTime)
+    function proposeRetirement(address payable newSystem, uint ballotEndTime)
     public payable returns (Ballot b) {
         b = _newBallot(ballotEndTime);
-        _saveProposal(b, _retire, abi.encode(address(newSystem)));
+        _saveProposal(b, _retire, abi.encode(newSystem));
     }
 
 
@@ -228,12 +229,14 @@ contract GovernanceSystem is AccessControlled {
     
     
     function _retire(bytes storage data, bool isForCheck) internal {
-        address newSystem = abi.decode(data, (address));
+        address payable newSystem = abi.decode(data, (address));
         if (isForCheck) {
             emit DecodedGovernanceChange(newSystem);
             return;
         }
         governanceToken.setOwner(newSystem);
+        // if we are the admin we should change it.
+        if (governanceToken.admin() == address(this)) governanceToken.setAdmin(newSystem);
         emit GovernanceSystemChanged(newSystem);
         selfdestruct(admin);
     }
@@ -262,7 +265,7 @@ contract GovernanceSystem is AccessControlled {
             emit DecodedChangeOfSettings(newAdmin, newVotingConfig);
             return;
         }
-        // we checked the values when we were creating the proposal so we don't check them here again.
+        // we checked the proposal values when we were creating the proposal so we don't check them here again.
         admin = newAdmin;
         votingConfig = newVotingConfig;
         emit SettingsChanged(newAdmin, newVotingConfig);
