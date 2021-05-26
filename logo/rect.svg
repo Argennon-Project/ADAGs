@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1712"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="rect.svg"
+   inkscape:export-filename="/home/aybehrouz/rect.png"
+   inkscape:export-xdpi="130"
+   inkscape:export-ydpi="130">
+  <defs
+     id="defs1706">
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter925">
+      <feBlend
+         inkscape:collect="always"
+         mode="screen"
+         in2="BackgroundImage"
+         id="feBlend927" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="270.21353"
+     inkscape:cy="573.61573"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1608"
+     inkscape:window-height="986"
+     inkscape:window-x="72"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:snap-bbox="false"
+     inkscape:snap-bbox-edge-midpoints="false"
+     inkscape:bbox-nodes="false"
+     inkscape:bbox-paths="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:object-nodes="true" />
+  <metadata
+     id="metadata1709">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       inkscape:export-ydpi="130"
+       inkscape:export-xdpi="130"
+       y="29.411867"
+       x="-97.369041"
+       height="197.22755"
+       width="396.27429"
+       id="rect1038"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:0.3408263;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
+    <g
+       inkscape:export-ydpi="130"
+       inkscape:export-xdpi="130"
+       style="fill:#ffffff;filter:url(#filter925)"
+       id="g2506-3-2"
+       transform="matrix(0.76656083,0,0,0.76656083,-103.82176,34.755061)">
+      <g
+         style="fill:#ffffff"
+         id="g2514-6-7">
+        <rect
+           style="fill:#ffffff;fill-opacity:1;stroke-width:0.28444517;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+           id="rect2416-7-0"
+           width="14.204243"
+           height="66.202477"
+           x="111.10216"
+           y="88.572639" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+           d="M 108.92019,88.30806 H 125.3064 L 79.797716,155.0397 H 63.411493 Z"
+           id="rect2416-3-5-9"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           style="fill:#ffffff;fill-opacity:1;stroke-width:0.29233146;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+           d="M 95.756998,140.21167 125.5582,139.97914 V 155.0397 H 85.618553 Z"
+           id="rect2434-3-3"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+        <rect
+           style="fill:#ffffff;fill-opacity:1;stroke-width:0.19035791;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+           id="rect2416-6-5-6"
+           width="6.3110695"
+           height="66.732002"
+           x="127.29501"
+           y="88.307701" />
+        <rect
+           style="fill:#000000;fill-opacity:1;stroke-width:0.33684993;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+           id="rect2454-6-0"
+           width="48.440773"
+           height="4.75"
+           x="94.329498"
+           y="-140.9256"
+           transform="scale(1,-1)" />
+        <path
+           style="fill:#000000;fill-opacity:1;stroke-width:0.21545573;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+           d="m 99.446006,110.91864 h 4.009064 l -15.874972,23.76079 h -4.009044 z"
+           id="rect2456-2-6"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+      </g>
+    </g>
+    <flowRoot
+       inkscape:export-ydpi="130"
+       inkscape:export-xdpi="130"
+       xml:space="preserve"
+       id="flowRoot997-2"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:113.33333588px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;filter:url(#filter925)"
+       transform="matrix(0.26458333,0,0,0.26458333,-597.05558,352.01138)"><flowRegion
+         id="flowRegion999-6"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:113.33333588px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#ffffff"><rect
+           id="rect1001-1"
+           width="1131.4286"
+           height="542.85712"
+           x="2268.5715"
+           y="-920.33746"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:113.33333588px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#ffffff" /></flowRegion><flowPara
+         id="flowPara1003-8"
+         style="font-size:192px;fill:#ffffff">rgennon</flowPara></flowRoot>    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.13491067;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+       id="rect966"
+       width="1.5"
+       height="98.346252"
+       x="254.16986"
+       y="79.80484"
+       inkscape:export-xdpi="130"
+       inkscape:export-ydpi="130" />
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.13089614;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+       id="rect966-6"
+       width="1.5"
+       height="92.580399"
+       x="260.86829"
+       y="116.6506"
+       inkscape:export-xdpi="130"
+       inkscape:export-ydpi="130" />
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.11994098;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+       id="rect1031"
+       width="159.55406"
+       height="1.5"
+       x="139.35139"
+       y="157.33162"
+       inkscape:export-xdpi="130"
+       inkscape:export-ydpi="130" />
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.11271842;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+       id="rect1031-7"
+       width="140.91666"
+       height="1.5"
+       x="68.975029"
+       y="162.3774"
+       inkscape:export-xdpi="130"
+       inkscape:export-ydpi="130" />
+  </g>
+</svg>
