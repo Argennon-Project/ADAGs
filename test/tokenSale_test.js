@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 const Verifier = require('./verifier');
-const CrowdFunding = artifacts.require("CrowdFunding");
+const TokenSale = artifacts.require("TokenSale");
 const Argennon = artifacts.require("ArgennonToken");
 const FiatToken = artifacts.require("LockableTestToken");
 
-contract("CrowdFunding", (accounts) => {
+contract("TokenSale", (accounts) => {
     const decimals = 1000000;
     const admin = accounts[8], owner = accounts[9]
     let arg, fiat, cf;
@@ -26,7 +26,7 @@ contract("CrowdFunding", (accounts) => {
             fiatTokenContract: fiat.address,
             originalToken: arg.address
         };
-        cf = await CrowdFunding.new(admin, arg.address, normalConfig);
+        cf = await TokenSale.new(admin, arg.address, normalConfig);
         await arg.increaseMintingAllowance(cf.address, normalConfig.totalSupply, {from: owner});
 
         await fiat.transfer(accounts[0], 1000 * decimals, {from: admin});
@@ -88,7 +88,7 @@ contract("CrowdFunding", (accounts) => {
 
         // overflow test
         normalConfig.price = {a: 2000, b: 1000000};
-        cf = await CrowdFunding.new(admin, arg.address, normalConfig);
+        cf = await TokenSale.new(admin, arg.address, normalConfig);
         await Verifier.expectError(
             cf.buy(2n ** 250n, {from: accounts[0]}),
             Verifier.GENERAL_ERROR
@@ -98,7 +98,7 @@ contract("CrowdFunding", (accounts) => {
     it("allows withdrawal after redemption end time", async () => {
         normalConfig.redemptionDuration = 10;
         const deployTime = Math.floor(Date.now() / 1000);
-        cf = await CrowdFunding.new(admin, arg.address, normalConfig);
+        cf = await TokenSale.new(admin, arg.address, normalConfig);
         await arg.increaseMintingAllowance(cf.address, normalConfig.totalSupply, {from: owner});
 
         await fiat.approve(cf.address, 400 * decimals, {from: accounts[0]});
@@ -110,7 +110,7 @@ contract("CrowdFunding", (accounts) => {
         );
         await Verifier.expectError(
             cf.withdraw(1),
-            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+            Verifier.TokenSale.AMOUNT_TOO_HIGH_ERROR
         );
 
         while (Math.floor(Date.now() / 1000) < deployTime + 12) ;
@@ -168,7 +168,7 @@ contract("CrowdFunding", (accounts) => {
         await cf.withdraw(150 * decimals);
         await Verifier.expectError(
             cf.withdraw(1),
-            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+            Verifier.TokenSale.AMOUNT_TOO_HIGH_ERROR
         );
 
         // redemption at 80%
@@ -215,7 +215,7 @@ contract("CrowdFunding", (accounts) => {
         await cf.withdraw(Math.floor(12.5 * (rp - 0.8) * 100 * decimals + 1));
         await Verifier.expectError(
             cf.withdraw(1),
-            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+            Verifier.TokenSale.AMOUNT_TOO_HIGH_ERROR
         );
         assert.equal(
             (await cf.calculateRefund.call(decimals * decimals)).valueOf(),
@@ -267,7 +267,7 @@ contract("CrowdFunding", (accounts) => {
 
         await Verifier.expectError(
             cf.withdraw(1),
-            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+            Verifier.TokenSale.AMOUNT_TOO_HIGH_ERROR
         );
 
         // converting to ARG
@@ -294,7 +294,7 @@ contract("CrowdFunding", (accounts) => {
         await cf.withdraw(40 * decimals);
         await Verifier.expectError(
             cf.withdraw(1),
-            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+            Verifier.TokenSale.AMOUNT_TOO_HIGH_ERROR
         );
 
         // redemption after sending money to the cf contract
@@ -314,7 +314,7 @@ contract("CrowdFunding", (accounts) => {
         await cf.withdraw(100 * decimals);
         await Verifier.expectError(
             cf.withdraw(1),
-            Verifier.CrowdFunding.AMOUNT_TOO_HIGH_ERROR
+            Verifier.TokenSale.AMOUNT_TOO_HIGH_ERROR
         );
         assert.equal(
             (await fiat.balanceOf.call(arg.address)).valueOf(),
@@ -332,7 +332,7 @@ contract("CrowdFunding", (accounts) => {
     });
 
     it("checks constructor parameters", async () => {
-        const cf = await CrowdFunding.new(admin, admin, normalConfig);
+        const cf = await TokenSale.new(admin, admin, normalConfig);
         assert.equal(
             (await cf.config.call()).fiatTokenContract.address,
             normalConfig.fiatTokenContract.address,
@@ -344,44 +344,44 @@ contract("CrowdFunding", (accounts) => {
         const invalidDuration = {...normalConfig};
         invalidDuration.redemptionDuration = 3600 * 24 * 2000;
         await Verifier.expectError(
-            CrowdFunding.new(admin, admin, invalidDuration),
-            Verifier.CrowdFunding.DURATION_ERROR
+            TokenSale.new(admin, admin, invalidDuration),
+            Verifier.TokenSale.DURATION_ERROR
         );
 
         const invalidPrice = {...normalConfig};
         invalidPrice.price = {a: 0, b: 1000};
         await Verifier.expectError(
-            CrowdFunding.new(admin, admin, invalidPrice),
-            Verifier.CrowdFunding.ZERO_PRICE_ERROR
+            TokenSale.new(admin, admin, invalidPrice),
+            Verifier.TokenSale.ZERO_PRICE_ERROR
         );
         invalidPrice.price = {a: 100, b: 0};
         await Verifier.expectError(
-            CrowdFunding.new(admin, admin, invalidPrice),
+            TokenSale.new(admin, admin, invalidPrice),
             Verifier.GENERAL_ERROR
         );
 
         const invalidRatio = {...normalConfig};
         invalidRatio.redemptionRatio = {a: 101, b: 100};
         await Verifier.expectError(
-            CrowdFunding.new(admin, admin, invalidRatio),
-            Verifier.CrowdFunding.REDEMPTION_RATIO_ERROR
+            TokenSale.new(admin, admin, invalidRatio),
+            Verifier.TokenSale.REDEMPTION_RATIO_ERROR
         );
         invalidRatio.redemptionRatio = {a: 999, b: 10000};
         await Verifier.expectError(
-            CrowdFunding.new(admin, admin, invalidRatio),
-            Verifier.CrowdFunding.REDEMPTION_RATIO_ERROR
+            TokenSale.new(admin, admin, invalidRatio),
+            Verifier.TokenSale.REDEMPTION_RATIO_ERROR
         );
         invalidRatio.redemptionRatio = {a: 999, b: 0};
         await Verifier.expectError(
-            CrowdFunding.new(admin, admin, invalidRatio),
-            Verifier.CrowdFunding.REDEMPTION_RATIO_ERROR
+            TokenSale.new(admin, admin, invalidRatio),
+            Verifier.TokenSale.REDEMPTION_RATIO_ERROR
         );
 
         const invalidActivation = {...normalConfig};
         invalidActivation.minFiatForActivation = decimals * decimals;
         await Verifier.expectError(
-            CrowdFunding.new(admin, admin, invalidActivation),
-            Verifier.CrowdFunding.MIN_ACTIVATION_ERROR
+            TokenSale.new(admin, admin, invalidActivation),
+            Verifier.TokenSale.MIN_ACTIVATION_ERROR
         );
     });
 

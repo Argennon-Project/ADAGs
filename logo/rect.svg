@@ -16,9 +16,9 @@
    id="svg1712"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
    sodipodi:docname="rect.svg"
-   inkscape:export-filename="/home/aybehrouz/rect.png"
-   inkscape:export-xdpi="130"
-   inkscape:export-ydpi="130"
+   inkscape:export-filename="/home/aybehrouz/rect5.png"
+   inkscape:export-xdpi="129.98534"
+   inkscape:export-ydpi="129.98534"
    enable-background="new">
   <defs
      id="defs1706">
@@ -35,12 +35,12 @@
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
-       id="filter849">
+       id="filter841">
       <feBlend
          inkscape:collect="always"
-         mode="color-burn"
+         mode="hard-light"
          in2="BackgroundImage"
-         id="feBlend851" />
+         id="feBlend843" />
     </filter>
   </defs>
   <sodipodi:namedview
@@ -50,9 +50,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.34386925"
-     inkscape:cx="577.47577"
-     inkscape:cy="420.13189"
+     inkscape:zoom="0.48630456"
+     inkscape:cx="102.96997"
+     inkscape:cy="800.12819"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -86,7 +86,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     style="filter:url(#filter849);opacity:0.99">
+     style="filter:url(#filter841);opacity:0.97">
     <rect
        inkscape:export-ydpi="130"
        inkscape:export-xdpi="130"
@@ -168,8 +168,8 @@
        id="rect966"
        width="1"
        height="98.346252"
-       x="254.16986"
-       y="78.746506"
+       x="253.11154"
+       y="79.275673"
        inkscape:export-xdpi="130"
        inkscape:export-ydpi="130" />
     <rect
@@ -177,17 +177,17 @@
        id="rect966-6"
        width="2.7"
        height="92.580399"
-       x="260.86829"
-       y="116.6506"
+       x="261.39746"
+       y="103.95061"
        inkscape:export-xdpi="130"
        inkscape:export-ydpi="130" />
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.10727848;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.09793141;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
        id="rect1031"
        width="159.55406"
-       height="1.2"
+       height="1"
        x="139.35139"
-       y="157.63162"
+       y="157.83162"
        inkscape:export-xdpi="130"
        inkscape:export-ydpi="130" />
     <rect
@@ -196,15 +196,8 @@
        width="137.64658"
        height="2.7"
        x="68.975029"
-       y="162.76488"
+       y="164.88152"
        inkscape:export-xdpi="130"
        inkscape:export-ydpi="130" />
-    <rect
-       style="opacity:1;fill:#f9f9f9;fill-opacity:1;stroke-width:0.56040567;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
-       id="rect2045"
-       width="74.300926"
-       height="0.69999999"
-       x="210.60838"
-       y="184.05219" />
   </g>
 </svg>

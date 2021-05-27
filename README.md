@@ -37,7 +37,7 @@ Argennon blockchain. Meanwhile, the ARG ERC20 token will act as a governance tok
 The Argennon Decentralized Autonomous Governance system (ADAGs /eɪ-dagz/) is a smart contract which is able to perform
 *governance actions*. These actions, for the ADAGs version functioning on the Binance Smart Chain, include:
 
-- Starting new crowdfunding campaigns with different configurations
+- Starting new token sales with different configurations
 - Minting new ARG tokens
 - Sending funds to any address as grants
 - Changing the threshold of voting weight needed for accepting a proposal
@@ -50,28 +50,28 @@ The Argennon Decentralized Autonomous Governance system (ADAGs /eɪ-dagz/) is a 
     - this operation is possible only if ADAGs is the current admin of that contract
 - Deploying a new governance system
 
-### Crowdfunding Campaigns
+### Token Sales
 
-Several crowdfunding campaigns may be held before the launch of the Argennon blockchain, all of them will follow a set
+Several token sales may be held before the launch of the Argennon blockchain, all of them will follow a set
 of predefined rules:
 
-- Every crowdfunding is conducted using a smart contract: the *CF contract*, and it has its own token: the *ICO token*.
-  Users may only buy *ICO tokens* from the *CF contract*. These ICO tokens can be burnt and converted to the ARG token
-  in 1:1 ratio using the CF contract at any time.
-- The ICO token is redeemable. This means anyone can redeem his ICO tokens using the CF contract and get a refund. The
-  redemption price depends on the time since the start of the crowdfunding and the amount of funds the crowdfunding has
+- Every token sale is conducted using a smart contract: the *TS contract*, and it has its own token: the *ICO token*.
+  Users may only buy *ICO tokens* from the *TS contract*. These ICO tokens can be burnt and converted to the ARG token
+  in 1:1 ratio using the TS contract at any time.
+- The ICO token is redeemable. This means anyone can redeem his ICO tokens using the TS contract and get a refund. The
+  redemption price depends on the time since the start of the token sale and the amount of funds the token sale has
   raised so far:
-    - If the amount of raised funds has not yet reached the threshold defined in the CF contract, a user may redeem at
+    - If the amount of raised funds has not yet reached the threshold defined in the TS contract, a user may redeem at
       100% price.
     - If the amount of raised funds has reached the threshold, then the redemption price will drop to the price defined
-      in the CF contract, which is determined by the ADAGs and usually is 90%. It is guaranteed that a user can redeem
+      in the TS contract, which is determined by the ADAGs and usually is 90%. It is guaranteed that a user can redeem
       at that price for a configured time interval, which again is determined by the ADAGs and usually is one year.
       After that time interval, the ICO token may not be redeemable, and the user should only convert them to the ARG
       token.
       (*Actually even after this time interval, the ICO tokens are still redeemable. However, since the contract will
       allow the withdrawal of funds, the redemption price could be anything based on the amount of remaining funds.*)
 
-- When a crowdfunding is done, the earnings of the crowdfunding will be automatically sent to the ARG ERC20 contract
+- When a token sale is done, the earnings of the token sale will be automatically sent to the ARG ERC20 contract
   address and hence, it will be distributed between ARG holders, or it will be sent to the ADAGs smart contract and will
   be used for grant programs.
 
@@ -86,7 +86,7 @@ The minting of the ARG ERC20 token will follow these rules:
 - **5 billion:** founder's share.
 - **5 billion:** founder's initial reserve which will be granted to early contributors. **All these grants are
   documented [here](https://github.com/aybehrouz/ADAGs/blob/main/grants.md).**
-- **1 billion:** first crowdfunding which will be sold for **at least** 100,000$.
+- **1 billion:** first token sale which will be sold for **at least** 100,000$.
 
 The minting of ARG ERC20 tokens will be decided by the ADAGs, but it has to be limited by the maximum supply defined by
 the ARG ERC20 contract. This maximum allowed supply is a function of time. For the first year a maximum supply of 10

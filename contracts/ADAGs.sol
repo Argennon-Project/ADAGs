@@ -25,11 +25,11 @@ contract ADAGs is GovernanceSystem {
     ) {}
 
 
-    function createInitialCrowdfunding(CrowdFundingConfig calldata config) onlyBy(admin) public {
-        require(crowdFundingCampaigns.length == 0, "already created");
-        CrowdFunding newCf = new CrowdFunding(admin, address(governanceToken), config);
-        governanceToken.increaseMintingAllowance(address(newCf), config.totalSupply);
-        crowdFundingCampaigns.push(newCf);
-        emit CrowdFundingCreated(newCf);
+    function createInitialCrowdfunding(TokenSaleConfig calldata config) onlyBy(admin) public {
+        require(tokenSales.length == 0, "already created");
+        TokenSale newTs = new TokenSale(admin, address(governanceToken), config);
+        governanceToken.increaseMintingAllowance(address(newTs), config.totalSupply);
+        tokenSales.push(newTs);
+        emit TokenSaleCreated(newTs);
     }
 }

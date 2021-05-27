@@ -8,7 +8,7 @@ import "./../utils/Administered.sol";
 
 
 // we've arranged the variables in a way that they can be easily packed in 256 bit buckets.
-struct CrowdFundingConfig {
+struct TokenSaleConfig {
     string name;
     string symbol;
     uint redemptionDuration;
@@ -21,8 +21,8 @@ struct CrowdFundingConfig {
 }
 
 
-// Helper function for validating CrowdFunding configurations
-function validate(CrowdFundingConfig memory conf) pure returns (CrowdFundingConfig memory) {
+// Helper function for validating TokenSale configurations
+function validate(TokenSaleConfig memory conf) pure returns (TokenSaleConfig memory) {
     require(
         conf.redemptionDuration <= 1095 days,
         "redemption duration must be less than 3 years"
@@ -43,11 +43,11 @@ function validate(CrowdFundingConfig memory conf) pure returns (CrowdFundingConf
 }
 
 
-contract CrowdFunding is ERC20, Administered {
+contract TokenSale is ERC20, Administered {
     using Rational for RationalNumber;
     
     
-    CrowdFundingConfig public config;
+    TokenSaleConfig public config;
     address immutable public beneficiary;
     uint immutable public redemptionEndTime;
     bool public activationThresholdReached = false;
@@ -58,7 +58,7 @@ contract CrowdFunding is ERC20, Administered {
     event Converted(address sender, uint256 amount);
     
     
-    constructor(address payable _admin, address _beneficiary, CrowdFundingConfig memory _config)
+    constructor(address payable _admin, address _beneficiary, TokenSaleConfig memory _config)
     ERC20(_config.name, _config.symbol)
     Administered(_admin) {
         config = validate(_config);

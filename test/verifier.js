@@ -38,7 +38,7 @@ exports.Mintable = {
         "totalSupply exceeds limit -- Reason given: totalSupply exceeds limit.",
 }
 
-exports.CrowdFunding = {
+exports.TokenSale = {
     AMOUNT_TOO_HIGH_ERROR: "Error: Returned error: VM Exception while processing transaction: revert amount is too " +
         "high -- Reason given: amount is too high.",
     DURATION_ERROR: "Error: Returned error: VM Exception while processing transaction: revert redemption duration " +

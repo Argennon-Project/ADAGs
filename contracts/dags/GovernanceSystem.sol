@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 
 
 import "./Ballot.sol";
-import "./CrowdFunding.sol";
+import "./TokenSale.sol";
 import "./../utils/AccessControlled.sol";
 
 
@@ -54,11 +54,11 @@ contract GovernanceSystem is AccessControlled {
     address payable public admin;
     VotingConfig public votingConfig;
     LockableMintable public governanceToken;
-    CrowdFunding[] public crowdFundingCampaigns;
+    TokenSale[] public tokenSales;
     mapping(Ballot => GovernanceAction) internal proposals;
 
 
-    event DecodedCreateCrowdFunding(CrowdFundingConfig cfConfig, address beneficiary);
+    event DecodedCreateTokenSale(TokenSaleConfig tsConfig, address beneficiary);
     event DecodedApproveMinter(address minter, uint amount);
     event DecodedGovernanceChange(address newGovernanceSystem);
     event DecodedGrant(address payable recipient, uint amount, IERC20 token);
@@ -66,7 +66,7 @@ contract GovernanceSystem is AccessControlled {
     event DecodedAdminReset(Administered target, address payable admin);
 
     event MinterApproved(address minter, uint amount);
-    event CrowdFundingCreated(CrowdFunding newCf);
+    event TokenSaleCreated(TokenSale newTs);
     event GovernanceSystemChanged(address newGovernanceSystem);
     event GrantGiven(address payable recipient, uint amount, IERC20 token);
     event SettingsChanged(address payable newAdmin, VotingConfig newVotingConfig);
@@ -119,7 +119,7 @@ contract GovernanceSystem is AccessControlled {
     }
 
 
-    function proposeCrowdFund(CrowdFundingConfig calldata config, bool governorIsBeneficiary, uint ballotEndTime)
+    function proposeTokenSale(TokenSaleConfig calldata config, bool governorIsBeneficiary, uint ballotEndTime)
     public payable returns (Ballot b) {
         address beneficiary;
         if (governorIsBeneficiary) {
@@ -132,7 +132,7 @@ contract GovernanceSystem is AccessControlled {
             );
         }
         b = _newBallot(ballotEndTime);
-        _saveProposal(b, _createCF, abi.encode(validate(config), beneficiary));
+        _saveProposal(b, _createTokenSale, abi.encode(validate(config), beneficiary));
     }
 
 
@@ -203,16 +203,16 @@ contract GovernanceSystem is AccessControlled {
     }
 
 
-    function _createCF(bytes storage data, bool isForCheck) internal {
-        (CrowdFundingConfig memory cfConfig, address beneficiary) = abi.decode(data, (CrowdFundingConfig, address));
+    function _createTokenSale(bytes storage data, bool isForCheck) internal {
+        (TokenSaleConfig memory tsConfig, address beneficiary) = abi.decode(data, (TokenSaleConfig, address));
         if (isForCheck) {
-            emit DecodedCreateCrowdFunding(cfConfig, beneficiary);
+            emit DecodedCreateTokenSale(tsConfig, beneficiary);
             return;
         }
-        CrowdFunding newCf = new CrowdFunding(admin, beneficiary, cfConfig);
-        governanceToken.increaseMintingAllowance(address(newCf), cfConfig.totalSupply);
-        crowdFundingCampaigns.push(newCf);
-        emit CrowdFundingCreated(newCf);
+        TokenSale newTs = new TokenSale(admin, beneficiary, tsConfig);
+        governanceToken.increaseMintingAllowance(address(newTs), tsConfig.totalSupply);
+        tokenSales.push(newTs);
+        emit TokenSaleCreated(newTs);
     }
 
 
