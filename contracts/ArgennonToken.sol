@@ -12,14 +12,14 @@ import "./erc20/LockableERC20.sol";
 string constant NAME = "Argennon";
 string constant SYMBOL = "ARG";
 uint8 constant DECIMALS = 6;
-uint constant CAP = 50e15;
-uint constant INITIAL_SUPPLY = 10e15;
+uint constant CAP = 50e6;
+uint constant INITIAL_SUPPLY = 10e6;
 uint constant DURATION = 2920 days;
 
 
 address constant FOUNDER = address(0x1BE77304cA7b3B0FBFaa3cd0F6dd47B360936c0d);
-uint constant FOUNDERS_SHARE = 5e15;
-uint constant FOUNDERS_INITIAL_MINT_APPROVAL = 5e15;
+uint constant FOUNDERS_SHARE = 5e6;
+uint constant FOUNDERS_INITIAL_MINT_APPROVAL = 5e6;
 
 
 contract ArgennonToken is LockableERC20, MintableERC20, DistributorERC20 {
@@ -29,8 +29,8 @@ contract ArgennonToken is LockableERC20, MintableERC20, DistributorERC20 {
         // we have to use low level functions because the msg.sender != owner and higher level functions will fail.
         // this will reduce our gas usage too.
         _mint(FOUNDER, FOUNDERS_SHARE);
-        mintingAllowances[FOUNDER] = FOUNDERS_INITIAL_MINT_APPROVAL - 1e15;
-        mintingAllowances[_admin] = 1e15;
+        mintingAllowances[FOUNDER] = FOUNDERS_INITIAL_MINT_APPROVAL - 1e6;
+        mintingAllowances[_admin] = 1e6;
     }
     
     
