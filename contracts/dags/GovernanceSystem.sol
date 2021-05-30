@@ -121,16 +121,17 @@ contract GovernanceSystem is AccessControlled {
 
     function proposeTokenSale(TokenSaleConfig calldata config, bool governorIsBeneficiary, uint ballotEndTime)
     public payable returns (Ballot b) {
+        // we make sure the token has `increaseMintingAllowance` function and it can be called by our contract
         config.originalToken.increaseMintingAllowance(address(this), 0);
         address beneficiary;
         if (governorIsBeneficiary) {
             beneficiary = address(this);
         } else {
-            beneficiary = address(governanceToken);
             require(
                 governanceToken.canControl(config.fiatTokenContract),
                 "governance token does not support fiatToken"
             );
+            beneficiary = address(governanceToken);
         }
         b = _newBallot(ballotEndTime);
         _saveProposal(b, _createTokenSale, abi.encode(validate(config), beneficiary));

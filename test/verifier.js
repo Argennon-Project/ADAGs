@@ -84,6 +84,17 @@ exports.expectError = async function (promise, error) {
     if (passed) throw(`No errors given, While expecting: ${error}`);
 }
 
+exports.checkStruct = function (want, got, name) {
+    for (const key of Object.keys(want)) {
+        if(key === "price" || key === "redemptionRatio") {
+            assert.equal(got[key].a, want[key].a, `in ${name}, ${key}.a is invalid`);
+            assert.equal(got[key].b, want[key].b, `in ${name}, ${key}.b is invalid`);
+        } else {
+            assert.equal(got[key], want[key], `in ${name}, ${key} is invalid`);
+        }
+    }
+}
+
 exports.check = async function (f, wants, accounts, exact, name, decimals) {
     for (let i = 0; i < wants.length; i++) {
         const got = (await f(accounts[i])).valueOf();
