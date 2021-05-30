@@ -3,7 +3,7 @@
 const Verifier = require('./verifier');
 const GovernanceSystem = artifacts.require("GovernanceSystem");
 const GovernanceToken = artifacts.require("GovernanceTestToken");
-const FiatToken = artifacts.require("LockableTestToken");
+const ArgToken = artifacts.require("ArgennonToken");
 const Ballot = artifacts.require("Ballot"); 
 
 contract("GovernanceSystem", (accounts) => {
@@ -26,7 +26,7 @@ contract("GovernanceSystem", (accounts) => {
         );
         await gToken.setOwner(gSystem.address, {from: admin});
         deployTime = Math.floor(Date.now() / 1000);
-        await gToken.setLock(1000, deployTime + 1000 + 3600 * 24 * 240, {from: accounts[0]});
+        await gToken.setLock(800, deployTime + 1000 + 3600 * 24 * 240, {from: accounts[0]});
     });
 
     it("creates a ballot for a proposal", async () => {
@@ -149,7 +149,7 @@ contract("GovernanceSystem", (accounts) => {
         const ballot = await Ballot.at(ballotAddress);
         await ballot.changeVoteTo(701, {from: accounts[0]});
 
-        while (Math.floor(Date.now() / 1000) < deployTime + 3);
+        while (Math.floor(Date.now() / 1000) < deployTime + 4);
 
         assert.equal(
             (await gToken.balanceOf.call(accounts[5])).valueOf(),
@@ -159,24 +159,159 @@ contract("GovernanceSystem", (accounts) => {
         await gSystem.executeProposal(ballot.address);
         assert.equal(
             (await gToken.balanceOf.call(accounts[5])).valueOf(),
-            2100,
+            100,
             "error in minting for acc5"
         );
     });
 
     it("can give mint allowance", async () => {
+        let ballotAddress = (await gSystem.proposeMintApproval(
+            accounts[5], 200,
+            deployTime + 2,
+            {from: accounts[2], value: 2000}
+        )).logs[0].args.newBallot;
+        const ballot = await Ballot.at(ballotAddress);
+        await ballot.changeVoteTo(701, {from: accounts[0]});
 
+        while (Math.floor(Date.now() / 1000) < deployTime + 4);
+
+        assert.equal(
+            (await gToken.mintingAllowances.call(accounts[5])).valueOf(),
+            0,
+            "error in acc5 mint allowance"
+        );
+
+        await gSystem.executeProposal(ballot.address);
+
+        assert.equal(
+            (await gToken.mintingAllowances.call(accounts[5])).valueOf(),
+            200,
+            "error in acc5 mint allowance"
+        );
+        assert.equal(
+            (await gToken.balanceOf.call(accounts[5])).valueOf(),
+            0,
+            "error in acc5 balance"
+        );
+        await gToken.mint(accounts[5], 200, {from: accounts[5]});
+        await Verifier.expectError(
+            gToken.mint(accounts[5], 1, {from: accounts[5]}),
+            Verifier.Mintable.MINT_ALLOWANCE_ERROR
+        );
+        assert.equal(
+            (await gToken.balanceOf.call(accounts[5])).valueOf(),
+            200,
+            "error in minting for acc5"
+        );
     });
 
     it("can give grants", async () => {
+        let ballotAddress = (await gSystem.proposeGrant(
+            accounts[5], 500, "0x0000000000000000000000000000000000000000",
+            deployTime + 2,
+            {from: accounts[2], value: 2000}
+        )).logs[0].args.newBallot;
+        const ballot = await Ballot.at(ballotAddress);
+        await ballot.changeVoteTo(701, {from: accounts[0]});
 
+        while (Math.floor(Date.now() / 1000) < deployTime + 4);
+
+        const balanceBefore = BigInt(await web3.eth.getBalance(accounts[5]));
+        await gSystem.executeProposal(ballot.address);
+        const balanceAfter = BigInt(await web3.eth.getBalance(accounts[5]));
+        assert.equal(
+            balanceAfter - balanceBefore,
+            500,
+            "error in eth grant"
+        );
+
+        ballotAddress = (await gSystem.proposeGrant(
+            accounts[5], 200, gToken.address,
+            deployTime + 5,
+            {from: accounts[2], value: 2000}
+        )).logs[0].args.newBallot;
+        const ballot2 = await Ballot.at(ballotAddress);
+        await ballot2.changeVoteTo(701, {from: accounts[0]});
+        await gToken.transfer(gSystem.address, 200, {from: accounts[0]});
+
+        while (Math.floor(Date.now() / 1000) < deployTime + 7);
+
+        assert.equal(
+            (await gToken.balanceOf.call(accounts[5])).valueOf(),
+            0,
+            "error in acc5 token balance"
+        );
+        await gSystem.executeProposal(ballot2.address);
+        assert.equal(
+            (await gToken.balanceOf.call(accounts[5])).valueOf(),
+            200,
+            "error in token grant"
+        );
     });
 
     it("can reset the admin of other contracts", async () => {
+        await Verifier.expectError(
+            gSystem.proposeAdminReset(accounts[0], deployTime + 2, {from: accounts[2], value: 1000}),
+            Verifier.GENERAL_ERROR
+        );
 
+        const adminTest = await Ballot.new(admin, gToken.address, deployTime + 5, deployTime + 6, {from: admin});
+        await Verifier.expectError(
+            gSystem.proposeAdminReset(adminTest.address, deployTime + 2, {from: accounts[2], value: 1000}),
+            Verifier.Governance.TARGET_ADMIN_ERROR
+        );
+
+        await adminTest.setAdmin(gSystem.address, {from: admin});
+        let ballotAddress = (await gSystem.proposeAdminReset(
+            adminTest.address,
+            deployTime + 2,
+            {from: accounts[2], value: 2000}
+        )).logs[0].args.newBallot;
+        const ballot = await Ballot.at(ballotAddress);
+        await ballot.changeVoteTo(701, {from: accounts[0]});
+
+        while (Math.floor(Date.now() / 1000) < deployTime + 4);
+
+        await gSystem.executeProposal(ballot.address);
+        assert.equal(
+            (await adminTest.admin.call()),
+            admin,
+            "invalid admin"
+        );
     });
 
     it("can start a new token sale", async () => {
+        const arg = await ArgToken.new(admin, gSystem.address);
+        const fiat = await GovernanceToken.new(accounts[6]);
+        await arg.registerProfitSource(fiat.address, {from: admin});
+        const normalConfig = {
+            name: "test ICO",
+            symbol: "TST_ICO",
+            redemptionDuration: 3600 * 24 * 15,
+            minFiatForActivation: 1000,
+            totalSupply: 5e14,
+            redemptionRatio: {a: 80, b: 100},
+            price: {a: 1, b: 10000},
+            fiatTokenContract: fiat.address,
+            originalToken: arg.address
+        };
+
+        const invalidPrice = {...normalConfig};
+        invalidPrice.price = {a: 0, b: 1000};
+        await Verifier.expectError(
+            gSystem.proposeTokenSale(invalidPrice, true, deployTime + 2, {from: accounts[2], value: 2000}),
+            Verifier.TokenSale.ZERO_PRICE_ERROR
+        );
+
+        const invalidfiat = {...normalConfig};
+        invalidfiat.fiatTokenContract = accounts[7];
+        await Verifier.expectError(
+            gSystem.proposeTokenSale(invalidfiat, false, deployTime + 2, {from: accounts[2], value: 2000}),
+            Verifier.Governance.FIAT_ERROR
+        );
+    });
+
+    it("can change its settings", async () => {
 
     });
 

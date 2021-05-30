@@ -121,6 +121,7 @@ contract GovernanceSystem is AccessControlled {
 
     function proposeTokenSale(TokenSaleConfig calldata config, bool governorIsBeneficiary, uint ballotEndTime)
     public payable returns (Ballot b) {
+        config.originalToken.increaseMintingAllowance(address(this), 0);
         address beneficiary;
         if (governorIsBeneficiary) {
             beneficiary = address(this);
@@ -128,7 +129,7 @@ contract GovernanceSystem is AccessControlled {
             beneficiary = address(governanceToken);
             require(
                 governanceToken.canControl(config.fiatTokenContract),
-                "governance token does not support config's fiatToken"
+                "governance token does not support fiatToken"
             );
         }
         b = _newBallot(ballotEndTime);
@@ -167,7 +168,7 @@ contract GovernanceSystem is AccessControlled {
 
     function proposeAdminReset(Administered target, uint ballotEndTime)
     public payable returns(Ballot b) {
-        require(target.admin() == address(this), "target's admin can not be changed");
+        require(target.admin() == address(this), "admin of target is not this contract");
         b = _newBallot(ballotEndTime);
         _saveProposal(b, _resetAdmin, abi.encode(target));
     }
@@ -218,7 +219,7 @@ contract GovernanceSystem is AccessControlled {
             return;
         }
         TokenSale newTs = new TokenSale(admin, beneficiary, tsConfig);
-        governanceToken.increaseMintingAllowance(address(newTs), tsConfig.totalSupply);
+        tsConfig.originalToken.increaseMintingAllowance(address(newTs), tsConfig.totalSupply);
         tokenSales.push(newTs);
         emit TokenSaleCreated(newTs);
     }

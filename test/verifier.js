@@ -67,6 +67,10 @@ exports.Governance = {
         "not found -- Reason given: ballot not found.",
     FEE_ERROR: "Error: Returned error: VM Exception while processing transaction: revert proposal fee was not " +
         "paid -- Reason given: proposal fee was not paid.",
+    TARGET_ADMIN_ERROR: "Error: Returned error: VM Exception while processing transaction: revert admin of target " +
+        "is not this contract -- Reason given: admin of target is not this contract.",
+    FIAT_ERROR: "Error: Returned error: VM Exception while processing transaction: revert governance token does " +
+        "not support fiatToken -- Reason given: governance token does not support fiatToken.",
 }
 
 exports.expectError = async function (promise, error) {
