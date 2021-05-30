@@ -15,7 +15,10 @@
    version="1.1"
    id="svg1047"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="coin.svg">
+   sodipodi:docname="coin.svg"
+   inkscape:export-filename="/home/aybehrouz/coin.png"
+   inkscape:export-xdpi="130"
+   inkscape:export-ydpi="130">
   <defs
      id="defs1041" />
   <sodipodi:namedview
@@ -25,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="-124.28571"
-     inkscape:cy="560"
+     inkscape:zoom="0.7"
+     inkscape:cx="412.90183"
+     inkscape:cy="551.54943"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -35,7 +38,15 @@
      inkscape:window-height="986"
      inkscape:window-x="72"
      inkscape:window-y="27"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:object-paths="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:bbox-nodes="true" />
   <metadata
      id="metadata1044">
     <rdf:RDF>
@@ -44,7 +55,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -71,51 +82,48 @@
        cy="137.49405"
        r="75" />
     <g
-       id="g2506"
-       transform="translate(5.3249312,10.641893)">
-      <g
-         id="g2514">
-        <rect
-           style="fill:#ffffff;fill-opacity:1;stroke-width:0.28444517;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
-           id="rect2416"
-           width="14.204243"
-           height="66.202477"
-           x="111.10216"
-           y="88.572639" />
-        <path
-           style="fill:#ffffff;fill-opacity:1;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
-           d="M 108.92019,88.30806 H 125.3064 L 79.797716,155.0397 H 63.411493 Z"
-           id="rect2416-3"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="ccccc" />
-        <path
-           style="fill:#ffffff;fill-opacity:1;stroke-width:0.29233146;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
-           d="M 95.756998,140.21167 125.5582,139.97914 V 155.0397 H 85.618553 Z"
-           id="rect2434"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="ccccc" />
-        <rect
-           style="fill:#ffffff;fill-opacity:1;stroke-width:0.19035791;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
-           id="rect2416-6"
-           width="6.3110695"
-           height="66.732002"
-           x="127.29501"
-           y="88.307701" />
-        <rect
-           style="fill:#000000;fill-opacity:1;stroke-width:0.33684993;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
-           id="rect2454"
-           width="48.440773"
-           height="4.75"
-           x="94.329498"
-           y="-140.9256"
-           transform="scale(1,-1)" />
-        <path
-           style="fill:#000000;fill-opacity:1;stroke-width:0.21545573;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
-           d="m 99.446006,110.91864 h 4.009064 l -15.874972,23.76079 h -4.009044 z"
-           id="rect2456"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="ccccc" />
-      </g>
+       id="g852"
+       transform="matrix(0.92594102,0,0,0.92594102,6.67805,10.153573)">
+      <rect
+         y="98.971954"
+         x="116.42709"
+         height="66.710037"
+         width="14.204243"
+         id="rect2416"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.28553349;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="rect2416-3"
+         d="m 114.24512,98.949953 h 16.38621 L 85.122647,165.68159 H 68.736424 Z"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="rect2434"
+         d="m 101.11152,150.12519 29.51981,-0.0387 v 15.5951 H 90.50261 Z"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.298177;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
+      <rect
+         y="98.949593"
+         x="132.61995"
+         height="66.732002"
+         width="6.3110695"
+         id="rect2416-6"
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.19035791;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
+      <rect
+         transform="scale(1,-1)"
+         y="-150.50917"
+         x="100.21435"
+         height="4.9731498"
+         width="48.440773"
+         id="rect2454"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.34467155;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="rect2456"
+         d="M 104.77094,121.56053 H 108.78 l -15.874971,23.76079 h -4.009044 z"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.21545573;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
     </g>
   </g>
 </svg>

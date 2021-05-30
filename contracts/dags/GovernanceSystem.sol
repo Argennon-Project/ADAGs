@@ -13,7 +13,7 @@ uint constant MIN_LOCK_DURATION = 120 days;
 uint constant MAX_LOCK_DURATION = 730 days;
 uint constant MIN_MAJORITY_PERCENT = 55;
 uint constant MAX_MAJORITY_PERCENT = 80;
-uint constant MAX_PROPOSAL_FEE = 2e18;
+uint constant MAX_PROPOSAL_FEE = 5e17;
 
 
 // this struct is only 128 bit and we hope that it is packed in a single 256 bit storage slot
@@ -60,12 +60,12 @@ contract GovernanceSystem is AccessControlled {
 
     event DecodedCreateTokenSale(TokenSaleConfig tsConfig, address beneficiary);
     event DecodedApproveMinter(address minter, uint amount);
+    event DecodedMint(address recipient, uint amount);
     event DecodedGovernanceChange(address newGovernanceSystem);
     event DecodedGrant(address payable recipient, uint amount, IERC20 token);
     event DecodedChangeOfSettings(address payable newAdmin, VotingConfig newVotingConfig);
     event DecodedAdminReset(Administered target, address payable admin);
 
-    event MinterApproved(address minter, uint amount);
     event TokenSaleCreated(TokenSale newTs);
     event GovernanceSystemChanged(address newGovernanceSystem);
     event GrantGiven(address payable recipient, uint amount, IERC20 token);
@@ -108,7 +108,7 @@ contract GovernanceSystem is AccessControlled {
 
     // any one may call this function
     function executeProposal(Ballot ballot) authenticate(ballot) onlyAfter(ballot.endTime()) public {
-        // We first set the active flag of the proposal to false to make sure reentracy will not cause a proposal to be
+        // We first set the active flag of the proposal to false to make sure reentrancy will not cause a proposal to be
         // applied multiple times and the authenticate(ballot) modifier will revert.
         proposals[ballot].active = false;
         if (_isMajority(ballot.totalWeight())) {
@@ -128,7 +128,7 @@ contract GovernanceSystem is AccessControlled {
             beneficiary = address(governanceToken);
             require(
                 governanceToken.canControl(config.fiatTokenContract),
-                "governance token does not support config's fiat token"
+                "governance token does not support config's fiatToken"
             );
         }
         b = _newBallot(ballotEndTime);
@@ -158,8 +158,16 @@ contract GovernanceSystem is AccessControlled {
     }
 
 
+    function proposeMinting(address recipient, uint amount, uint ballotEndTime)
+    public payable returns (Ballot b) {
+        b = _newBallot(ballotEndTime);
+        _saveProposal(b, _mint, abi.encode(recipient, amount));
+    }
+
+
     function proposeAdminReset(Administered target, uint ballotEndTime)
     public payable returns(Ballot b) {
+        require(target.admin() == address(this), "target's admin can not be changed");
         b = _newBallot(ballotEndTime);
         _saveProposal(b, _resetAdmin, abi.encode(target));
     }
@@ -224,7 +232,17 @@ contract GovernanceSystem is AccessControlled {
         }
         // the new amount will be added to the previous allowance amount
         governanceToken.increaseMintingAllowance(minter, amount);
-        emit MinterApproved(minter, amount);
+        // we assume `governanceToken` emits the appropriate event, so we don't emit any events here.
+    }
+
+
+    function _mint(bytes storage data, bool isForCheck) internal {
+        (address recipient, uint amount) = abi.decode(data, (address, uint));
+        if (isForCheck) {
+            emit DecodedMint(recipient, amount);
+            return;
+        }
+        governanceToken.mint(recipient, amount);
     }
     
     

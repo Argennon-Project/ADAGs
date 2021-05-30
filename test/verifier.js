@@ -21,6 +21,8 @@ exports.FINAL_SOURCES_ERROR = "Error: Returned error: VM Exception while process
     "sources are final -- Reason given: profit sources are final.";
 exports.TOO_EARLY_ERROR = "Error: Returned error: VM Exception while processing transaction: revert too early -- " +
     "Reason given: too early.";
+exports.TOO_LATE_ERROR = "Error: Returned error: VM Exception while processing transaction: revert too late -- " +
+    "Reason given: too late.";
 
 exports.ERC20 = {
     ALLOWANCE_ERROR: "Error: Returned error: VM Exception while processing transaction: revert " +
@@ -56,11 +58,15 @@ exports.Ballot = {
         "not enough -- Reason given: locked amount not enough.",
     LOCK_TOO_SHORT_ERROR: "Error: Returned error: VM Exception while processing transaction: revert lock period is " +
         "too short -- Reason given: lock period is too short.",
+    DATES_ERROR: "Error: Returned error: VM Exception while processing transaction: revert ballot dates are " +
+        "invalid -- Reason given: ballot dates are invalid.",
 }
 
 exports.Governance = {
     BALLOT_NOT_FOUND_ERROR: "Error: Returned error: VM Exception while processing transaction: revert ballot " +
         "not found -- Reason given: ballot not found.",
+    FEE_ERROR: "Error: Returned error: VM Exception while processing transaction: revert proposal fee was not " +
+        "paid -- Reason given: proposal fee was not paid.",
 }
 
 exports.expectError = async function (promise, error) {

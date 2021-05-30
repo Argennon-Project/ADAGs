@@ -17,7 +17,7 @@ contract Ballot is Administered {
 
 
     event Voted(address account, uint weight, uint total);
-    event Destroyed(Ballot b);
+    event Destroyed(Ballot ballot);
     
     
     constructor(address payable _admin, LockableToken _votingToken, uint _endTime, uint _lockTime)
