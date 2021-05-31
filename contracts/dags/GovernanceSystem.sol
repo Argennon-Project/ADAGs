@@ -10,7 +10,7 @@ import "./../utils/AccessControlled.sol";
 
 
 uint constant MIN_LOCK_DURATION = 120 days;
-uint constant MAX_LOCK_DURATION = 730 days;
+uint constant MAX_LOCK_DURATION = 540 days;
 uint constant MIN_MAJORITY_PERCENT = 55;
 uint constant MAX_MAJORITY_PERCENT = 80;
 uint constant MAX_PROPOSAL_FEE = 5e17;
@@ -122,6 +122,7 @@ contract GovernanceSystem is AccessControlled {
     function proposeTokenSale(TokenSaleConfig calldata config, bool governorIsBeneficiary, uint ballotEndTime)
     public payable returns (Ballot b) {
         // we make sure the token has `increaseMintingAllowance` function and it can be called by our contract
+        // reentrancy can not cause any problems
         config.originalToken.increaseMintingAllowance(address(this), 0);
         address beneficiary;
         if (governorIsBeneficiary) {
@@ -147,7 +148,7 @@ contract GovernanceSystem is AccessControlled {
 
     function proposeChangeOfSettings(address payable newAdmin, VotingConfig calldata newVotingConfig, uint ballotEndTime)
     public payable returns (Ballot b) {
-        require(newAdmin != address(this), "admin can't be the contract itself");
+        require(newAdmin != address(this), "admin can not be the contract itself");
         b = _newBallot(ballotEndTime);
         _saveProposal(b, _changeSettings, abi.encode(newAdmin, validate(newVotingConfig)));
     }
@@ -258,7 +259,7 @@ contract GovernanceSystem is AccessControlled {
         // if we are the admin we should change it.
         if (governanceToken.admin() == address(this)) governanceToken.setAdmin(newSystem);
         emit GovernanceSystemChanged(newSystem);
-        selfdestruct(admin);
+        selfdestruct(newSystem);
     }
 
 

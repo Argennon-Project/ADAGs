@@ -43,7 +43,7 @@ The Argennon Decentralized Autonomous Governance system (ADAGs /eɪ-dagz/) is a 
 - Changing the threshold of voting weight needed for accepting a proposal
     - can be changed between 0.55 and 0.8 of total ARG supply
 - Changing the minimum lock period required for voting
-    - can be changed between 120 and 730 days
+    - can be changed between 120 and 540 days
 - Changing the required fee for creating a proposal
     - can be changed between 0 and 0.5 BNB
 - Changing the administrator of other Argennon contracts
