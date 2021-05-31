@@ -230,14 +230,14 @@ contract("GovernanceSystem", (accounts) => {
 
         ballotAddress = (await gSystem.proposeGrant(
             accounts[5], 200, gToken.address,
-            deployTime + 7,
+            deployTime + 8,
             {from: accounts[2], value: 2000}
         )).logs[0].args.newBallot;
         const ballot2 = await Ballot.at(ballotAddress);
         await ballot2.changeVoteTo(701, {from: accounts[0]});
         await gToken.transfer(gSystem.address, 200, {from: accounts[0]});
 
-        while (Math.floor(Date.now() / 1000) < deployTime + 9);
+        while (Math.floor(Date.now() / 1000) < deployTime + 10);
 
         assert.equal(
             (await gToken.balanceOf.call(accounts[5])).valueOf(),
@@ -266,13 +266,13 @@ contract("GovernanceSystem", (accounts) => {
         await gToken.setAdmin(gSystem.address, {from: admin});
         let ballotAddress = (await gSystem.proposeAdminReset(
             gToken.address,
-            deployTime + 2,
+            deployTime + 3,
             {from: accounts[2], value: 2000}
         )).logs[0].args.newBallot;
         const ballot = await Ballot.at(ballotAddress);
         await ballot.changeVoteTo(701, {from: accounts[0]});
 
-        while (Math.floor(Date.now() / 1000) < deployTime + 4);
+        while (Math.floor(Date.now() / 1000) < deployTime + 5);
 
         assert.equal(
             (await gToken.admin.call()),
@@ -336,7 +336,7 @@ contract("GovernanceSystem", (accounts) => {
         let ballotAddress = (await gSystem.proposeTokenSale(
             normalConfig,
             true,
-            deployTime + 4,
+            deployTime + 8,
             {from: accounts[2], value: 2000}
         )).logs[0].args.newBallot;
         const ballotGs = await Ballot.at(ballotAddress);
@@ -345,13 +345,13 @@ contract("GovernanceSystem", (accounts) => {
         ballotAddress = (await gSystem.proposeTokenSale(
             normalConfig,
             false,
-            deployTime + 4,
+            deployTime + 8,
             {from: accounts[2], value: 2000}
         )).logs[0].args.newBallot;
         const ballotArg = await Ballot.at(ballotAddress);
         await ballotArg.changeVoteTo(701, {from: accounts[0]});
 
-        while (Math.floor(Date.now() / 1000) < deployTime + 6);
+        while (Math.floor(Date.now() / 1000) < deployTime + 10);
 
         await gSystem.executeProposal(ballotGs.address);
         const saleGs = await TokenSale.at(await gSystem.tokenSales.call(0));
@@ -456,13 +456,13 @@ contract("GovernanceSystem", (accounts) => {
         let ballotAddress = (await gSystem.proposeChangeOfSettings(
             accounts[4],
             config,
-            deployTime + 4,
+            deployTime + 6,
             {from: accounts[0], value: 1000}
         )).logs[0].args.newBallot;
         const ballot = await Ballot.at(ballotAddress);
         await ballot.changeVoteTo(701, {from: accounts[0]});
 
-        while (Math.floor(Date.now() / 1000) < deployTime + 6);
+        while (Math.floor(Date.now() / 1000) < deployTime + 8);
 
         await gSystem.executeProposal(ballot.address);
         Verifier.checkStruct(config, await gSystem.votingConfig.call(), "settings test");

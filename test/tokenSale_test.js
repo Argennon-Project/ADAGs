@@ -224,7 +224,7 @@ contract("TokenSale", (accounts) => {
         );
     });
 
-    it("allows users to redeem at 100% at initial phase", async () => {
+    it("allows users to redeem at 100% at the initial phase", async () => {
         await fiat.approve(cf.address, 150 * decimals, {from: accounts[0]});
         await cf.buy(1.5 * decimals * decimals, {from: accounts[0]});
 

@@ -49,11 +49,13 @@ The Argennon Decentralized Autonomous Governance system (ADAGs /eɪ-dagz/) is a 
 - Changing the administrator of other Argennon contracts
     - this operation is possible only if ADAGs is the current admin of that contract
 - Deploying a new governance system
+    - this operation can only be proposed by ADAGs admin. (*It should be noted that this will not give the admin a
+      special role, because the admin of ADAGs can be changed through a normal proposal and voting mechanism.*)
 
 ### Token Sales
 
-Several token sales may be held before the launch of the Argennon blockchain, all of them will follow a set
-of predefined rules:
+Several token sales may be held before the launch of the Argennon blockchain, all of them will follow a set of
+predefined rules:
 
 - Every token sale is conducted using a smart contract: the *TS contract*, and it has its own token: the *ICO token*.
   Users may only buy *ICO tokens* from the *TS contract*. These ICO tokens can be burnt and converted to the ARG token
@@ -71,9 +73,9 @@ of predefined rules:
       (*Actually even after this time interval, the ICO tokens are still redeemable. However, since the contract will
       allow the withdrawal of funds, the redemption price could be anything based on the amount of remaining funds.*)
 
-- When a token sale is done, the earnings of the token sale will be automatically sent to the ARG ERC20 contract
-  address and hence, it will be distributed between ARG holders, or it will be sent to the ADAGs smart contract and will
-  be used for grant programs.
+- When a token sale is done, the earnings of the token sale will be automatically sent to the ARG ERC20 contract address
+  and hence, it will be distributed between ARG holders, or it will be sent to the ADAGs smart contract and will be used
+  for grant programs.
 
 ### Token Dynamics
 
