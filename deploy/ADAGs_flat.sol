@@ -445,6 +445,7 @@ pragma solidity ^0.8.0;
 
 
 
+
 interface PossessiveContract {
     function canControl(IERC20 token) external view returns(bool);
     function setAdmin(address payable newAdmin) external;
@@ -452,17 +453,16 @@ interface PossessiveContract {
 }
 
 
-interface LockableToken {
+interface LockableToken is IERC20Metadata {
     struct LockInfo {
         uint128 amount;
         uint128 releaseTime;
     }
     function locked(address account) external returns(LockInfo memory);
-    function totalSupply() external view returns(uint256);
 }
 
 
-interface MintableToken {
+interface MintableToken is IERC20Metadata {
     function mint(address recipient, uint amount) external;
     function increaseMintingAllowance(address minter, uint amount) external;
     function setOwner(address newOwner) external;
@@ -697,8 +697,13 @@ contract TokenSale is ERC20, Administered {
         redemptionEndTime = block.timestamp + _config.redemptionDuration;
         _mint(address(this), _config.totalSupply);
     }
-    
-    
+
+
+    function decimals() public view override returns (uint8) {
+        return config.originalToken.decimals();
+    }
+
+
     function canControl(IERC20 token) public view override virtual returns (bool) {
         return token == this || token == config.fiatTokenContract; 
     }

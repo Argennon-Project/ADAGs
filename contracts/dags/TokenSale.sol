@@ -66,8 +66,13 @@ contract TokenSale is ERC20, Administered {
         redemptionEndTime = block.timestamp + _config.redemptionDuration;
         _mint(address(this), _config.totalSupply);
     }
-    
-    
+
+
+    function decimals() public view override returns (uint8) {
+        return config.originalToken.decimals();
+    }
+
+
     function canControl(IERC20 token) public view override virtual returns (bool) {
         return token == this || token == config.fiatTokenContract; 
     }

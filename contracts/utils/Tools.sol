@@ -7,11 +7,13 @@ pragma solidity ^0.8.0;
 // for truffle use these imports:
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 
 // for Remix use these imports:
 // import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 // import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+// import "@openzeppelin/contracts/token/extensions/IERC20Metadata.sol"
 
 
 interface PossessiveContract {
@@ -21,17 +23,16 @@ interface PossessiveContract {
 }
 
 
-interface LockableToken {
+interface LockableToken is IERC20Metadata {
     struct LockInfo {
         uint128 amount;
         uint128 releaseTime;
     }
     function locked(address account) external returns(LockInfo memory);
-    function totalSupply() external view returns(uint256);
 }
 
 
-interface MintableToken {
+interface MintableToken is IERC20Metadata {
     function mint(address recipient, uint amount) external;
     function increaseMintingAllowance(address minter, uint amount) external;
     function setOwner(address newOwner) external;
