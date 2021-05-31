@@ -29,6 +29,22 @@ contract("ArgennonToken", (accounts) => {
         );
     }
 
+    it("allows an account with lock to mint tokens", async () => {
+        await arg.mint(admin, 300 * decimals * decimals, {from: admin});
+        await arg.setLock(1000 * decimals * decimals, 1e15, {from: admin});
+        await Errors.expectError(
+            arg.transfer(accounts[2], 1, {from: admin}),
+            Errors.LOCKED_ERROR
+        );
+
+        await arg.mint(accounts[2], 200 * decimals * decimals, {from: admin});
+        assert.equal(
+            (await arg.balanceOf.call(accounts[2])).valueOf(),
+            200 * decimals * decimals,
+            "Error in minting"
+        );
+    });
+
     it("can handle a normal use case", async () => {
         await arg.mint(accounts[1], 300 * decimals * decimals, {from: admin});
         await arg.mint(accounts[2], 200 * decimals * decimals, {from: admin});

@@ -65,12 +65,12 @@ exports.Ballot = {
 exports.Governance = {
     BALLOT_NOT_FOUND_ERROR: "Error: Returned error: VM Exception while processing transaction: revert ballot " +
         "not found -- Reason given: ballot not found.",
-    FEE_ERROR: "Error: Returned error: VM Exception while processing transaction: revert proposal fee was not " +
-        "paid -- Reason given: proposal fee was not paid.",
-    TARGET_ADMIN_ERROR: "Error: Returned error: VM Exception while processing transaction: revert admin of target " +
-        "is not this contract -- Reason given: admin of target is not this contract.",
-    FIAT_ERROR: "Error: Returned error: VM Exception while processing transaction: revert governance token does " +
-        "not support fiatToken -- Reason given: governance token does not support fiatToken.",
+    FEE_ERROR: "Error: Returned error: VM Exception while processing transaction: revert fee was not " +
+        "paid -- Reason given: fee was not paid.",
+    TARGET_ADMIN_ERROR: "Error: Returned error: VM Exception while processing transaction: revert can't set " +
+        "target's admin -- Reason given: can't set target's admin.",
+    FIAT_ERROR: "Error: Returned error: VM Exception while processing transaction: revert fiatToken not supported " +
+        "-- Reason given: fiatToken not supported.",
     INVALID_ADMIN_ERROR: "Error: Returned error: VM Exception while processing transaction: revert admin can " +
         "not be the contract itself -- Reason given: admin can not be the contract itself.",
     HIGH_FEE_ERROR: "Error: Returned error: VM Exception while processing transaction: revert proposal fee is too " +

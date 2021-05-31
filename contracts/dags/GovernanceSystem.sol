@@ -121,16 +121,13 @@ contract GovernanceSystem is AccessControlled {
 
     function proposeTokenSale(TokenSaleConfig calldata config, bool governorIsBeneficiary, uint ballotEndTime)
     public payable returns (Ballot b) {
-        // we make sure the token has `increaseMintingAllowance` function and it can be called by our contract
-        // reentrancy can not cause any problems
-        config.originalToken.increaseMintingAllowance(address(this), 0);
         address beneficiary;
         if (governorIsBeneficiary) {
             beneficiary = address(this);
         } else {
             require(
                 governanceToken.canControl(config.fiatTokenContract),
-                "governance token does not support fiatToken"
+                "fiatToken not supported"
             );
             beneficiary = address(governanceToken);
         }
@@ -170,7 +167,7 @@ contract GovernanceSystem is AccessControlled {
 
     function proposeAdminReset(Administered target, uint ballotEndTime)
     public payable returns(Ballot b) {
-        require(target.admin() == address(this), "admin of target is not this contract");
+        require(target.admin() == address(this), "can't set target's admin");
         b = _newBallot(ballotEndTime);
         _saveProposal(b, _resetAdmin, abi.encode(target));
     }
@@ -206,7 +203,7 @@ contract GovernanceSystem is AccessControlled {
     
    
     function _newBallot(uint ballotEndTime) internal returns(Ballot b) {
-        require(msg.value >= votingConfig.proposalFee, "proposal fee was not paid");
+        require(msg.value >= votingConfig.proposalFee, "fee was not paid");
         // ballot contract will do checks for times.
         uint lockTime = ballotEndTime + votingConfig.lockDuration;
         b = new Ballot(admin, governanceToken, ballotEndTime, lockTime);

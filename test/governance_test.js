@@ -144,13 +144,13 @@ contract("GovernanceSystem", (accounts) => {
     it("can mint governance token", async () => {
         let ballotAddress = (await gSystem.proposeMinting(
             accounts[5], 100,
-            deployTime + 2,
+            deployTime + 3,
             {from: accounts[2], value: 2000}
         )).logs[0].args.newBallot;
         const ballot = await Ballot.at(ballotAddress);
         await ballot.changeVoteTo(701, {from: accounts[0]});
 
-        while (Math.floor(Date.now() / 1000) < deployTime + 4);
+        while (Math.floor(Date.now() / 1000) < deployTime + 5);
 
         assert.equal(
             (await gToken.balanceOf.call(accounts[5])).valueOf(),
@@ -168,13 +168,13 @@ contract("GovernanceSystem", (accounts) => {
     it("can give mint allowance", async () => {
         let ballotAddress = (await gSystem.proposeMintApproval(
             accounts[5], 200,
-            deployTime + 2,
+            deployTime + 3,
             {from: accounts[2], value: 2000}
         )).logs[0].args.newBallot;
         const ballot = await Ballot.at(ballotAddress);
         await ballot.changeVoteTo(701, {from: accounts[0]});
 
-        while (Math.floor(Date.now() / 1000) < deployTime + 4);
+        while (Math.floor(Date.now() / 1000) < deployTime + 5);
 
         assert.equal(
             (await gToken.mintingAllowances.call(accounts[5])).valueOf(),
@@ -319,19 +319,6 @@ contract("GovernanceSystem", (accounts) => {
             Verifier.Governance.FIAT_ERROR
         );
         await gSystem.proposeTokenSale(invalidFiat, true, deployTime + 6, {from: accounts[2], value: 2000});
-
-        const invalidOriginal = {...normalConfig};
-        invalidOriginal.originalToken = accounts[7];
-        await Verifier.expectError(
-            gSystem.proposeTokenSale(invalidOriginal, false, deployTime + 6, {from: accounts[2], value: 2000}),
-            Verifier.GENERAL_ERROR
-        );
-
-        invalidOriginal.originalToken = (await ArgToken.new(admin, admin)).address;
-        await Verifier.expectError(
-            gSystem.proposeTokenSale(invalidOriginal, false, deployTime + 6, {from: accounts[2], value: 2000}),
-            Verifier.NOT_AUTHORIZED_ERROR
-        );
 
         let ballotAddress = (await gSystem.proposeTokenSale(
             normalConfig,
