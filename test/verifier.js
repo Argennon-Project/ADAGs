@@ -71,6 +71,14 @@ exports.Governance = {
         "is not this contract -- Reason given: admin of target is not this contract.",
     FIAT_ERROR: "Error: Returned error: VM Exception while processing transaction: revert governance token does " +
         "not support fiatToken -- Reason given: governance token does not support fiatToken.",
+    INVALID_ADMIN_ERROR: "Error: Returned error: VM Exception while processing transaction: revert admin can " +
+        "not be the contract itself -- Reason given: admin can not be the contract itself.",
+    HIGH_FEE_ERROR: "Error: Returned error: VM Exception while processing transaction: revert proposal fee is too " +
+        "high -- Reason given: proposal fee is too high.",
+    LOCK_DURATION_ERROR: "Error: Returned error: VM Exception while processing transaction: revert invalid lock " +
+        "duration -- Reason given: invalid lock duration.",
+    MAJORITY_PERCENT_ERROR: "Error: Returned error: VM Exception while processing transaction: revert invalid " +
+        "majority percent -- Reason given: invalid majority percent.",
 }
 
 exports.expectError = async function (promise, error) {

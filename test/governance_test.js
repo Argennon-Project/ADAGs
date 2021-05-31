@@ -209,13 +209,13 @@ contract("GovernanceSystem", (accounts) => {
     it("can give grants", async () => {
         let ballotAddress = (await gSystem.proposeGrant(
             accounts[5], 15000, "0x0000000000000000000000000000000000000000",
-            deployTime + 2,
+            deployTime + 3,
             {from: accounts[2], value: 2000}
         )).logs[0].args.newBallot;
         const ballot = await Ballot.at(ballotAddress);
         await ballot.changeVoteTo(701, {from: accounts[0]});
 
-        while (Math.floor(Date.now() / 1000) < deployTime + 4);
+        while (Math.floor(Date.now() / 1000) < deployTime + 5);
 
         await gSystem.send(15000);
 
@@ -230,14 +230,14 @@ contract("GovernanceSystem", (accounts) => {
 
         ballotAddress = (await gSystem.proposeGrant(
             accounts[5], 200, gToken.address,
-            deployTime + 5,
+            deployTime + 7,
             {from: accounts[2], value: 2000}
         )).logs[0].args.newBallot;
         const ballot2 = await Ballot.at(ballotAddress);
         await ballot2.changeVoteTo(701, {from: accounts[0]});
         await gToken.transfer(gSystem.address, 200, {from: accounts[0]});
 
-        while (Math.floor(Date.now() / 1000) < deployTime + 7);
+        while (Math.floor(Date.now() / 1000) < deployTime + 9);
 
         assert.equal(
             (await gToken.balanceOf.call(accounts[5])).valueOf(),
@@ -308,34 +308,35 @@ contract("GovernanceSystem", (accounts) => {
         const invalidPrice = {...normalConfig};
         invalidPrice.price = {a: 0, b: 1000};
         await Verifier.expectError(
-            gSystem.proposeTokenSale(invalidPrice, true, deployTime + 2, {from: accounts[2], value: 2000}),
+            gSystem.proposeTokenSale(invalidPrice, true, deployTime + 6, {from: accounts[2], value: 2000}),
             Verifier.TokenSale.ZERO_PRICE_ERROR
         );
 
         const invalidFiat = {...normalConfig};
         invalidFiat.fiatTokenContract = accounts[7];
         await Verifier.expectError(
-            gSystem.proposeTokenSale(invalidFiat, false, deployTime + 2, {from: accounts[2], value: 2000}),
+            gSystem.proposeTokenSale(invalidFiat, false, deployTime + 6, {from: accounts[2], value: 2000}),
             Verifier.Governance.FIAT_ERROR
         );
+        await gSystem.proposeTokenSale(invalidFiat, true, deployTime + 6, {from: accounts[2], value: 2000});
 
         const invalidOriginal = {...normalConfig};
         invalidOriginal.originalToken = accounts[7];
         await Verifier.expectError(
-            gSystem.proposeTokenSale(invalidOriginal, false, deployTime + 2, {from: accounts[2], value: 2000}),
+            gSystem.proposeTokenSale(invalidOriginal, false, deployTime + 6, {from: accounts[2], value: 2000}),
             Verifier.GENERAL_ERROR
         );
 
         invalidOriginal.originalToken = (await ArgToken.new(admin, admin)).address;
         await Verifier.expectError(
-            gSystem.proposeTokenSale(invalidOriginal, false, deployTime + 2, {from: accounts[2], value: 2000}),
+            gSystem.proposeTokenSale(invalidOriginal, false, deployTime + 6, {from: accounts[2], value: 2000}),
             Verifier.NOT_AUTHORIZED_ERROR
         );
 
         let ballotAddress = (await gSystem.proposeTokenSale(
             normalConfig,
             true,
-            deployTime + 3,
+            deployTime + 4,
             {from: accounts[2], value: 2000}
         )).logs[0].args.newBallot;
         const ballotGs = await Ballot.at(ballotAddress);
@@ -350,7 +351,7 @@ contract("GovernanceSystem", (accounts) => {
         const ballotArg = await Ballot.at(ballotAddress);
         await ballotArg.changeVoteTo(701, {from: accounts[0]});
 
-        while (Math.floor(Date.now() / 1000) < deployTime + 5);
+        while (Math.floor(Date.now() / 1000) < deployTime + 6);
 
         await gSystem.executeProposal(ballotGs.address);
         const saleGs = await TokenSale.at(await gSystem.tokenSales.call(0));
@@ -382,12 +383,155 @@ contract("GovernanceSystem", (accounts) => {
     });
 
     it("can change its settings", async () => {
+        await Verifier.expectError(
+            gSystem.proposeChangeOfSettings(gSystem.address,
+                {
+                    proposalFee: 0,
+                    lockDuration: 3600 * 24 * 120,
+                    majorityPercent: 60
+                },
+                deployTime + 5, {from: accounts[0], value: 1000}),
+            Verifier.Governance.INVALID_ADMIN_ERROR
+        );
 
+        await Verifier.expectError(
+            gSystem.proposeChangeOfSettings(accounts[1],
+                {
+                    proposalFee: 10n ** 18n,
+                    lockDuration: 3600 * 24 * 120,
+                    majorityPercent: 60
+                },
+                deployTime + 5, {from: accounts[0], value: 1000}),
+            Verifier.Governance.HIGH_FEE_ERROR
+        );
+
+        await Verifier.expectError(
+            gSystem.proposeChangeOfSettings(accounts[1],
+                {
+                    proposalFee: 0,
+                    lockDuration: 3600 * 24 * 110,
+                    majorityPercent: 60
+                },
+                deployTime + 5, {from: accounts[0], value: 1000}),
+            Verifier.Governance.LOCK_DURATION_ERROR
+        );
+        await Verifier.expectError(
+            gSystem.proposeChangeOfSettings(accounts[1],
+                {
+                    proposalFee: 0,
+                    lockDuration: 3600 * 24 * 541,
+                    majorityPercent: 60
+                },
+                deployTime + 5, {from: accounts[0], value: 1000}),
+            Verifier.Governance.LOCK_DURATION_ERROR
+        );
+
+        await Verifier.expectError(
+            gSystem.proposeChangeOfSettings(accounts[1],
+                {
+                    proposalFee: 0,
+                    lockDuration: 3600 * 24 * 541,
+                    majorityPercent: 54
+                },
+                deployTime + 5, {from: accounts[0], value: 1000}),
+            Verifier.Governance.MAJORITY_PERCENT_ERROR
+        );
+        await Verifier.expectError(
+            gSystem.proposeChangeOfSettings(accounts[1],
+                {
+                    proposalFee: 0,
+                    lockDuration: 3600 * 24 * 541,
+                    majorityPercent: 81
+                },
+                deployTime + 5, {from: accounts[0], value: 1000}),
+            Verifier.Governance.MAJORITY_PERCENT_ERROR
+        );
+
+        const config = {
+            proposalFee: 0,
+            lockDuration:  3600 * 24 * 540,
+            majorityPercent: 55
+        };
+
+        let ballotAddress = (await gSystem.proposeChangeOfSettings(
+            accounts[4],
+            config,
+            deployTime + 4,
+            {from: accounts[0], value: 1000}
+        )).logs[0].args.newBallot;
+        const ballot = await Ballot.at(ballotAddress);
+        await ballot.changeVoteTo(701, {from: accounts[0]});
+
+        while (Math.floor(Date.now() / 1000) < deployTime + 6);
+
+        await gSystem.executeProposal(ballot.address);
+        Verifier.checkStruct(config, await gSystem.votingConfig.call(), "settings test");
+        assert.equal(
+            (await gSystem.admin.call()),
+            accounts[4],
+            "invalid admin"
+        );
     });
 
     it("can retire itself", async () => {
+        await Verifier.expectError(
+            gSystem.proposeNewGovernor(accounts[3], deployTime + 3, {from: accounts[0], value: 55000}),
+            Verifier.NOT_AUTHORIZED_ERROR
+        );
 
+        let ballotAddress = (await gSystem.proposeNewGovernor(
+            accounts[3],
+            deployTime + 3,
+            {from: admin, value: 55000}
+        )).logs[0].args.newBallot;
+        const ballot = await Ballot.at(ballotAddress);
+        await ballot.changeVoteTo(701, {from: accounts[0]});
+
+        while (Math.floor(Date.now() / 1000) < deployTime + 5);
+
+        const balanceBefore = BigInt(await web3.eth.getBalance(accounts[3]));
+        await gSystem.executeProposal(ballot.address);
+        const balanceAfter = BigInt(await web3.eth.getBalance(accounts[3]));
+        assert.equal(
+            balanceAfter - balanceBefore,
+            55000,
+            "error in new system balance"
+        );
+        assert.equal(
+            (await gToken.owner.call()),
+            accounts[3],
+            "invalid owner"
+        );
+        assert.equal(
+            (await gToken.admin.call()),
+            admin,
+            "invalid admin"
+        );
     });
 
+    it("can retire itself and change admin", async () => {
+        let ballotAddress = (await gSystem.proposeNewGovernor(
+            accounts[3],
+            deployTime + 3,
+            {from: admin, value: 5000}
+        )).logs[0].args.newBallot;
+        const ballot = await Ballot.at(ballotAddress);
+        await ballot.changeVoteTo(701, {from: accounts[0]});
 
+        while (Math.floor(Date.now() / 1000) < deployTime + 5);
+
+        await gToken.setAdmin(gSystem.address, {from: admin});
+        await gSystem.executeProposal(ballot.address);
+
+        assert.equal(
+            (await gToken.owner.call()),
+            accounts[3],
+            "invalid owner"
+        );
+        assert.equal(
+            (await gToken.admin.call()),
+            accounts[3],
+            "invalid admin"
+        );
+    });
 });

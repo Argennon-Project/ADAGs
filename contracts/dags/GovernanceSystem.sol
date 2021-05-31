@@ -176,10 +176,10 @@ contract GovernanceSystem is AccessControlled {
     }
 
     
-    function proposeRetirement(address payable newSystem, uint ballotEndTime)
+    function proposeNewGovernor(address payable newGovernor, uint ballotEndTime) onlyBy(admin)
     public payable returns (Ballot b) {
         b = _newBallot(ballotEndTime);
-        _saveProposal(b, _retire, abi.encode(newSystem));
+        _saveProposal(b, _retire, abi.encode(newGovernor));
     }
 
 
