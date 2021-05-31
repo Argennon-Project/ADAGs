@@ -55,6 +55,7 @@ abstract contract LockableERC20 is ERC20 {
      * @param releaseTime is the lock's release time. After this time the lock will be deactivated.
      */
     function setLock(uint128 threshold, uint128 releaseTime) public {
+        assert(msg.sender != address(0));
         // we do not check the user balance and let the user increase his lock threshold beyond his balance.
         // this will enable use cases that an account could act like a timed locked smart contract.
         _updateLock(msg.sender);
