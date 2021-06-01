@@ -1,6 +1,6 @@
-## The Argennon Decentralized Autonomous Governance <br>system (ADAGs /eɪ-dagz/)
+## The Argennon Project
 
-Argennon (*the classical pronunciation should be used:* /arˈɡen.non/) is a new innovative blockchain and smart contract
+Argennon (*the classical pronunciation should be used:* /ɑrˈɡen.non/) is a new innovative blockchain and smart contract
 platform which tries to solve many shortcomings of existing platforms. The Argennon Virtual Machine is designed to be
 secure and efficient. Security issues such as reentrancy, complexities of integer arithmetic errors, and authorization
 problems do not exist for Argennon programmers. The Argennon Virtual Machine is scalable and very efficient at data
@@ -18,9 +18,9 @@ Until the launch of the Argennon mainnet, an ERC20 token and a governance system
 Chain in order to represent investors' share in the project and giving them the opportunity to determine the project
 path.
 
-### The Argennon ERC20 token
+### The Argennon ERC20 Token
 
-The Argennon token (ARG) is an ERC20 token intended to represent an investor's share in the Argennon project. After the
+The Argennon token (ARG /ɑrɡ/) is an ERC20 token intended to represent an investor's share in the Argennon project. After the
 launch of the Argennon blockchain, the ARG ERC20 token will be convertible in 1:1 ratio to the main currency of the
 Argennon blockchain. Meanwhile, the ARG ERC20 token will act as a governance token:
 
