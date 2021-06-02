@@ -54,7 +54,6 @@ contract GovernanceSystem is AccessControlled {
     address payable public admin;
     VotingConfig public votingConfig;
     LockableMintable public governanceToken;
-    TokenSale[] public tokenSales;
     mapping(Ballot => GovernanceAction) internal proposals;
 
 
@@ -66,14 +65,14 @@ contract GovernanceSystem is AccessControlled {
     event DecodedChangeOfSettings(address payable newAdmin, VotingConfig newVotingConfig);
     event DecodedAdminReset(Administered target, address payable admin);
 
-    event TokenSaleCreated(TokenSale newTs);
     event GovernanceSystemChanged(address newGovernanceSystem);
     event GrantGiven(address payable recipient, uint amount, IERC20 token);
     event SettingsChanged(address payable newAdmin, VotingConfig newVotingConfig);
     event AdminReset(Administered target, address payable admin);
 
     event PaymentReceived(address sender, uint amount);
-    event BallotCreated(Ballot newBallot, uint endTime);
+    event BallotCreated(Ballot newBallot, bytes constructorArguments);
+    event TokenSaleCreated(TokenSale newTs, bytes constructorArguments);
 
 
     // authenticates the given ballot to make sure it's our ballot.
@@ -207,7 +206,7 @@ contract GovernanceSystem is AccessControlled {
         // ballot contract will do checks for times.
         uint lockTime = ballotEndTime + votingConfig.lockDuration;
         b = new Ballot(admin, governanceToken, ballotEndTime, lockTime);
-        emit BallotCreated(b, ballotEndTime);
+        emit BallotCreated(b, abi.encode(admin, governanceToken, ballotEndTime, lockTime));
     }
 
 
@@ -219,8 +218,7 @@ contract GovernanceSystem is AccessControlled {
         }
         TokenSale newTs = new TokenSale(admin, beneficiary, tsConfig);
         tsConfig.originalToken.increaseMintingAllowance(address(newTs), tsConfig.totalSupply);
-        tokenSales.push(newTs);
-        emit TokenSaleCreated(newTs);
+        emit TokenSaleCreated(newTs, abi.encode(admin, beneficiary, tsConfig));
     }
 
 

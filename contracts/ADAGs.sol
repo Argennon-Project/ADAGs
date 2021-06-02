@@ -13,6 +13,9 @@ uint8 constant INITIAL_MAJORITY_PERCENT = 66;
 
 
 contract ADAGs is GovernanceSystem {
+    bool private initialCrowdfundingCreated;
+
+
     constructor(address payable _admin, LockableMintable _argennonToken)
     GovernanceSystem(
         _admin,
@@ -26,10 +29,10 @@ contract ADAGs is GovernanceSystem {
 
 
     function createInitialCrowdfunding(TokenSaleConfig calldata config) onlyBy(admin) public {
-        require(tokenSales.length == 0, "already created");
+        require(!initialCrowdfundingCreated, "already created");
+        initialCrowdfundingCreated = true;
         TokenSale newTs = new TokenSale(admin, address(governanceToken), config);
         governanceToken.increaseMintingAllowance(address(newTs), config.totalSupply);
-        tokenSales.push(newTs);
-        emit TokenSaleCreated(newTs);
+        emit TokenSaleCreated(newTs, abi.encode(admin, address(governanceToken), config));
     }
 }

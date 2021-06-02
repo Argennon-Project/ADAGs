@@ -340,8 +340,8 @@ contract("GovernanceSystem", (accounts) => {
 
         while (Math.floor(Date.now() / 1000) < deployTime + 10);
 
-        await gSystem.executeProposal(ballotGs.address);
-        const saleGs = await TokenSale.at(await gSystem.tokenSales.call(0));
+        let newTsAddress = (await gSystem.executeProposal(ballotGs.address)).logs[0].args.newTs;
+        const saleGs = await TokenSale.at(newTsAddress);
         Verifier.checkStruct(normalConfig, await saleGs.config.call(), "test GS");
         assert.equal(
             (await saleGs.beneficiary.call()),
@@ -354,8 +354,8 @@ contract("GovernanceSystem", (accounts) => {
             "error in GS mint allowance"
         );
 
-        await gSystem.executeProposal(ballotArg.address);
-        const saleArg = await TokenSale.at(await gSystem.tokenSales.call(1));
+        newTsAddress = (await gSystem.executeProposal(ballotArg.address)).logs[0].args.newTs;
+        const saleArg = await TokenSale.at(newTsAddress);
         Verifier.checkStruct(normalConfig, await saleArg.config.call(), "test ARG");
         assert.equal(
             (await saleArg.beneficiary.call()),

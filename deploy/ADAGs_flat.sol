@@ -849,7 +849,6 @@ contract GovernanceSystem is AccessControlled {
     address payable public admin;
     VotingConfig public votingConfig;
     LockableMintable public governanceToken;
-    TokenSale[] public tokenSales;
     mapping(Ballot => GovernanceAction) internal proposals;
 
 
@@ -861,14 +860,14 @@ contract GovernanceSystem is AccessControlled {
     event DecodedChangeOfSettings(address payable newAdmin, VotingConfig newVotingConfig);
     event DecodedAdminReset(Administered target, address payable admin);
 
-    event TokenSaleCreated(TokenSale newTs);
     event GovernanceSystemChanged(address newGovernanceSystem);
     event GrantGiven(address payable recipient, uint amount, IERC20 token);
     event SettingsChanged(address payable newAdmin, VotingConfig newVotingConfig);
     event AdminReset(Administered target, address payable admin);
 
     event PaymentReceived(address sender, uint amount);
-    event BallotCreated(Ballot newBallot, uint endTime);
+    event BallotCreated(Ballot newBallot, bytes constructorArguments);
+    event TokenSaleCreated(TokenSale newTs, bytes constructorArguments);
 
 
     modifier authenticate(Ballot b) {require(proposals[b].active, "ballot not found"); _;}
@@ -996,7 +995,7 @@ contract GovernanceSystem is AccessControlled {
         require(msg.value >= votingConfig.proposalFee, "fee was not paid");
         uint lockTime = ballotEndTime + votingConfig.lockDuration;
         b = new Ballot(admin, governanceToken, ballotEndTime, lockTime);
-        emit BallotCreated(b, ballotEndTime);
+        emit BallotCreated(b, abi.encode(admin, governanceToken, ballotEndTime, lockTime));
     }
 
 
@@ -1008,8 +1007,7 @@ contract GovernanceSystem is AccessControlled {
         }
         TokenSale newTs = new TokenSale(admin, beneficiary, tsConfig);
         tsConfig.originalToken.increaseMintingAllowance(address(newTs), tsConfig.totalSupply);
-        tokenSales.push(newTs);
-        emit TokenSaleCreated(newTs);
+        emit TokenSaleCreated(newTs, abi.encode(admin, beneficiary, tsConfig));
     }
 
 
@@ -1097,6 +1095,9 @@ uint8 constant INITIAL_MAJORITY_PERCENT = 66;
 
 
 contract ADAGs is GovernanceSystem {
+    bool private initialCrowdfundingCreated;
+
+
     constructor(address payable _admin, LockableMintable _argennonToken)
     GovernanceSystem(
         _admin,
@@ -1110,10 +1111,10 @@ contract ADAGs is GovernanceSystem {
 
 
     function createInitialCrowdfunding(TokenSaleConfig calldata config) onlyBy(admin) public {
-        require(tokenSales.length == 0, "already created");
+        require(!initialCrowdfundingCreated, "already created");
+        initialCrowdfundingCreated = true;
         TokenSale newTs = new TokenSale(admin, address(governanceToken), config);
         governanceToken.increaseMintingAllowance(address(newTs), config.totalSupply);
-        tokenSales.push(newTs);
-        emit TokenSaleCreated(newTs);
+        emit TokenSaleCreated(newTs, abi.encode(admin, address(governanceToken), config));
     }
 }
