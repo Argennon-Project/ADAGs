@@ -12,7 +12,7 @@ Thanks to the efficient design of the AVM, participation in the Argennon consens
 computational resources, and normal personal computers with limited computational power can actively participate in the
 Argennon consensus protocol. This property makes the Argennon blockchain a truly decentralized blockchain. An initial
 draft of the Argennon white paper could be
-accessed [here](https://raw.githubusercontent.com/aybehrouz/AVM/main/pdf/A.pdf).
+accessed [here](https://github.com/aybehrouz/AVM/blob/main/pdf/A.pdf).
 
 Until the launch of the Argennon mainnet, an ERC20 token and a governance system will be deployed on the Binance Smart
 Chain in order to represent investors' share in the project and giving them the opportunity to determine the project

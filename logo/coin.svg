@@ -16,11 +16,23 @@
    id="svg1047"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
    sodipodi:docname="coin.svg"
-   inkscape:export-filename="/home/aybehrouz/coin.png"
+   inkscape:export-filename="/home/aybehrouz/coin2.png"
    inkscape:export-xdpi="130"
-   inkscape:export-ydpi="130">
+   inkscape:export-ydpi="130"
+   enable-background="new">
   <defs
-     id="defs1041" />
+     id="defs1041">
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter830">
+      <feBlend
+         inkscape:collect="always"
+         mode="multiply"
+         in2="BackgroundImage"
+         id="feBlend832" />
+    </filter>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -29,8 +41,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="412.90183"
-     inkscape:cy="551.54943"
+     inkscape:cx="637.40053"
+     inkscape:cy="578.41143"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -62,35 +74,25 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     style="filter:url(#filter830);opacity:1">
     <circle
        style="fill:#000000;stroke-width:0.26458332"
        id="path28"
        cx="109.6131"
        cy="137.49405"
        r="81" />
-    <circle
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
-       id="path2516"
-       cx="109.6131"
-       cy="137.49405"
-       r="78" />
-    <circle
-       style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:0.26499999;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill"
-       id="path2722"
-       cx="109.6131"
-       cy="137.49405"
-       r="75" />
     <g
        id="g852"
-       transform="matrix(0.92594102,0,0,0.92594102,6.67805,10.153573)">
+       transform="matrix(0.96347917,0,0,0.96347917,1.4842122,4.0785564)"
+       style="">
       <rect
-         y="98.971954"
-         x="116.42709"
+         y="98.949951"
+         x="116.51582"
          height="66.710037"
-         width="14.204243"
+         width="14.11551"
          id="rect2416"
-         style="fill:#ffffff;fill-opacity:1;stroke-width:0.28553349;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
+         style="fill:#ffffff;fill-opacity:1;stroke-width:0.28464025;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
       <path
          sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0"
@@ -101,29 +103,29 @@
          sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0"
          id="rect2434"
-         d="m 101.11152,150.12519 29.51981,-0.0387 v 15.5951 H 90.50261 Z"
+         d="m 103.22124,150.12569 27.41009,-0.0392 v 15.5951 l -38.018986,5e-4 z"
          style="fill:#ffffff;fill-opacity:1;stroke-width:0.298177;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
       <rect
          y="98.949593"
-         x="132.61995"
+         x="133.16917"
          height="66.732002"
          width="6.3110695"
          id="rect2416-6"
          style="fill:#ffffff;fill-opacity:1;stroke-width:0.19035791;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
       <rect
          transform="scale(1,-1)"
-         y="-150.50917"
-         x="100.21435"
-         height="4.9731498"
+         y="-151.39207"
+         x="99.665123"
+         height="6.4350119"
          width="48.440773"
          id="rect2454"
-         style="fill:#000000;fill-opacity:1;stroke-width:0.34467155;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
+         style="fill:#000000;fill-opacity:1;stroke-width:0.39207065;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
       <path
          sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0"
          id="rect2456"
-         d="M 104.77094,121.56053 H 108.78 l -15.874971,23.76079 h -4.009044 z"
-         style="fill:#000000;fill-opacity:1;stroke-width:0.21545573;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
+         d="m 104.48762,121.67786 h 3.8562 l -15.819418,23.41648 h -3.856183 z"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.20977172;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers stroke fill" />
     </g>
   </g>
 </svg>
