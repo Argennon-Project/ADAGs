@@ -10,9 +10,10 @@ taking advantage of a smart data clustering algorithm.
 On the other hand, the Argennon blockchain uses a truly decentralized and secure proof of stake consensus protocol.
 Thanks to the efficient design of the AVM, participation in the Argennon consensus protocol does not require huge
 computational resources, and normal personal computers with limited computational power can actively participate in the
-Argennon consensus protocol. This property makes the Argennon blockchain a truly decentralized blockchain. An initial
-draft of the Argennon white paper could be
-accessed [here](https://github.com/aybehrouz/AVM/blob/main/pdf/A.pdf).
+Argennon consensus protocol. This property makes the Argennon blockchain a truly decentralized and democratic
+blockchain. An initial draft of the Argennon white paper can be
+accessed [here](https://github.com/aybehrouz/AVM/blob/main/pdf/A.pdf), and a brief overview of Argennon's properties
+can be seen [here](https://github.com/aybehrouz/AVM#properties-overview).
 
 Until the launch of the Argennon mainnet, an ERC20 token and a governance system will be deployed on the Binance Smart
 Chain in order to represent investors' share in the project and giving them the opportunity to determine the project
@@ -77,7 +78,7 @@ predefined rules:
   and hence, it will be distributed between ARG holders, or it will be sent to the ADAGs smart contract and will be used
   for grant programs.
 
-### Token Dynamics
+### Tokenomics
 
 The final total supply of the Argennon currency will be 100 billion. The ARG ERC20 token on the other hand, will have a
 50 billion cap. Consequently, 50 billion Argennons will be minted only after the launch of the Argennon blockchain.
@@ -86,11 +87,15 @@ These Argennons will be mainly used as incentive rewards.
 The minting of the ARG ERC20 token will follow these rules:
 
 - **5 billion:** founder's share.
-    - 95% of the founder's share will be locked by the ARG ERC20 contract, and it can not be
-      liquidated into the market for the first 2 years.
-- **5 billion:** founder's initial minting allowance which will be granted to early contributors. **All these grants are
-  documented [here](https://github.com/aybehrouz/ADAGs/blob/main/grants.md).**
-- **1 billion:** first token sale which will be sold for **at least** 100,000$.
+    - 95% of the founder's share will be locked by the ARG ERC20 contract, and it can not be liquidated into the market
+      for the first **two years**.
+- **5 billion:** founder's initial minting allowance which will be used for giving ARG grants to early contributors.
+    - These grants can only be given to people who have helped the development and growth of the Argennon ecosystem.
+    - These grants can not be given in exchange for money.
+    - Before the launch of the Argennon mainnet, a grant more than 5,000,000 ARGs can be given to a single person
+      only if the amount is locked for at least **one year**.
+    - All these grants are documented [here](https://www.argennon.com/grants.html).
+- **1 billion:** first token sale which will be sold for **at least** 150,000$.
 
 The minting of ARG ERC20 tokens will be decided by the ADAGs, but it has to be limited by the maximum supply defined by
 the ARG ERC20 contract. This maximum allowed supply is a function of time. For the first year a maximum supply of 10
