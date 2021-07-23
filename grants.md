@@ -1,6 +1,10 @@
+## Argennon ERC20/BEP20 Token
+
+
 | Address | Current Supply | Total Grants Given |
 | :--- | --- | --- |
 | [0x31DF96d738362Cd3402F94aCCeeF73A6612698cd](https://bscscan.com/address/0x31df96d738362cd3402f94acceef73a6612698cd) | **5,016,000,000** | **16,000,000** |  
+
 
 | Recipient | Amount | Description | Locked Date |  Txn  | 
 | --------- | ------ | ----------- | :---: | :---: | 
