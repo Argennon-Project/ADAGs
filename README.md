@@ -98,7 +98,7 @@ The minting of the ARG ERC20 token will follow these rules:
     - Before the launch of the Argennon mainnet, a grant more than 5,000,000 ARGs can be given to a single person only
       if the grant is locked for at least **one year**.
     - All these grants are documented [here](https://www.argennon.com/grants.html).
-- **1 billion:** first token sale which will be sold for **at least** 150,000$.
+- **1 billion:** first token sale which will be sold for 0.0005$ per ARG.
 
 The minting of ARG ERC20 tokens will be decided by the ADAGs, but it has to be limited by the maximum supply defined by
 the ARG ERC20 contract. This maximum allowed supply is a function of time. For the first year a maximum supply of 10
@@ -108,7 +108,7 @@ the actual supply may be lower than this amount.
 
 The Argennon ERC20 token can be minted only for the following reasons:
 
-- Donating grants to contributors to the Argennon ecosystem
+- Awarding grants to contributors to the Argennon ecosystem
 - Having a **public** token sale which can only be done using the TS contract, complying with Argennon's token sale
   rules.
 

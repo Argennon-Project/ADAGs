@@ -3,7 +3,7 @@
 
 | Address | Current Supply | Total Grants Given |
 | :--- | --- | --- |
-| [0x31DF96d738362Cd3402F94aCCeeF73A6612698cd](https://bscscan.com/address/0x31df96d738362cd3402f94acceef73a6612698cd) | **5,016,000,000** | **16,000,000** |  
+| [0x31DF96d738362Cd3402F94aCCeeF73A6612698cd](https://bscscan.com/address/0x31df96d738362cd3402f94acceef73a6612698cd) | **5,021,000,000** | **21,000,000** |  
 
 
 | Recipient | Amount | Description | Locked Date |  Txn  | 
@@ -17,3 +17,4 @@
 | [chase-manning](https://github.com/chase-manning) | 500,000 | community reward | - | [0x40ac19cc17542fa6cf6619f2e8f4c405da2e40115cbf7747139ca3cac0dd9b08](https://bscscan.com/tx/0x40ac19cc17542fa6cf6619f2e8f4c405da2e40115cbf7747139ca3cac0dd9b08) | 
 | Religious hacker#3994 | 2,000,000 | community reward | - | [0x66643b2f6fa9f1c0b77ebcab3732904846e401a2c25694153e3d0424a8c5b25b](https://bscscan.com/tx/0x66643b2f6fa9f1c0b77ebcab3732904846e401a2c25694153e3d0424a8c5b25b) | 
 | PotatoHeadz35#6589 | 1,000,000 | community reward | - | [0x718163a3d10e37763aa1564745c2ca46daf3377ab1e542271b93528454673de5](https://bscscan.com/tx/0x718163a3d10e37763aa1564745c2ca46daf3377ab1e542271b93528454673de5) |
+| [foxhound](https://twitter.com/RainierMat)| 5,000,000 | marketing contribution | - | [0xc0b7db7c67a30b284929cf9017de220cb5fa2412c39c459f3f8677f49984ff1d](https://bscscan.com/tx/0xc0b7db7c67a30b284929cf9017de220cb5fa2412c39c459f3f8677f49984ff1d) |
