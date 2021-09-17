@@ -3,7 +3,7 @@
 
 | Address | Current Supply | Total Grants Given |
 | :--- | --- | --- |
-| [0x31DF96d738362Cd3402F94aCCeeF73A6612698cd](https://bscscan.com/address/0x31df96d738362cd3402f94acceef73a6612698cd) | **5,021,500,000** | **21,500,000** |  
+| [0x31DF96d738362Cd3402F94aCCeeF73A6612698cd](https://bscscan.com/address/0x31df96d738362cd3402f94acceef73a6612698cd) | **5,022,000,000** | **22,000,000** |  
 
 
 | Recipient | Amount | Description | Locked Date |  Txn  | 
@@ -19,3 +19,4 @@
 | PotatoHeadz35#6589 | 1,000,000 | community reward | - | [0x7181...3de5](https://bscscan.com/tx/0x718163a3d10e37763aa1564745c2ca46daf3377ab1e542271b93528454673de5) |
 | [foxhound](https://twitter.com/RainierMat)| 5,000,000 | marketing contribution | - | [0xc0b7...ff1d](https://bscscan.com/tx/0xc0b7db7c67a30b284929cf9017de220cb5fa2412c39c459f3f8677f49984ff1d) |
 | TheRealJake#4367 | 500,000 | contribution (paper review) | - | [0xbd6a...6885](https://bscscan.com/tx/0xbd6a7c2d5b3eb0f75d83368c2b8c95920003418ffc67826f6ed21476671b6885) |
+| kvt#6137([uneevn](https://twitter.com/uneevn)) | 500,000 | community reward | - | [0x7ff5...6987](https://bscscan.com/tx/0x7ff51e6a5c2c4b04afa0c0a9d24634c90404af0c7a72e8af6fbab14730176987) |
