@@ -1,3 +1,4 @@
+Check out the Argennon community on Discord: https://discord.gg/7u3cXNt5yN
 ## The Argennon Project
 
 Argennon (*the classical pronunciation should be used:* /ɑrˈɡen.non/) is a new innovative blockchain and smart contract
