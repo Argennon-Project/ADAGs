@@ -3,12 +3,12 @@
 
 | Address | Current Supply | Total Grants Given |
 | :--- | --- | --- |
-| [0x31DF96d738362Cd3402F94aCCeeF73A6612698cd](https://bscscan.com/address/0x31df96d738362cd3402f94acceef73a6612698cd) | **5,022,000,000** | **22,000,000** |  
+| [0x31DF96d738362Cd3402F94aCCeeF73A6612698cd](https://bscscan.com/address/0x31df96d738362cd3402f94acceef73a6612698cd) | **5,022,250,000** | **22,250,000** |  
 
 
 | Recipient | Amount | Description | Locked Date |  Txn  | 
 | --------- | ------ | ----------- | :---: | :---: | 
-| [Rejinderi](https://github.com/Rejinderi) | 5,000,000 | community reward/contribution (paper and code review) | - | [0x8d68...d100](https://bscscan.com/tx/0x8d685bceb87fc231cd824dc83863e075247bedaf77282cab60316aa85f72d100) | 
+| [Rejinderi](https://github.com/Rejinderi) | 5,000,000 | community reward/contribution | - | [0x8d68...d100](https://bscscan.com/tx/0x8d685bceb87fc231cd824dc83863e075247bedaf77282cab60316aa85f72d100) | 
 | Σlias#4904 | 2,000,000 | community reward | - | [0x3484...13b1](https://bscscan.com/tx/0x3484018b11887f652dfa23dc1ea37a415b2a76673a982dd503edb8017ba513b1) | 
 | hacktivist#6969 | 2,000,000 | community reward | - | [0xbb33...0ee5](https://bscscan.com/tx/0xbb33711ec2b7ea958bc7fc0491fd9de79fd3bcb5860c6fcc6e904a4619480ee5) | 
 | AWAS#1787 | 1,000,000 | community reward/contribution (code review) | - | [0x57a5...12a3](https://bscscan.com/tx/0x57a5a08f8a68f5c96d9876a9d889c588bdb896f2e9d39b2d544801cd2bd912a3) | 
@@ -19,4 +19,4 @@
 | PotatoHeadz35#6589 | 1,000,000 | community reward | - | [0x7181...3de5](https://bscscan.com/tx/0x718163a3d10e37763aa1564745c2ca46daf3377ab1e542271b93528454673de5) |
 | [foxhound](https://twitter.com/RainierMat)| 5,000,000 | marketing contribution | - | [0xc0b7...ff1d](https://bscscan.com/tx/0xc0b7db7c67a30b284929cf9017de220cb5fa2412c39c459f3f8677f49984ff1d) |
 | TheRealJake#4367 | 500,000 | contribution (paper review) | - | [0xbd6a...6885](https://bscscan.com/tx/0xbd6a7c2d5b3eb0f75d83368c2b8c95920003418ffc67826f6ed21476671b6885) |
-| kvt#6137([uneevn](https://twitter.com/uneevn)) | 500,000 | community reward | - | [0x7ff5...6987](https://bscscan.com/tx/0x7ff51e6a5c2c4b04afa0c0a9d24634c90404af0c7a72e8af6fbab14730176987) |
+| kvt#6137([uneevn](https://twitter.com/uneevn)) | 500,000 <br> 250,000 | community reward <br> C++ challenge prize | - | [0x7ff5...6987](https://bscscan.com/tx/0x7ff51e6a5c2c4b04afa0c0a9d24634c90404af0c7a72e8af6fbab14730176987) <br> [0xc3ba...5d64](https://bscscan.com/tx/0xc3ba2bc060241e1890d32b7abf815dbfc36cd835e52eaf61a04ae0b499a95d64) |
