@@ -1,24 +1,27 @@
 Check out the Argennon community on Discord: [https://discord.gg/7u3cXNt5yN](https://discord.gg/7u3cXNt5yN)
+
 ## The Argennon Project
 
-Argennon (*the classical pronunciation should be used:* /ɑrˈɡen.non/) is a new innovative blockchain and smart contract
-platform which tries to solve many shortcomings of existing platforms. The Argennon Virtual Machine (AVM) is designed to
-be secure and efficient. Security issues such as reentrancy, complexities of integer arithmetic errors, and
-authorization problems do not exist for AVM programmers. The Argennon Virtual Machine is scalable and very efficient at
-data storage. It is optimized for using a zero knowledge database as its persistence layer, seamlessly and efficiently
-by taking advantage of a smart data clustering algorithm.
+Argennon (*the classical pronunciation should be used:* /ɑrˈɡen.non/) is a cloud based blockchain and smart contract
+platform which tries to solve many shortcomings of existing platforms. The Argennon blockchain uses a hybrid proof of
+stake (POS) consensus protocol, which is based on participation of every Argennon user. Thanks to the cloud based design
+of the Argennon blockchain, participation in the Argennon consensus protocol does not require costly computational
+resources, and normal personal computers with limited computational power can actively participate in the Argennon
+consensus protocol. This property makes Argennon a truly decentralized and democratic blockchain and one of the most
+secure existing platforms.
 
-On the other hand, the Argennon blockchain uses a truly decentralized and secure proof of stake consensus protocol.
-Thanks to the efficient design of the AVM, participation in the Argennon consensus protocol does not require huge
-computational resources, and normal personal computers with limited computational power can actively participate in the
-Argennon consensus protocol. This property makes the Argennon blockchain a truly decentralized and democratic
-blockchain. An initial draft of the Argennon white paper can be
-accessed [here](https://raw.githubusercontent.com/aybehrouz/AVM/main/pdf/A.pdf), and a brief overview of Argennon's
-properties can be seen [here](https://github.com/aybehrouz/AVM#properties-overview).
+By using cryptographic commitment schemes, the integrity of data on the Argennon cloud is guaranteed, and there is no
+need for trusting cloud servers. At the same time, by using a smart clustering algorithm the network usage and the
+overhead of the commitment scheme is kept manageable.
 
-Until the launch of the Argennon mainnet, an ERC20 token and a governance system will be deployed on the Binance Smart
+An initial draft of the Argennon white paper can be
+found [here](https://raw.githubusercontent.com/aybehrouz/AVM/main/pdf/A.pdf). In addition,
+this [link](https://www.argennon.com/features.html) provides a brief overview of important properties of the Argennon
+platform.
+
+Until the launch of the Argennon main-net, an ERC20 token and a governance system will be deployed on the Binance Smart
 Chain or the Ethereum network in order to represent investors' share in the project and giving them the opportunity to
-determine the project path.
+determine the project's path.
 
 ### The Argennon ERC20 Token
 
@@ -115,8 +118,7 @@ the ARG ERC20 token and the actual supply may be lower than this amount.
 The Argennon ERC20 token can be minted only for the following reasons:
 
 - Awarding grants to contributors to the Argennon ecosystem.
-- Having a **public** token sale which can only be done using the TS contract, complying with Argennon token sale
-  rules.
+- Having a **public** token sale which can only be done using the TS contract, complying with Argennon token sale rules.
 
 Therefore, the ARG token should not be minted in order to be sold on the market, to add liquidity to liquidity pools or
 to do any type of activities for price manipulation.
