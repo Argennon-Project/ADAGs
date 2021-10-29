@@ -1,14 +1,14 @@
-Check out the Argennon community on Discord: [https://discord.gg/7u3cXNt5yN](https://discord.gg/7u3cXNt5yN)
+Check out the Argennon community on Discord: [https://discord.gg/7u3cXNt5yN](https://discord.gg/7u3cXNt5yN) and
+reddit: [https://www.reddit.com/r/Argennon/](https://www.reddit.com/r/Argennon/)
 
 ## The Argennon Project
 
 Argennon (*the classical pronunciation should be used:* /ɑrˈɡen.non/) is a cloud based blockchain and smart contract
 platform which tries to solve many shortcomings of existing platforms. The Argennon blockchain uses a hybrid proof of
 stake (POS) consensus protocol, which is based on participation of every Argennon user. Thanks to the cloud based design
-of the Argennon blockchain, participation in the Argennon consensus protocol does not require costly computational
-resources, and normal personal computers with limited computational power can actively participate in the Argennon
-consensus protocol. This property makes Argennon a truly decentralized and democratic blockchain and one of the most
-secure existing platforms.
+of its blockchain, participation in the Argennon consensus protocol does not require costly computational resources, and
+normal personal computers with limited computational power can actively participate in the consensus protocol. This
+property makes Argennon a truly decentralized and democratic blockchain and one of the most secure existing platforms.
 
 By using cryptographic commitment schemes, the integrity of data on the Argennon cloud is guaranteed, and there is no
 need for trusting cloud servers. At the same time, by using a smart clustering algorithm the network usage and the
