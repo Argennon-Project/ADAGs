@@ -1,35 +1,35 @@
 ### An Overview of Argennon Properties:
 
 - Argennon is a cloud based blockchain. Argennon validators do not keep a local copy of the state data. Instead, the
-  state is stored on a **trust-less** cloud of zero knowledge database (ZK-EDB) servers.
+  state is stored on a **trust-less** cloud of publicly verifiable database (PV-DB) servers.
 
 - By using cryptographic commitment schemes the integrity of data on the cloud is guaranteed, and there is no need for
-  trusting ZK-EDB servers. At the same time, by using a smart clustering algorithm the network usage and the overhead of
+  trusting PV-DB servers. At the same time, by using a smart clustering algorithm the network usage and the overhead of
   the commitment scheme is kept manageable.
 
-- Argennon uses a **hybrid** POS consensus protocol. A democratically elected committee of trusted delegates is
-  responsible for minting new blocks and each block is validated by a large committee of normal validators. **Every**
+- Argennon uses a **hybrid** POS consensus protocol. A democratically elected committee of delegates is responsible for
+  minting and proposing new blocks. Then, each block is validated by a large committee of normal validators. **Every**
   Argennon user is a member of at least one committee of validators. Thanks to the cloud based design of the Argennon
-  blockchain, transaction validation does not require a large physical storage space. This way, being a validator does
-  not require costly computational resources and everyone with an Argennon wallet can participate in the Argennon
-  consensus protocol. This makes Argennon a truly democratic and decentralized blockchain.
+  blockchain, transaction validation does not require a large physical storage space and being a validator does not
+  require costly computational resources. Everyone with an Argennon wallet can participate in the Argennon consensus
+  protocol. This makes Argennon a truly democratic and decentralized blockchain.
 
-- Sharding **decreases** the security of a blockchain. Argennon does not need shards. Due to its cloud based design,
-  Argennon validators do not need to validate blocks sequentially and the validation of multiple blocks can be done in
-  parallel by different committees of validators.
+- Sharding **decreases** the security of a blockchain. Argennon does not need shards. Due to the cloud based design of
+  the Argennon blockchain, validators do not need to validate blocks sequentially and the validation of multiple blocks
+  can be done in parallel by different committees of validators.
 
 - By using a dependency detection algorithm, Argennon is also able to parallelize transaction validation of a **single**
   block. As a result, a multicore machine is able to validate the Argennon blockchain as fast as multiple independent
   shards.
 
 - The hybrid Argennon consensus protocol makes Argennon one of the most secure blockchains. Only one honest delegate can
-  stop any attack against the integrity of the Argennon blockchain, and if all the delegates are malicious, as long as
+  stop any attacks against the integrity of the Argennon blockchain, and if all the delegates are malicious, as long as
   more than half of the Argennon total stake is controlled by honest users, the Argennon blockchain will preserve its
   consistency.
 
-- The Argennon network relies on a **permission-less** network of ZK-EDB servers, forming the Argennon cloud. A ZK-EDB
+- The Argennon network relies on a **permission-less** network of PV-DB servers, forming the Argennon cloud. A PV-DB
   server is a conventional data server which uses its computational and storage resources to help the Argennon network
-  process transactions. A large portion of incentive rewards in the Argennon protocol is devoted to ZK-EDB servers. This
+  process transactions. A large portion of incentive rewards in the Argennon protocol is devoted to PV-DB servers. This
   will incentivize the development of conventional networking, storage and computational hardware, which can benefit all
   areas of information technology. This contrasts with the approach of other blockchains that incentivize development of
   a totally useless technology of hash calculation.
