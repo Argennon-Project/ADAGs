@@ -1,10 +1,8 @@
 ## Argennon ERC20/BEP20 Token
 
-
 | Address | Current Supply | Total Grants Given |
 | :--- | --- | --- |
-| [0x31DF96d738362Cd3402F94aCCeeF73A6612698cd](https://bscscan.com/address/0x31df96d738362cd3402f94acceef73a6612698cd) | **5,022,250,000** | **22,250,000** |  
-
+| [0x31DF96d738362Cd3402F94aCCeeF73A6612698cd](https://bscscan.com/address/0x31df96d738362cd3402f94acceef73a6612698cd) | **5,023,000,000** | **23,000,000** |  
 
 | Recipient | Amount | Description | Locked Date |  Txn  | 
 | --------- | ------ | ----------- | :---: | :---: | 
@@ -20,3 +18,6 @@
 | [foxhound](https://twitter.com/RainierMat)| 5,000,000 | marketing contribution | - | [0xc0b7...ff1d](https://bscscan.com/tx/0xc0b7db7c67a30b284929cf9017de220cb5fa2412c39c459f3f8677f49984ff1d) |
 | TheRealJake#4367 | 500,000 | contribution (paper review) | - | [0xbd6a...6885](https://bscscan.com/tx/0xbd6a7c2d5b3eb0f75d83368c2b8c95920003418ffc67826f6ed21476671b6885) |
 | kvt#6137([uneevn](https://twitter.com/uneevn)) | 500,000 <br> 250,000 | community reward <br> C++ challenge prize | - | [0x7ff5...6987](https://bscscan.com/tx/0x7ff51e6a5c2c4b04afa0c0a9d24634c90404af0c7a72e8af6fbab14730176987) <br> [0xc3ba...5d64](https://bscscan.com/tx/0xc3ba2bc060241e1890d32b7abf815dbfc36cd835e52eaf61a04ae0b499a95d64) |
+| Saurondalf#1852 | 250,000 | community reward | - | [0x47ff...ba27](https://bscscan.com/tx/0x47ffa2067d25c0dc892faf27229fd5bef1876770856250c8d8e3cf4623dbba27) |
+| FIRE182#9048| 250,000 | community reward | - | [0x72c4...f9f9](https://bscscan.com/tx/0x72c40b074bb24f278609239988e19962efaafd0eddc227240f9a2a0f0616f9f9) |
+| liang#6875  | 250,000 | community reward | - | [0xbfed...28af](https://bscscan.com/tx/0xbfede63ec1137f71d7e11b4d921c821323bc0914c8ad802529616ae1fa9728af) |
