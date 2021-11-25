@@ -27,7 +27,7 @@ determine the project's path.
 ### The Argennon ERC20 Token
 
 The Argennon token (ARG /ɑrɡ/) is an ERC20 token intended to represent an investor's share in the Argennon project.
-After the launch of the Argennon blockchain, the ARG ERC20 token will be convertible in 1:1 ratio to the main currency
+After the launch of the Argennon blockchain, the ARG ERC20 token will be convertible in 1:1 ratio to the native currency
 of the Argennon blockchain. Meanwhile, the ARG ERC20 token will act as a governance token:
 
 - The ARG ERC20 smart contract is a profit distributor. That means when an amount of an ERC20 token which is registered
@@ -88,9 +88,10 @@ the withdrawal of funds, the redemption price could be anything based on the amo
 
 ### Tokenomics
 
-The final total supply of the Argennon currency will be **100 billion** which **must** be reached in **30 years**. The
-ARG ERC20 token on the other hand, will have a 50 billion cap. Consequently, 50 billion Argennons will be minted only
-after the launch of the Argennon blockchain. These Argennons will be mainly used as incentive rewards.
+The final total supply of the Argennon currency will be **100 billion** which **must** be reached in **30 years**. At
+max, half of this amount may be minted before the launch of the Argennon main-net. Consequently, The ARG ERC20 token
+will have a 50 billion cap. The other half, including 50 billion Argennons, will be minted only
+after the launch of the Argennon blockchain, and will be mainly used as incentive rewards.
 
 The minting of the ARG ERC20 token and the ARG currency will follow these rules:
 
