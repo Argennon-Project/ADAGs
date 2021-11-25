@@ -955,7 +955,7 @@ abstract contract LockableERC20 is ERC20 {
      * Extends the defined lock on your account. This operation is irreversible.
      * 
      * @param threshold is the maximum amount of locked tokens. When the balance of your account is higher than this
-     * threshold, the extra token may be transferred.
+     * threshold, the extra tokens may be transferred.
      * @param releaseTime is the lock's release time. After this time the lock will be deactivated.
      */
     function setLock(uint128 threshold, uint128 releaseTime) public {
@@ -975,7 +975,7 @@ abstract contract LockableERC20 is ERC20 {
         if (locksData[from].threshold == 0)
             return;
         _updateLock(from);
-        require(balanceOf(from) >= locksData[msg.sender].threshold + amount, "not enough non-locked tokens");
+        require(balanceOf(from) >= locksData[from].threshold + amount, "not enough non-locked tokens");
     }
 
 
