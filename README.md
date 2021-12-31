@@ -1,5 +1,6 @@
-Check out the Argennon community on Discord: [https://discord.gg/7u3cXNt5yN](https://discord.gg/7u3cXNt5yN) and
-reddit: [https://www.reddit.com/r/Argennon/](https://www.reddit.com/r/Argennon/)
+Check out the Argennon community on Discord: [https://discord.gg/7u3cXNt5yN](https://discord.gg/7u3cXNt5yN),
+reddit: [https://www.reddit.com/r/Argennon/](https://www.reddit.com/r/Argennon/) and twitter 
+[https://twitter.com/Argennon_org](https://twitter.com/Argennon_org)
 
 ## The Argennon Project
 
