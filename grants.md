@@ -22,13 +22,16 @@
 | [Croissant#9048](https://twitter.com/FantomMe999)| 250,000 | community reward | - | [0x72c4...f9f9](https://bscscan.com/tx/0x72c40b074bb24f278609239988e19962efaafd0eddc227240f9a2a0f0616f9f9) |
 | liang#6875  | 250,000 | community reward | - | [0xbfed...28af](https://bscscan.com/tx/0xbfede63ec1137f71d7e11b4d921c821323bc0914c8ad802529616ae1fa9728af) |
 
-**Aggregate grant round#0:**
+**Aggregate grant round#0 - amount: 3,000,000**
 
 | Recipient | Amount | Description | Locked Date |  Txn  | 
 | --------- | ------ | ----------- | :---: | :---: | 
 | [Saurondalf#1852](https://twitter.com/CryptoScrubLord) | 250,000 | community reward | - | [0xd745...fb1d](https://bscscan.com/tx/0xd745a98fea0150197cce61dc6ad77ab9503b325b4f41abb0a844534f925dfb1d) |
 | [Bernardattic#4458](https://twitter.com/PhilWolstenhol4) | 1,000,000 | community reward | - | [0x954a...3aa5](https://bscscan.com/tx/0x954aab7863d7756ade12612c401bb48b575fab8b8396f5e42e4b0da461223aa5) <br> [0x0c1b...891b](https://bscscan.com/tx/0x0c1b1f66383e442d880a12ac273c117dab2dfce257bb1044b3376512181b891b) | 
 | [hacktivist#6969](https://twitter.com/hacktivist24) | 200,000 | community reward | - | [0x0888...a3c7](https://bscscan.com/tx/0x0888592b7720325d999faaf4bb3653d90c743265e1db86ab0d5e8905a8f7a3c7) |
-| [MΞhran#9955](https://twitter.com/mehranxyz) | 300,000 | community reward | - | [0x6c70...8eb9](https://bscscan.com/tx/0x6c70493bee7f2d6207e023b20b5d2d26666904b25de1cb6ef16cbbfef5448eb9) |
+| [MΞhran#9955](https://twitter.com/mehranxyz) | 550,000 | community reward | - | [0x6c70...8eb9](https://bscscan.com/tx/0x6c70493bee7f2d6207e023b20b5d2d26666904b25de1cb6ef16cbbfef5448eb9) <br> [0x76ed...5a38](https://bscscan.com/tx/0x76edd94cd591c4984e2c18374dbfaf7e4b43bc3495fb5f481bfadddc67b95a38) |
 | nath1014#4970| 250,000| community reward | - | [0x8313...f683](https://bscscan.com/tx/0x83138405ca8449e128f7e1499ca28fdd14a1863c712b577e4a64b7ab9613f683) |
-| [distributor account]() | 2,000,000 | **aggregate minting transaction** | - | []() |
+| [TheRealJake#4367](https://twitter.com/jakesarjeant) | 250,000 | community reward | - | [0x28dd...0197](https://bscscan.com/tx/0x28dd6ff943fcd23adf5468f3d608781a1e9d9b6b0e8ad4d1cc640d31b782e16b) |
+| kvt#6137([uneevn](https://twitter.com/uneevn)) | 250,000 | community reward | - | [0x8962...689f](https://bscscan.com/tx/0x896201402b2d4049473236b3bb784d9f12916c0efbe632e085664a0e1111689f)
+| [Σlias#4904]() | 250,000 | community reward | - | [0xfde9...3dd5](https://bscscan.com/tx/0xfde9a066809292d8f6b51fb24062ae1dbc02a7e4ce7f0444b38e87e8edb33dd5) |
+| [distributor account]() | 3,000,000 | **aggregate minting transaction** | - | [pending...]() |
