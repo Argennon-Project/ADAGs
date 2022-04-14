@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "liang0561",
+      "name": "liang0561",
+      "avatar_url": "https://avatars.githubusercontent.com/u/75945582?v=4",
+      "profile": "https://github.com/liang0561",
+      "contributions": [
+        "financial",
+        "blog"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "ADAGs",
+  "projectOwner": "Argennon-Project",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
