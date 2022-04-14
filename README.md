@@ -141,7 +141,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/liang0561"><img src="https://avatars.githubusercontent.com/u/75945582?v=4?s=100" width="100px;" alt=""/><br /><sub><b>liang0561</b></sub></a><br /><a href="#financial-liang0561" title="Financial">💵</a></td>
+    <td align="center"><a href="https://github.com/liang0561"><img src="https://avatars.githubusercontent.com/u/75945582?v=4?s=100" width="100px;" alt=""/><br /><sub><b>liang0561</b></sub></a><br /><a href="#financial-liang0561" title="Financial">💵</a> <a href="#blog-liang0561" title="Blogposts">📝</a></td>
   </tr>
 </table>
 
