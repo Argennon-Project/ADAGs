@@ -43,6 +43,16 @@
         "fundingFinding",
         "ideas"
       ]
+    },
+    {
+      "login": "hacktivist24",
+      "name": "hacktivist",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54760103?v=4",
+      "profile": "https://medium.com/@greedybucks",
+      "contributions": [
+        "blog",
+        "fundingFinding"
+      ]
     }
   ],
   "contributorsPerLine": 7,
