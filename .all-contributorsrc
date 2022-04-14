@@ -31,6 +31,18 @@
         "userTesting",
         "security"
       ]
+    },
+    {
+      "login": "Rejinderi",
+      "name": "Rejinderi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4333016?v=4",
+      "profile": "https://github.com/Rejinderi",
+      "contributions": [
+        "blog",
+        "financial",
+        "fundingFinding",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
