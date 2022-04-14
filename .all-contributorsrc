@@ -64,6 +64,16 @@
         "fundingFinding",
         "question"
       ]
+    },
+    {
+      "login": "codemaster138",
+      "name": "Jake",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43313420?v=4",
+      "profile": "https://github.com/codemaster138",
+      "contributions": [
+        "ideas",
+        "security"
+      ]
     }
   ],
   "contributorsPerLine": 7,
