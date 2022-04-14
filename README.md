@@ -1,11 +1,10 @@
 
 
-Check out the Argennon community on Discord: [https://discord.gg/7u3cXNt5yN](https://discord.gg/7u3cXNt5yN),
+Please check out the Argennon community on [Discord](https://discord.gg/7u3cXNt5yN), [Telegram](https://t.me/Argennon), [Reddit](https://www.reddit.com/r/Argennon/) and [Twitter](https://twitter.com/Argennon_org)!
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-reddit: [https://www.reddit.com/r/Argennon/](https://www.reddit.com/r/Argennon/) and twitter 
-[https://twitter.com/Argennon_org](https://twitter.com/Argennon_org)
 
 ## The Argennon Project
 
