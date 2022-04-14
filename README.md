@@ -3,7 +3,7 @@
 Please check out the Argennon community on [Discord](https://discord.gg/7u3cXNt5yN), [Telegram](https://t.me/Argennon), [Reddit](https://www.reddit.com/r/Argennon/) and [Twitter](https://twitter.com/Argennon_org)!
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## The Argennon Project
@@ -147,6 +147,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/Rejinderi"><img src="https://avatars.githubusercontent.com/u/4333016?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rejinderi</b></sub></a><br /><a href="#blog-Rejinderi" title="Blogposts">📝</a> <a href="#financial-Rejinderi" title="Financial">💵</a> <a href="#fundingFinding-Rejinderi" title="Funding Finding">🔍</a> <a href="#ideas-Rejinderi" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://medium.com/@greedybucks"><img src="https://avatars.githubusercontent.com/u/54760103?v=4?s=100" width="100px;" alt=""/><br /><sub><b>hacktivist</b></sub></a><br /><a href="#blog-hacktivist24" title="Blogposts">📝</a> <a href="#fundingFinding-hacktivist24" title="Funding Finding">🔍</a></td>
     <td align="center"><a href="https://github.com/Tuananhthepussyhunter"><img src="https://avatars.githubusercontent.com/u/71578941?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tuananhthepussyhunter</b></sub></a><br /><a href="#blog-Tuananhthepussyhunter" title="Blogposts">📝</a> <a href="#fundingFinding-Tuananhthepussyhunter" title="Funding Finding">🔍</a> <a href="#question-Tuananhthepussyhunter" title="Answering Questions">💬</a></td>
+    <td align="center"><a href="https://github.com/codemaster138"><img src="https://avatars.githubusercontent.com/u/43313420?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jake</b></sub></a><br /><a href="#ideas-codemaster138" title="Ideas, Planning, & Feedback">🤔</a> <a href="#security-codemaster138" title="Security">🛡️</a></td>
   </tr>
 </table>
 
