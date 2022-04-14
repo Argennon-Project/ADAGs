@@ -2,7 +2,7 @@
 
 Check out the Argennon community on Discord: [https://discord.gg/7u3cXNt5yN](https://discord.gg/7u3cXNt5yN),
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 reddit: [https://www.reddit.com/r/Argennon/](https://www.reddit.com/r/Argennon/) and twitter 
 [https://twitter.com/Argennon_org](https://twitter.com/Argennon_org)
@@ -147,6 +147,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/SatoshiMiracle"><img src="https://avatars.githubusercontent.com/u/72975337?v=4?s=100" width="100px;" alt=""/><br /><sub><b>SatoshiMiracle</b></sub></a><br /><a href="https://github.com/Argennon-Project/ADAGs/issues?q=author%3ASatoshiMiracle" title="Bug reports">🐛</a> <a href="#blog-SatoshiMiracle" title="Blogposts">📝</a> <a href="#content-SatoshiMiracle" title="Content">🖋</a> <a href="#fundingFinding-SatoshiMiracle" title="Funding Finding">🔍</a> <a href="#ideas-SatoshiMiracle" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-SatoshiMiracle" title="Answering Questions">💬</a> <a href="https://github.com/Argennon-Project/ADAGs/pulls?q=is%3Apr+reviewed-by%3ASatoshiMiracle" title="Reviewed Pull Requests">👀</a> <a href="#userTesting-SatoshiMiracle" title="User Testing">📓</a> <a href="#security-SatoshiMiracle" title="Security">🛡️</a></td>
     <td align="center"><a href="https://github.com/Rejinderi"><img src="https://avatars.githubusercontent.com/u/4333016?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rejinderi</b></sub></a><br /><a href="#blog-Rejinderi" title="Blogposts">📝</a> <a href="#financial-Rejinderi" title="Financial">💵</a> <a href="#fundingFinding-Rejinderi" title="Funding Finding">🔍</a> <a href="#ideas-Rejinderi" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://medium.com/@greedybucks"><img src="https://avatars.githubusercontent.com/u/54760103?v=4?s=100" width="100px;" alt=""/><br /><sub><b>hacktivist</b></sub></a><br /><a href="#blog-hacktivist24" title="Blogposts">📝</a> <a href="#fundingFinding-hacktivist24" title="Funding Finding">🔍</a></td>
+    <td align="center"><a href="https://github.com/Tuananhthepussyhunter"><img src="https://avatars.githubusercontent.com/u/71578941?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tuananhthepussyhunter</b></sub></a><br /><a href="#blog-Tuananhthepussyhunter" title="Blogposts">📝</a> <a href="#fundingFinding-Tuananhthepussyhunter" title="Funding Finding">🔍</a> <a href="#question-Tuananhthepussyhunter" title="Answering Questions">💬</a></td>
   </tr>
 </table>
 
