@@ -85,6 +85,15 @@
         "ideas",
         "question"
       ]
+    },
+    {
+      "login": "ak223wd",
+      "name": "ak223wd",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50454050?v=4",
+      "profile": "https://github.com/ak223wd",
+      "contributions": [
+        "fundingFinding"
+      ]
     }
   ],
   "contributorsPerLine": 7,
