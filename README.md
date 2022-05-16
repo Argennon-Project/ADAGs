@@ -8,21 +8,17 @@ Please check out the Argennon community on [Discord](https://discord.gg/7u3cXNt5
 
 ## The Argennon Project
 
-Argennon (*the classical pronunciation should be used:* /ɑrˈɡen.non/) is a cloud based blockchain and smart contract
-platform which tries to solve shortcomings of existing platforms. The Argennon blockchain uses a hybrid proof of
-stake (POS) consensus protocol, which is based on participation of every Argennon user. Thanks to the cloud based
-design of the Argennon blockchain, transaction validation does not require costly computational
-resources, and normal personal computers with limited hardware capabilities can actively participate in
-the Argennon consensus protocol. This property makes Argennon a truly decentralized and democratic blockchain
-and one of the most secure existing platforms.
+Argennon (*the classical pronunciation should be used: /ɑrˈɡen.non/*) is a next-gen cloud based blockchain and smart contract platform which tries to solve shortcomings of existing platforms. The Argennon blockchain uses a hybrid proof of stake (HPoS) consensus protocol, which is based on participation of every Argennon user. This hybrid protocol combines the benefits of a centralized and a decentralized system.
 
-By using cryptographic commitment schemes, the integrity of data on the Argennon cloud is guaranteed, and there is no
-need for trusting cloud servers. At the same time, by using a smart clustering algorithm the network usage and the
-overhead of the commitment scheme is kept manageable.
+Thanks to the cloud based design of the Argennon blockchain, transaction validation does not require costly computational resources, and normal personal computers with limited hardware capabilities can actively participate in the Argennon consensus protocol. This property makes Argennon a truly decentralized and democratic blockchain and one of the most secure existing platforms.
+
+By using cryptographic accumulators, the integrity of data on the Argennon cloud is guaranteed, and there is no need for trusting cloud servers. At the same time, by using a smart clustering algorithm the network usage and the overhead of the commitment scheme is kept manageable.
+
+The Argennon cloud is formed by a permission-less network of Publicly Verifiable Database (PV-DB) servers. A PV-DB server in Argennon, is a conventional data server which uses its computational and storage resources to help the Argennon network process transactions. A large portion of incentive rewards in the Argennon platform is devoted to PV-DB servers. This incentivizes the development of conventional networking, storage and computational hardware, which can benefit all areas of information technology. This contrasts with the approach of other blockchains that incentivizes the development of a totally useless technology of hash calculation.
 
 An initial draft of the Argennon white paper can be
 found [here](https://raw.githubusercontent.com/aybehrouz/AVM/main/pdf/A.pdf). In addition,
-this [link](https://www.argennon.com/features.html) provides a brief overview of important properties of the Argennon
+this [link](https://www.argennon.com/features.html) provides a brief overview of the important properties of the Argennon
 platform.
 
 Until the launch of the Argennon main-net, an ERC20 token and a governance system will be deployed on the Binance Smart
