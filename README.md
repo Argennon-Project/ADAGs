@@ -101,7 +101,7 @@ The minting of the ARG ERC20 token and the ARG currency will follow these rules:
       and it can not be transferred and liquidated into the market for the first **two years**.
 - **5 billion:** founder's initial minting allowance which will be used for awarding ARG grants to early contributors.
     - These grants can only be given to people who have helped the development and growth of the Argennon ecosystem.
-    - These grants can not be given in exchange for money.
+    - These grants must not be sold.
     - Before the launch of the Argennon mainnet, a grant more than 5,000,000 ARGs can be given to a single person only
       if the grant is locked for at least **one year**.
     - All these grants are documented [here](https://www.argennon.com/grants.html).
@@ -109,22 +109,19 @@ The minting of the ARG ERC20 token and the ARG currency will follow these rules:
     - This is the only token sale which is not conducted by the ADAGs.
 - **39-44 billion:** controlled by the ADAGs (the Argennon governance system). This amount may be used for token sales,
   air drops and grants, decided by the ADAGs.
+    - Token sales will be **public** and can only be done using the TS contract, complying with the Argennon token sale rules.
 - **50 billion:** will be minted after the launch of the Argennon blockchain and will be used for the Argennon incentive
   mechanism. (*The Argennon incentive mechanism is similar to mining rewards in other blockchains.*)
 
-The minting of ARG ERC20 token will be decided by the ADAGs, but it has to be limited by the maximum supply defined by
+
+Therefore, the ARG token should not be minted in order to be sold on the market, to add liquidity to liquidity pools or
+to do any type of activities for price manipulation.
+
+The minting of the ARG ERC20 token has to be limited by the maximum supply defined by
 the ARG ERC20 contract. This maximum allowed supply is a function of time. For the first year a maximum supply of 10
 billion is allowed, and after that, the maximum allowed supply increases 5 billion per year linearly, until it could
 reach the 50 billion cap after **nine years**. It should be noted that this is a hard limit on the **maximum** supply of
 the ARG ERC20 token and the actual supply may be lower than this amount.
-
-The Argennon ERC20 token can be minted only for the following reasons:
-
-- Awarding grants to contributors to the Argennon ecosystem.
-- Having a **public** token sale which can only be done using the TS contract, complying with Argennon token sale rules.
-
-Therefore, the ARG token should not be minted in order to be sold on the market, to add liquidity to liquidity pools or
-to do any type of activities for price manipulation.
 
 After the launch of the Argennon blockchain, all unminted ARG ERC20 tokens with respect to the 50 billion cap, will be
 considered as the reserve of the ADAGs counterpart on the Argennon blockchain.
