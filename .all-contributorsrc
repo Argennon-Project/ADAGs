@@ -94,6 +94,19 @@
       "contributions": [
         "fundingFinding"
       ]
+    },
+    {
+      "login": "fondofdogs",
+      "name": "dogperson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/85778179?v=4",
+      "profile": "https://github.com/fondofdogs",
+      "contributions": [
+        "blog",
+        "content",
+        "ideas",
+        "question",
+        "security"
+      ]
     }
   ],
   "contributorsPerLine": 7,

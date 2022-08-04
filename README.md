@@ -3,7 +3,7 @@
 Please check out the Argennon community on [Discord](https://discord.gg/7u3cXNt5yN), [Telegram](https://t.me/Argennon), [Reddit](https://www.reddit.com/r/Argennon/) and [Twitter](https://twitter.com/Argennon_org)!
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## The Argennon Project
@@ -140,6 +140,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/ak223wd"><img src="https://avatars.githubusercontent.com/u/50454050?v=4?s=100" width="100px;" alt=""/><br /><sub><b>ak223wd</b></sub></a><br /><a href="#fundingFinding-ak223wd" title="Funding Finding">🔍</a></td>
+    <td align="center"><a href="https://github.com/fondofdogs"><img src="https://avatars.githubusercontent.com/u/85778179?v=4?s=100" width="100px;" alt=""/><br /><sub><b>dogperson</b></sub></a><br /><a href="#blog-fondofdogs" title="Blogposts">📝</a> <a href="#content-fondofdogs" title="Content">🖋</a> <a href="#ideas-fondofdogs" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-fondofdogs" title="Answering Questions">💬</a> <a href="#security-fondofdogs" title="Security">🛡️</a></td>
   </tr>
 </table>
 
