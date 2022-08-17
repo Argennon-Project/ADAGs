@@ -8,17 +8,17 @@ Please check out the Argennon community on [Discord](https://discord.gg/7u3cXNt5
 
 ## The Argennon Project
 
-Argennon (the classical pronunciation should be used: /ɑrˈɡen.non/) is a next generation cloud based blockchain and
-smart contract platform. The Argennon blockchain uses
+Argennon(the classical pronunciation should be used: /ɑrˈɡen.non/) is a next generation cloud based blockchain and smart
+contract platform. The Argennon blockchain uses
 a hybrid proof of stake (HPoS) consensus protocol, which is capable of combining the benefits of
 a centralized and a decentralized system. In Argennon, ledger storage and transaction processing are
 outsourced to the cloud and normal personal computers or smartphones, with limited hardware
-capabilities, can validate transactions and actively
+capabilities, are able to validate transactions and actively
 participate in the Argennon consensus protocol. This property makes Argennon a truly decentralized and
 democratic blockchain and one of the most secure existing platforms.
 
 The Argennon cloud is trustless and publicly verifiable. Computational Integrity (CI) is
-achieved by using succinct cryptographic proofs (STARK/SNARK)
+achieved by using succinct argument of knowledge systems (STARK/SNARK)
 and data integrity is guaranteed by cryptographic accumulators. At the same time, a smart
 clustering algorithm keeps the bandwidth usage and the overhead of cryptography manageable
 for validators.
@@ -29,10 +29,6 @@ storage resources to help the Argennon network process transactions. This encour
 of conventional networking, storage and compute hardware, which can benefit all areas of information technology.
 This contrasts with the approach of some older blockchains that incentivized the development of a totally
 useless technology of hash calculation.
-
-An Argennon validator is light enough to be implemented as a smart contract. By deploying an Argennon validator
-on another blockchain, Argennon could use more established networks as an extra layer of security, specially
-during the bootstrapping phase, when ARG is not well distributed yet.
 
 An initial draft of the Argennon white paper can be
 found [here](https://raw.githubusercontent.com/aybehrouz/AVM/main/pdf/A.pdf). In addition,
