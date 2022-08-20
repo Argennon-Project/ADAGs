@@ -8,7 +8,7 @@ Please check out the Argennon community on [Discord](https://discord.gg/7u3cXNt5
 
 ## The Argennon Project
 
-Argennon(the classical pronunciation should be used: /ɑrˈɡen.non/) is a next generation cloud based blockchain and smart
+Argennon (the classical pronunciation should be used: /ɑrˈɡen.non/) is a next generation cloud based blockchain and smart
 contract platform. The Argennon blockchain uses
 a hybrid proof of stake (HPoS) consensus protocol, which is capable of combining the benefits of
 a centralized and a decentralized system. In Argennon, ledger storage and transaction processing are
@@ -18,7 +18,7 @@ participate in the Argennon consensus protocol. This property makes Argennon a t
 democratic blockchain and one of the most secure existing platforms.
 
 The Argennon cloud is trustless and publicly verifiable. Computational Integrity (CI) is
-achieved by using succinct argument of knowledge systems (STARK/SNARK)
+achieved by using Succinct Argument of Knowledge systems (STARK/SNARK)
 and data integrity is guaranteed by cryptographic accumulators. At the same time, a smart
 clustering algorithm keeps the bandwidth usage and the overhead of cryptography manageable
 for validators.
@@ -30,13 +30,19 @@ of conventional networking, storage and compute hardware, which can benefit all 
 This contrasts with the approach of some older blockchains that incentivized the development of a totally
 useless technology of hash calculation.
 
+Using Succinct Argument of Knowledge systems makes the main functionalities of an Argennon validator light enough to
+be implemented as a smart contract. By deploying a validator contract on another platform, Argennon
+could use more established blockchains as an extra layer of security. In addition, this contract will facilitate
+trustless bridging of assets to the Argennon blockchain. To reduce the execution fee, this validator
+contract can be used for validating only roll-ups of the state transition.
+
 An initial draft of the Argennon white paper can be
 found [here](https://raw.githubusercontent.com/aybehrouz/AVM/main/pdf/A.pdf). In addition,
 this [link](https://www.argennon.com/features.html) provides a brief overview of the important properties of the Argennon
 platform.
 
 Until the launch of the Argennon main-net, an ERC20 token and a governance system will be deployed on the Binance Smart
-Chain or the Ethereum network in order to represent investors' share in the project and give them the opportunity to
+Chain in order to represent investors' share in the project and give them the opportunity to
 determine the project's path. After the launch of the Argennon blockchain, this token will be convertible in 1:1 ratio
 to the native currency of the Argennon blockchain.
 
