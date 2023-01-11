@@ -38,7 +38,7 @@ contract can be used for validating only roll-ups of the state transition.
 
 An initial draft of the Argennon white paper can be
 found [here](https://raw.githubusercontent.com/aybehrouz/AVM/main/pdf/A.pdf). In addition,
-this [link](https://www.argennon.com/features.html) provides a brief overview of the important properties of the Argennon
+this [link](https://github.com/aybehrouz/argennon) provides a brief overview of the important properties of the Argennon
 platform.
 
 Until the launch of the Argennon main-net, an ERC20 token and a governance system will be deployed on the Binance Smart
